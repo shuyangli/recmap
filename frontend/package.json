@@ -4,7 +4,7 @@
   "description": "recmap-frontend",
   "main": "index.js",
   "scripts": {
-    "start": "webpack-dev-server --progress --colors",
+    "start": "webpack-dev-server --progress --inline --colors --hot",
     "build": "webpack",
     "clean": "rm -r ./build/*",
     "postinstall": "typings install",
