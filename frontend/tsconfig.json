@@ -7,9 +7,8 @@
     "target": "es5",
     "jsx": "react"
   },
-  "files": [
-    "./typings/index.d.ts",
-    "./src/components/TestComponent.tsx",
-    "./src/index.tsx"
+  "exclude": [
+    "node_modules",
+    "build"
   ]
 }

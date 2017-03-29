@@ -14,7 +14,7 @@ module.exports = {
   devtool: "source-map",
   resolve: {
     // What extensions should webpack load?
-    extensions: ["", ".js", ".webpack.js", ".web.js", ".json", ".ts", ".tsx"],
+    extensions: [".js", ".webpack.js", ".web.js", ".json", ".ts", ".tsx"],
     alias: {
       "webworkify": "webworkify-webpack"
     }
@@ -25,20 +25,7 @@ module.exports = {
       // files with .ts / .tsx extensions get passed through ts-loader
       { test: /\.tsx?$/, loader: "ts-loader" },
       { test: /\.json$/, loader: "json-loader" },
-      {
-        test: /\.js$/,
-        include: path.resolve("node_modules/mapbox-gl-shaders/index.js"),
-        loader: "transform/cacheable?brfs"
-      }
-    ],
-    preLoaders: [
-      // all output .js files will have sourcemaps processed by source-map-loader
-      { test: /\.js$/, loader: "source-map-loader" }
-    ],
-    postLoaders: [{
-      include: path.resolve("node_modules\/mapbox-gl-shaders/"),
-      loader: "transform",
-      query: "brfs"
-    }]
+      { test: /\.js$/, loader: "source-map-loader", enforce: "pre" }
+    ]
   }
 };
