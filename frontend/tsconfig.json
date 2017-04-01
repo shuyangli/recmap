@@ -10,5 +10,9 @@
   "exclude": [
     "node_modules",
     "build"
+  ],
+  "files": [
+    "typings/index.d.ts",
+    "extra-typings.d.ts"
   ]
 }

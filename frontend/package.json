@@ -2,12 +2,11 @@
   "name": "recmap-frontend",
   "version": "0.1.0",
   "description": "recmap-frontend",
-  "main": "index.js",
+  "main": "./src/index.tsx",
   "scripts": {
-    "start": "webpack-dev-server --progress --inline --colors --hot",
-    "build": "webpack",
+    "watch": "watchify ./src/index.tsx -p [ tsify --noImplicitAny ] -o ./build/app.js",
+    "build": "browserify ./src/index.tsx -p [ tsify --noImplicitAny ] > ./build/app.js",
     "clean": "rm -r ./build/*",
-    "postinstall": "typings install",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -21,30 +20,23 @@
   },
   "homepage": "https://github.com/shuyangli/recmap#readme",
   "dependencies": {
-    "@google/maps": "^0.1.0",
     "@types/react": "^15.0.20",
     "@types/react-dom": "^0.14.23",
+    "babel-runtime": "^6.23.0",
     "immutable": "^3.8.1",
-    "json-loader": "^0.5.4",
-    "lodash": "^4.15.0",
     "path": "^0.12.7",
-    "r-dom": "^2.3.0",
+    "r-dom": "^2.3.2",
     "react": "^15.3.1",
     "react-dom": "^15.3.1",
-    "react-map-gl": "^1.5.0",
-    "react-redux": "^4.4.5",
-    "redux": "^3.5.2",
-    "transform-loader": "^0.2.3",
-    "webworkify-webpack": "^1.1.7"
+    "react-map-gl": "^1.8.2"
   },
   "devDependencies": {
-    "css-loader": "^0.23.1",
-    "source-map-loader": "^0.1.5",
-    "style-loader": "^0.13.1",
-    "ts-loader": "^0.8.2",
+    "beefy": "^2.1.8",
+    "browserify": "^14.1.0",
+    "source-map-support": "^0.4.14",
+    "tsify": "^3.0.1",
+    "tslint": "^4.0.2",
     "typescript": "^2.2.2",
-    "typings": "^2.1.0",
-    "webpack": "^2.3.2",
-    "webpack-dev-server": "^1.14.1"
+    "watchify": "^3.9.0"
   }
 }
