@@ -10,11 +10,13 @@ ReactDOM.render(
   <div>
     <NavbarComponent />
     <MapGL 
+      mapboxApiAccessToken={config.mapboxApiAccessToken}
       width={700}
       height={450}
       latitude={37.78}
       longitude={-122.45}
-      zoom={11}/>
+      zoom={11}
+      mapStyle={'mapbox://styles/mapbox/streets-v10'} />
   </div>,
   document.getElementById("root")
   );
