@@ -17,6 +17,7 @@ class ReviewsController < ApplicationController
     # TODO (shuyang): figure out auth & get user id
     review = Review.create({
       rating: params[:rating],
+      notes: params[:notes],
       date: if params[:date] then params[:date] else Date.today end,
       address: params[:address]
       })
@@ -26,6 +27,7 @@ class ReviewsController < ApplicationController
   def create_for_venue
     review = Venue.find(params[:venue_id]).reviews.create({
       rating: params[:rating],
+      notes: params[:notes],
       date: if params[:date] then params[:date] else Date.today end,
       address: params[:address]
       })
@@ -43,6 +45,7 @@ class ReviewsController < ApplicationController
     review = Review.find(params[:id])
     review.update({
       rating: params[:rating],
+      notes: params[:notes],
       date: if params[:date] then params[:date] else Date.today end,
       address: params[:address]
       })
