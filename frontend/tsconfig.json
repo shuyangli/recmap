@@ -4,7 +4,10 @@
     "sourceMap": true,
     "noImplicitAny": true,
     "module": "commonjs",
-    "target": "es5",
+    "target": "es2015",
+    "types": [
+      "core-js"
+    ],
     "jsx": "react"
   },
   "exclude": [
@@ -12,7 +15,6 @@
     "build"
   ],
   "files": [
-    "typings/index.d.ts",
     "extra-typings.d.ts"
   ]
 }
