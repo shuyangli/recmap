@@ -6,6 +6,7 @@
   "scripts": {
     "watch": "watchify ./src/index.tsx --debug -p [ tsify --noImplicitAny ] -o ./build/app.js",
     "build": "browserify ./src/index.tsx --debug -p [ tsify --noImplicitAny ] > ./build/app.js",
+    "start": "budo src/index.tsx:build/app.js -- -p [ tsify --noImplicitAny ]",
     "clean": "rm -r ./build/*",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -20,6 +21,8 @@
   },
   "homepage": "https://github.com/shuyangli/recmap#readme",
   "dependencies": {
+    "@google/maps": "^0.3.1",
+    "@types/googlemaps": "^3.26.8",
     "@types/lodash": "^4.14.62",
     "@types/react": "^15.0.20",
     "@types/react-dom": "^0.14.23",
@@ -40,6 +43,7 @@
     "@types/core-js": "^0.9.41",
     "beefy": "^2.1.8",
     "browserify": "^14.1.0",
+    "budo": "^10.0.3",
     "core-js": "^2.4.1",
     "redux-devtools": "^3.3.2",
     "source-map-support": "^0.4.14",
