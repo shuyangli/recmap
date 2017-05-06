@@ -1,11 +1,34 @@
 import { combineReducers, applyMiddleware } from 'redux';
 
-const INITIAL_STATE = {
+import { Location } from '../api/interfaces';
+import { LOAD_LOCATIONS } from './actionTypes';
+
+export interface LocationState {
+  locations: Location[];
 }
 
-function defaultReducer(state = INITIAL_STATE, action: any) {
-  return state;
+const EMPTY_LOCATION_STATE: LocationState = {
+  locations: []
+};
+
+function loadLocationsReducer(state: LocationState = EMPTY_LOCATION_STATE, action: any) {
+  switch (action.type) {
+    case LOAD_LOCATIONS:
+      return Object.assign({}, state, {
+        locations: [{
+          id: 'test',
+          name: 'test',
+          address: 'test',
+          latitude: 'test',
+          longitude: 'test',
+          notes: 'test'
+        }]
+      });
+    default:
+      return state;
+  }
 }
-export default combineReducers({
-  defaultReducer
+
+export const reducer = combineReducers({
+  location: loadLocationsReducer
 });
