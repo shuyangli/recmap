@@ -1,3 +1,3 @@
 export interface FilterState {
-  searchTerm?: string;
+  searchTerm: string;
 }

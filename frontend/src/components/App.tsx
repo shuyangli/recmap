@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { store } from '../reducers/store';
 import { loadLocations } from '../reducers/actionTypes';
 
-import { ConnectedLocationsSidebar } from './sidebar/LocationsSidebar';
+import { ConnectedLocationSidebar } from './sidebar/LocationSidebar';
 
 export class App extends React.PureComponent<{}, void> {
 
@@ -15,7 +15,7 @@ export class App extends React.PureComponent<{}, void> {
   render() {
     return (
       <div>
-        <ConnectedLocationsSidebar />
+        <ConnectedLocationSidebar />
       </div>
       );
   }

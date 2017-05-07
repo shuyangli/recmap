@@ -1,0 +1,29 @@
+@import (reference) "../../../node_modules/@blueprintjs/core/dist/variables.less";
+
+.location-sidebar {
+  height: 100vh;
+  min-height: 100vh;
+  width: 35%;
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar-filter-controls {
+  flex-shrink: 0;
+  padding: 20px;
+  box-shadow: 0 1px 1px rgba(16, 22, 26, 0.2);
+
+  .search-term-input[type="search"] {
+    border-radius: 0;
+    box-shadow: none;
+  }
+}
+
+.location-items-wrapper {
+  overflow-y: auto;
+}
+
+.location-item {
+  flex: 1;
+  padding: 20px;
+}
