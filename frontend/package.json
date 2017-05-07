@@ -4,9 +4,9 @@
   "description": "recmap-frontend",
   "main": "./src/index.tsx",
   "scripts": {
-    "watch": "watchify ./src/index.tsx --debug -p [ tsify --noImplicitAny ] -o ./build/app.js",
-    "build": "browserify ./src/index.tsx --debug -p [ tsify --noImplicitAny ] > ./build/app.js",
-    "start": "budo src/index.tsx:build/app.js -- -p [ tsify --noImplicitAny ]",
+    "watch": "watchify -t node-lessify ./src/index.tsx --debug -p [ tsify --noImplicitAny ]  -o ./build/app.js",
+    "build": "browserify -t node-lessify ./src/index.tsx --debug -p [ tsify --noImplicitAny ] > ./build/app.js",
+    "start": "budo src/index.tsx:build/app.js -- -t node-lessify -p [ tsify --noImplicitAny ]",
     "clean": "rm -r ./build/*",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -48,6 +48,8 @@
     "browserify": "^14.1.0",
     "budo": "^10.0.3",
     "core-js": "^2.4.1",
+    "less-modulesify": "^1.1.2",
+    "node-lessify": "^0.1.4",
     "redux-devtools": "^3.3.2",
     "source-map-support": "^0.4.14",
     "tsify": "^3.0.1",
