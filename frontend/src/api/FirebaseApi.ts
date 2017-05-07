@@ -35,11 +35,7 @@ export class FirebaseApi implements BackendApi {
   }
 
   getAllLocations() {
-    return Promise.resolve(firebase.database().ref().child('locations').once('value'))
-    .then((snapshot) => {
-      const result: { [id: string] : Location } = {};
-      snapshot.forEach((child: any) => result[child.key] = child.val());
-      return result;
-    });
+    return Promise.resolve(firebase.database().ref('/locations/').once('value'))
+    .then((snapshot) => snapshot.val());
   }
 }
