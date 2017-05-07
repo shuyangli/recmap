@@ -1,10 +1,11 @@
 import * as React from 'react';
+import * as _ from 'lodash';
 import { connect } from 'react-redux';
 import { Location } from '../../api/interfaces';
 import { LocationItem } from './LocationItem';
 
 interface ConnectedProps {
-  locations: Location[];
+  locations: {[id: string]: Location};
 }
 
 function mapStateToProps(state: any): ConnectedProps {
@@ -17,7 +18,9 @@ class LocationsSidebar extends React.PureComponent<ConnectedProps, void> {
   render() {
     return (
       <div className="location-sidebar">
-        {this.props.locations.map((location) => <LocationItem location={location} />)}
+        {_.map(this.props.locations, (location) =>
+          <LocationItem location={location} />
+        )}
       </div>
     );
   }

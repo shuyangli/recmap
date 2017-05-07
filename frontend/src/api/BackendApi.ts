@@ -1,6 +1,6 @@
-import {
-  Location
-} from './interfaces';
+import { Location } from './interfaces';
+import { FirebaseApi } from './FirebaseApi';
+import { firebaseConfig } from '../config';
 
 export interface BackendApi {
   createLocation(location: Location): Promise<Location>;
@@ -8,3 +8,5 @@ export interface BackendApi {
   getLocation(id: string): Promise<Location>;
   getAllLocations(): Promise<{ [id: string]: Location }>;
 }
+
+export const backendApi: BackendApi = new FirebaseApi(firebaseConfig);
