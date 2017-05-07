@@ -12,7 +12,29 @@ export function loadLocations() {
     return backendApi.getAllLocations()
       .then(locations => dispatch({
         type: LOAD_LOCATIONS_FINISHED,
-        payload: { locations }
+        locations
       }));
+  };
+}
+
+export const OPEN_PANEL = '//OPEN_PANEL';
+export const CLOSE_PANEL = '//CLOSE_PANEL';
+
+export function openAddPanel() {
+  return {
+    type: OPEN_PANEL
+  };
+}
+
+export function openEditPanel(locationId: string) {
+  return {
+    type: OPEN_PANEL,
+    locationId
+  };
+}
+
+export function closePanel() {
+  return {
+    type: CLOSE_PANEL
   };
 }

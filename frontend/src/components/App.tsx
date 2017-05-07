@@ -1,10 +1,11 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 
-import { store } from '../reducers/store';
-import { loadLocations } from '../reducers/actionTypes';
+import { store } from '../store/store';
+import { loadLocations } from '../store/actions';
 
 import { ConnectedLocationSidebar } from './sidebar/LocationSidebar';
+import { ConnectedActionPanel } from './panel/ActionPanel';
 
 export class App extends React.PureComponent<{}, void> {
 
@@ -14,8 +15,9 @@ export class App extends React.PureComponent<{}, void> {
 
   render() {
     return (
-      <div>
+      <div className='app-viewport'>
         <ConnectedLocationSidebar />
+        <ConnectedActionPanel />
       </div>
       );
   }
