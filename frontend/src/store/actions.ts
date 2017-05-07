@@ -18,11 +18,18 @@ export function loadLocations() {
 }
 
 export const OPEN_PANEL = '//OPEN_PANEL';
+export const TOGGLE_PANEL = '//TOGGLE_PANEL';
 export const CLOSE_PANEL = '//CLOSE_PANEL';
 
 export function openAddPanel() {
   return {
     type: OPEN_PANEL
+  };
+}
+
+export function toggleAddPanel() {
+  return {
+    type: TOGGLE_PANEL
   };
 }
 

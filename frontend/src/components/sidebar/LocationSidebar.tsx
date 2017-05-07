@@ -8,7 +8,7 @@ import { LocationItem } from './LocationItem';
 import { FilterControls } from './FilterControls';
 import { FilterState } from './types';
 import { RootState } from '../../store/store';
-import { openAddPanel, openEditPanel } from '../../store/actions';
+import { toggleAddPanel, openEditPanel } from '../../store/actions';
 
 import './LocationSidebar.less'
 
@@ -40,7 +40,7 @@ function mapStateToProps(state: any): ConnectedProps {
 
 function mapDispatchToProps(dispatch: Dispatch<RootState>): DispatchProps {
   return {
-    openAddPanel: () => dispatch(openAddPanel())
+    openAddPanel: () => dispatch(toggleAddPanel())
   };
 }
 
