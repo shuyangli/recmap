@@ -6,7 +6,7 @@ import { loadLocations } from '../reducers/actionTypes';
 
 import { ConnectedLocationsSidebar } from './sidebar/LocationsSidebar';
 
-export class App extends React.PureComponent<void, void> {
+export class App extends React.PureComponent<{}, void> {
 
   componentWillMount() {
     store.dispatch(loadLocations());
