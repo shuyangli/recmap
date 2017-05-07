@@ -4,12 +4,12 @@ import { Location } from '../api/interfaces';
 import { LOAD_LOCATIONS_FINISHED } from './actionTypes';
 
 export interface LocationState {
-  locations: Location[];
+  locations: {[id: string]: Location};
   isLoadingActions: boolean;
 }
 
 const EMPTY_LOCATION_STATE: LocationState = {
-  locations: [],
+  locations: {},
   isLoadingActions: false
 };
 
