@@ -4,11 +4,11 @@ import * as fuzzy from 'fuzzy';
 import { connect, Dispatch } from 'react-redux';
 import { Button, NonIdealState, Spinner } from '@blueprintjs/core';
 import { Location } from '../../api/interfaces';
-import { LocationItem } from './LocationItem';
+import { ConnectedLocationItem } from './LocationItem';
 import { FilterControls } from './FilterControls';
 import { FilterState } from './types';
 import { RootState } from '../../store/store';
-import { toggleAddPanel, openEditPanel } from '../../store/actions';
+import { toggleEditPanel } from '../../store/actions';
 
 import './LocationSidebar.less'
 
@@ -18,7 +18,7 @@ interface ConnectedProps {
 }
 
 interface DispatchProps {
-  openAddPanel: () => void;
+  openEditPanel: () => void;
 }
 
 interface State {
@@ -40,7 +40,7 @@ function mapStateToProps(state: any): ConnectedProps {
 
 function mapDispatchToProps(dispatch: Dispatch<RootState>): DispatchProps {
   return {
-    openAddPanel: () => dispatch(toggleAddPanel())
+    openEditPanel: () => dispatch(toggleEditPanel())
   };
 }
 
@@ -62,12 +62,12 @@ class LocationSidebar extends React.PureComponent<ConnectedProps & DispatchProps
           ? <NonIdealState visual={<Spinner />} />
           : <div className='location-items-wrapper'>
               {_.map(filteredLocations, (location) =>
-                <LocationItem location={location} />
+                <ConnectedLocationItem key={location.id} location={location} />
               )}
             </div>
         }
         <div className='sidebar-edit-controls'>
-          <Button iconName='add' onClick={this.props.openAddPanel} />
+          <Button iconName='add' onClick={this.props.openEditPanel} />
         </div>
       </div>
     );

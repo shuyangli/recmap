@@ -14,16 +14,22 @@ export class FirebaseApi implements BackendApi {
     return `/locations/${locationId}`;
   }
 
-  // Need to wrap firebase.Promise<T> in a Promise.resolve because their types are not compatible
-  createLocation(location: Location) {
-    debugger;
+  createOrUpdateLocation(location: Location) {
+    if (location.id) {
+      return this.updateLocation(location);
+    } else {
+      return this.createLocation(location);
+    }
+  }
+
+  private createLocation(location: Location) {
     const newLocationRef = firebase.database().ref().child('locations').push();
     const newLocation = _.defaults({ id: newLocationRef.key }, location);
     return Promise.resolve(newLocationRef.set(newLocation))
     .then(() => newLocation);
   };
 
-  updateLocation(location: Location) {
+  private updateLocation(location: Location) {
     const newLocation = _.clone(location);
     return Promise.resolve(firebase.database().ref(this.getLocationKey(newLocation.id)).set(newLocation))
     .then(() => newLocation);

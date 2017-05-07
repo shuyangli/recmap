@@ -1,10 +1,15 @@
+import { Dispatch } from 'redux';
+import { RootState } from './store';
 import { backendApi } from '../api/BackendApi';
+import { Location } from '../api/interfaces';
 
 export const LOAD_LOCATIONS_STARTED = '//LOAD_LOCATIONS_STARTED';
 export const LOAD_LOCATIONS_FINISHED = '//LOAD_LOCATIONS_FINISHED';
+export const SAVE_LOCATION_STARTED = '//SAVE_LOCATION_STARTED';
+export const SAVE_LOCATION_FINISHED = '//SAVE_LOCATION_FINISHED';
 
 export function loadLocations() {
-  return (dispatch: any) => {
+  return (dispatch: Dispatch<RootState>) => {
     dispatch({
       type: LOAD_LOCATIONS_STARTED
     });
@@ -12,31 +17,40 @@ export function loadLocations() {
     return backendApi.getAllLocations()
       .then(locations => dispatch({
         type: LOAD_LOCATIONS_FINISHED,
-        locations
+        payload: { locations }
       }));
   };
 }
 
-export const OPEN_PANEL = '//OPEN_PANEL';
-export const TOGGLE_PANEL = '//TOGGLE_PANEL';
+export function createOrUpdateLocation(location: Location) {
+  return (dispatch: Dispatch<RootState>) => {
+    dispatch({
+      type: SAVE_LOCATION_STARTED
+    });
+
+    return backendApi.createOrUpdateLocation(location)
+      .then(location => dispatch({
+        type: SAVE_LOCATION_FINISHED,
+        payload: { location }
+      }));
+  }
+}
+
+export const TOGGLE_DETAIL_PANEL = '//TOGGLE_DETAIL_PANEL';
+export const TOGGLE_EDIT_PANEL = '//TOGGLE_EDIT_PANEL';
 export const CLOSE_PANEL = '//CLOSE_PANEL';
 
-export function openAddPanel() {
+export function toggleDetailsPanel(locationId: string) {
   return {
-    type: OPEN_PANEL
+    type: TOGGLE_DETAIL_PANEL,
+    payload: { locationId }
   };
 }
 
-export function toggleAddPanel() {
+export function toggleEditPanel(locationId?: string) {
   return {
-    type: TOGGLE_PANEL
-  };
-}
-
-export function openEditPanel(locationId: string) {
-  return {
-    type: OPEN_PANEL,
-    locationId
+    type: TOGGLE_EDIT_PANEL,
+    payload: { locationId }
   };
 }
 
