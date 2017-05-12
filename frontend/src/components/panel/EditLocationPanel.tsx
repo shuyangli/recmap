@@ -32,12 +32,12 @@ function mapDispatchToProps(dispatch: Dispatch<RootState>): DispatchProps {
 }
 
 interface State {
-  dirtyLocation: Location;
+  location: Location;
   isSaving: boolean;
 }
 
 const EMPTY_STATE: State = {
-  dirtyLocation: {
+  location: {
     name: '',
     address: '',
     latitude: '',
@@ -53,14 +53,14 @@ class EditLocationPanel extends React.PureComponent<OwnProps & DispatchProps, St
 
   componentWillMount() {
     if (this.props.initialLocation) {
-      this.setState({ dirtyLocation: _.assign({}, this.props.initialLocation) });
+      this.setState({ location: _.assign({}, this.props.initialLocation) });
     }
   }
 
-  private onCancel = () => this.props.onCancel(this.state.dirtyLocation.id);
+  private onCancel = () => this.props.onCancel(this.state.location.id);
 
   private onSave = () => {
-    this.props.onSave(this.state.dirtyLocation);
+    this.props.onSave(this.state.location);
   }
 
   render() {
@@ -68,10 +68,39 @@ class EditLocationPanel extends React.PureComponent<OwnProps & DispatchProps, St
       <div className='location-panel'>
 
         <div className='location-content-wrapper'>
-          <h1>{this.state.dirtyLocation.name}</h1>
-          <p>{this.state.dirtyLocation.address}</p>
-          <p>{this.state.dirtyLocation.notes}</p>
-          <p>{this.state.dirtyLocation.latitude}, {this.state.dirtyLocation.longitude}</p>
+          <input
+            className='pt-input pt-fill location-name'
+            value={this.state.location.name}
+            placeholder='Name'
+            onChange={(event) => this.setState(
+              {
+                location: Object.assign({}, this.state.location, {
+                  name: event.target.value
+                })
+              })}
+          />
+          <input
+            className='pt-input pt-fill location-address'
+            value={this.state.location.address}
+            placeholder='Address'
+            onChange={(event) => this.setState(
+              {
+                location: Object.assign({}, this.state.location, {
+                  address: event.target.value
+                })
+              })}
+          />
+          <textarea
+            className='pt-input pt-fill location-notes'
+            value={this.state.location.notes}
+            placeholder='Notes'
+            onChange={(event) => this.setState(
+              {
+                location: Object.assign({}, this.state.location, {
+                  notes: event.target.value
+                })
+              })}
+          />
         </div>
 
         <div className='panel-edit-controls pt-elevation-1'>

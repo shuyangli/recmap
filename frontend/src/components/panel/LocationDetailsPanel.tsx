@@ -28,10 +28,9 @@ class LocationDetailsPanel extends React.PureComponent<OwnProps & DispatchProps,
     return (
       <div className='location-panel'>
         <div className='location-content-wrapper'>
-          <h1>{this.props.location.name}</h1>
-          <p>{this.props.location.address}</p>
-          <p>{this.props.location.notes}</p>
-          <p>{this.props.location.latitude}, {this.props.location.longitude}</p>
+          <h1 className='location-name'>{this.props.location.name}</h1>
+          <p className='location-address'>{this.props.location.address}</p>
+          <p className='location-notes'>{this.props.location.notes}</p>
         </div>
 
         <div className='panel-edit-controls pt-elevation-1'>
