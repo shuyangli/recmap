@@ -1,7 +1,7 @@
 import * as React from 'react';
 import * as _ from 'lodash';
 import { connect, Dispatch } from 'react-redux';
-import { Button, Intent, Spinner } from '@blueprintjs/core';
+import { Button, Intent, Spinner, Tag } from '@blueprintjs/core';
 import { Location } from '../../api/interfaces';
 import { RootState } from '../../store/store';
 import { toggleEditPanel, toggleDetailsPanel, createOrUpdateLocation } from '../../store/actions';
@@ -42,7 +42,8 @@ const EMPTY_STATE: State = {
     address: '',
     latitude: '',
     longitude: '',
-    notes: ''
+    notes: '',
+    tags: []
   },
   isSaving: false
 };
@@ -79,6 +80,17 @@ class EditLocationPanel extends React.PureComponent<OwnProps & DispatchProps, St
                 })
               })}
           />
+          <input
+            className='pt-input pt-fill location-tag-input'
+            value={"Tags"}
+            placeholder='Add tags'
+            onChange={() => {}}
+          />
+          <div className='location-tag-area'>
+            {this.state.location.tags.map((tag: string) =>
+              <Tag key={tag} onRemove={() => {}}>{tag}</Tag>
+            )}
+          </div>
           <input
             className='pt-input pt-fill location-address'
             value={this.state.location.address}

@@ -5,6 +5,7 @@ export interface Location {
   latitude: string;
   longitude: string;
   notes: string;
+  tags: string[];
 };
 
 export enum Rating {
