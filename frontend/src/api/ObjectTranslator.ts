@@ -24,7 +24,10 @@ export class ObjectTranslator {
     let override: any = {};
     if (this.target[field]) {
       const flatValues: string[] = this.target[field];
-      override[field] = _.reduce(flatValues, (acc: any, val) => acc[val] = true, {});
+      override[field] = _.reduce(flatValues, (acc: any, val) => {
+        acc[val] = true;
+        return acc;
+      }, {});
     } else {
       override[field] = {};
     }

@@ -33,6 +33,7 @@ function mapDispatchToProps(dispatch: Dispatch<RootState>): DispatchProps {
 
 interface State {
   location: Location;
+  dirtyTag: string;
   isSaving: boolean;
 }
 
@@ -45,6 +46,7 @@ const EMPTY_STATE: State = {
     notes: '',
     tags: []
   },
+  dirtyTag: '',
   isSaving: false
 };
 
@@ -54,7 +56,7 @@ class EditLocationPanel extends React.PureComponent<OwnProps & DispatchProps, St
 
   componentWillMount() {
     if (this.props.initialLocation) {
-      this.setState({ location: _.assign({}, this.props.initialLocation) });
+      this.setState({ location: Object.assign({}, this.props.initialLocation) });
     }
   }
 
@@ -62,6 +64,22 @@ class EditLocationPanel extends React.PureComponent<OwnProps & DispatchProps, St
 
   private onSave = () => {
     this.props.onSave(this.state.location);
+  }
+
+  private onAddTag = () => {
+    this.setState({
+      location: Object.assign({}, this.state.location, {
+        tags: _.concat(this.state.location.tags, this.state.dirtyTag)
+      })
+    });
+  }
+
+  private onDeleteTag = (tag: string) => {
+    this.setState({
+      location: Object.assign({}, this.state.location, {
+        tags: this.state.location.tags.filter((existingTag) => existingTag !== tag)
+      })
+    });
   }
 
   render() {
@@ -82,13 +100,19 @@ class EditLocationPanel extends React.PureComponent<OwnProps & DispatchProps, St
           />
           <input
             className='pt-input pt-fill location-tag-input'
-            value={"Tags"}
+            value={this.state.dirtyTag}
             placeholder='Add tags'
-            onChange={() => {}}
+            onChange={(event) => this.setState({ dirtyTag: event.target.value })}
+            onKeyPress={(event) => {
+              if (event.key === 'Enter') {
+                this.onAddTag();
+                this.setState({ dirtyTag: '' });
+              }
+            }}
           />
           <div className='location-tag-area'>
             {this.state.location.tags.map((tag: string) =>
-              <Tag key={tag} onRemove={() => {}}>{tag}</Tag>
+              <Tag key={tag} onRemove={() => this.onDeleteTag(tag)}>{tag}</Tag>
             )}
           </div>
           <input
