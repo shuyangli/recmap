@@ -11,29 +11,12 @@ export class FirebaseApi implements BackendApi {
     firebase.initializeApp(config);
   };
 
-  private getLocationKey(locationId: string) {
-    return `/locations/${locationId}`;
-  }
-
-  createOrUpdateLocation(location: Location) {
-    if (location.id) {
-      return this.updateLocation(location);
+  createOrUpdateLocation(newLocation: Location, oldLocation?: Location) {
+    if (newLocation.id) {
+      return this.updateLocation(newLocation, oldLocation);
     } else {
-      return this.createLocation(location);
+      return this.createLocation(newLocation);
     }
-  }
-
-  private createLocation(location: Location) {
-    const newLocationRef = firebase.database().ref().child('locations').push();
-    const newLocation = this.firebaseifyLocation(_.defaults({ id: newLocationRef.key }, location));
-    return Promise.resolve(newLocationRef.set(newLocation))
-    .then(() => this.appifyLocation(newLocation));
-  };
-
-  private updateLocation(location: Location) {
-    const newLocation = this.firebaseifyLocation(_.clone(location));
-    return Promise.resolve(firebase.database().ref(this.getLocationKey(newLocation.id)).set(newLocation))
-    .then(() => this.appifyLocation(newLocation));
   }
 
   getLocation(id: string) {
@@ -45,6 +28,46 @@ export class FirebaseApi implements BackendApi {
     return Promise.resolve(firebase.database().ref('/locations/').once('value'))
     .then((snapshot) => _.mapValues(snapshot.val(), this.appifyLocation));
   }
+
+  getAllTags() {
+    return Promise.resolve(firebase.database().ref('/tags/').once('value'))
+    .then((snapshot) => snapshot.val());
+  }
+
+  private getLocationKey(locationId: string) {
+    return `/locations/${locationId}`;
+  }
+
+  private getTagKey(tag: string) {
+    return `/tags/${tag}`;
+  }
+
+  private createLocation(location: Location) {
+    const newLocationRef = firebase.database().ref().child('locations').push();
+    const newLocation = this.firebaseifyLocation(_.defaults({ id: newLocationRef.key }, location));
+    this.addLocationToTags(location.tags, newLocation.id);
+    return Promise.resolve(newLocationRef.set(newLocation))
+    .then(() => this.appifyLocation(newLocation));
+  };
+
+  private updateLocation(newLocation: Location, oldLocation: Location) {
+    const location = this.firebaseifyLocation(_.clone(newLocation));
+    this.removeLocationFromTags(oldLocation.tags, newLocation.id);
+    this.addLocationToTags(newLocation.tags, newLocation.id);
+    return Promise.resolve(firebase.database().ref(this.getLocationKey(location.id)).set(location))
+    .then(() => this.appifyLocation(location));
+  }
+
+  private setLocationValueInTags = (value: boolean | null) => (tags: string[], locationId: string) => {
+    tags.forEach((tag) => {
+      let updateValue: { [locationId: string]: boolean } = {};
+      updateValue[locationId] = value;
+      firebase.database().ref(this.getTagKey(tag)).update(updateValue);
+    });
+  }
+
+  private addLocationToTags = this.setLocationValueInTags(true);
+  private removeLocationFromTags = this.setLocationValueInTags(null);
 
   private firebaseifyLocation(appLocation: Location): any {
     return new ObjectTranslator(appLocation)

@@ -7,12 +7,12 @@ import { RootState } from '../../store/store';
 import { toggleEditPanel, toggleDetailsPanel, createOrUpdateLocation } from '../../store/actions';
 
 interface OwnProps {
-  initialLocation: Location;
+  initialLocation?: Location;
 }
 
 interface DispatchProps {
   onCancel: (locationId?: string) => void;
-  onSave: (location: Location) => void;
+  onSave: (location: Location, initialLocation?: Location) => void;
 }
 
 function mapDispatchToProps(dispatch: Dispatch<RootState>): DispatchProps {
@@ -24,11 +24,11 @@ function mapDispatchToProps(dispatch: Dispatch<RootState>): DispatchProps {
         dispatch(toggleEditPanel())
       }
     },
-    onSave: (location: Location) => {
-      dispatch(createOrUpdateLocation(location))
+    onSave: (location: Location, initialLocation?: Location) => {
+      dispatch(createOrUpdateLocation(location, initialLocation))
       .then((action) => dispatch(toggleDetailsPanel(action.payload.location.id)))
     }
-  }
+  };
 }
 
 interface State {
@@ -63,7 +63,7 @@ class EditLocationPanel extends React.PureComponent<OwnProps & DispatchProps, St
   private onCancel = () => this.props.onCancel(this.state.location.id);
 
   private onSave = () => {
-    this.props.onSave(this.state.location);
+    this.props.onSave(this.state.location, this.props.initialLocation);
   }
 
   private onAddTag = () => {

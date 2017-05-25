@@ -22,13 +22,13 @@ export function loadLocations() {
   };
 }
 
-export function createOrUpdateLocation(location: Location) {
+export function createOrUpdateLocation(newLocation: Location, oldLocation?: Location) {
   return (dispatch: Dispatch<RootState>) => {
     dispatch({
       type: SAVE_LOCATION_STARTED
     });
 
-    return backendApi.createOrUpdateLocation(location)
+    return backendApi.createOrUpdateLocation(newLocation, oldLocation)
       .then(location => dispatch({
         type: SAVE_LOCATION_FINISHED,
         payload: { location }
