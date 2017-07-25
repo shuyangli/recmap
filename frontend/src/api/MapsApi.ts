@@ -4,7 +4,17 @@ import { googleMapsApiKey } from '../config';
 GoogleMapsLoader.KEY = googleMapsApiKey;
 GoogleMapsLoader.LIBRARIES = ['places'];
 
-export const initialize: () => Promise<any> = () => Promise.resolve(GoogleMapsLoader.load());
+export const mapsDefaults = {
+  longitude: -122.42740250000001,
+  latitude: 37.77674160000001,
+  zoom: 15
+};
+
+export function initialize(): Promise<any> {
+  return new Promise(resolve => {
+    GoogleMapsLoader.load(resolve);
+  });
+}
 
 export function getCurrentLocation(): Promise<Position> {
   return new Promise((resolve, reject) => {
