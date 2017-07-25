@@ -3,6 +3,7 @@ import * as _ from 'lodash';
 import { connect, Dispatch } from 'react-redux';
 import { Button, Intent, Spinner, Tag } from '@blueprintjs/core';
 import { Location } from '../../api/interfaces';
+import { getCurrentLocation } from '../../api/MapsApi';
 import { RootState } from '../../store/store';
 import { toggleEditPanel, toggleDetailsPanel, createOrUpdateLocation } from '../../store/actions';
 
@@ -51,13 +52,40 @@ const EMPTY_STATE: State = {
 };
 
 class EditLocationPanel extends React.PureComponent<OwnProps & DispatchProps, State> {
-
   state: State = EMPTY_STATE;
+
+  private addressInput: HTMLInputElement;
+  private autocomplete: any;
 
   componentWillMount() {
     if (this.props.initialLocation) {
       this.setState({ location: Object.assign({}, this.props.initialLocation) });
     }
+  }
+
+  componentDidMount = () => {
+    // hack for loading google maps dependency in-browser
+    const google = (window as any).google;
+
+    this.autocomplete = new google.maps.places.Autocomplete(this.addressInput, {
+      types: ['geocode']
+    });
+    this.autocomplete.addListener('place_changed', () => {
+      console.log(this.autocomplete.getPlace());
+    });
+
+    getCurrentLocation().then(position => {
+      const location = {
+        lat: position.coords.latitude,
+        lng: position.coords.longitude
+      };
+      const circle = new google.maps.Circle({
+        center: location,
+        radius: position.coords.accuracy
+      });
+
+      this.autocomplete.setBounds(circle.getBounds());
+    });
   }
 
   private onCancel = () => this.props.onCancel(this.state.location.id);
@@ -91,12 +119,11 @@ class EditLocationPanel extends React.PureComponent<OwnProps & DispatchProps, St
             className='pt-input pt-fill location-name'
             value={this.state.location.name}
             placeholder='Name'
-            onChange={(event) => this.setState(
-              {
-                location: Object.assign({}, this.state.location, {
-                  name: event.target.value
-                })
-              })}
+            onChange={(event) => this.setState({
+              location: Object.assign({}, this.state.location, {
+                name: event.target.value
+              })
+            })}
           />
           <input
             className='pt-input pt-fill location-tag-input'
@@ -119,12 +146,12 @@ class EditLocationPanel extends React.PureComponent<OwnProps & DispatchProps, St
             className='pt-input pt-fill location-address'
             value={this.state.location.address}
             placeholder='Address'
-            onChange={(event) => this.setState(
-              {
-                location: Object.assign({}, this.state.location, {
-                  address: event.target.value
-                })
-              })}
+            ref={(element) => this.addressInput = element}
+            onChange={(event) => this.setState({
+              location: Object.assign({}, this.state.location, {
+                address: event.target.value
+              })
+            })}
           />
           <textarea
             className='pt-input pt-fill location-notes'

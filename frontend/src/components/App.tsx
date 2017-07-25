@@ -6,6 +6,7 @@ import { loadLocations } from '../store/actions';
 
 import { ConnectedLocationSidebar } from './sidebar/LocationSidebar';
 import { ConnectedActionPanel } from './panel/ActionPanel';
+import { Map } from './map/Map';
 
 export class App extends React.PureComponent<{}, void> {
 
@@ -18,6 +19,7 @@ export class App extends React.PureComponent<{}, void> {
       <div className='app-viewport'>
         <ConnectedLocationSidebar />
         <ConnectedActionPanel />
+        <Map />
       </div>
       );
   }
