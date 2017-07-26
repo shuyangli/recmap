@@ -14,12 +14,6 @@ interface DispatchProps {
   onEdit: (locationId: string) => void;
 }
 
-function mapDispatchToProps(dispatch: Dispatch<RootState>): DispatchProps {
-  return {
-    onEdit: (locationId: string) => dispatch(toggleEditPanel(locationId))
-  };
-}
-
 class LocationDetailsPanel extends React.PureComponent<OwnProps & DispatchProps, void> {
 
   private onEdit = () => this.props.onEdit(this.props.location.id);
@@ -44,6 +38,12 @@ class LocationDetailsPanel extends React.PureComponent<OwnProps & DispatchProps,
       </div>
     );
   }
+}
+
+function mapDispatchToProps(dispatch: Dispatch<RootState>): DispatchProps {
+  return {
+    onEdit: (locationId: string) => dispatch(toggleEditPanel(locationId))
+  };
 }
 
 export const ConnectedLocationDetailsPanel: React.ComponentClass<OwnProps> =

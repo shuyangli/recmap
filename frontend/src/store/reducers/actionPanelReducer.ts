@@ -16,30 +16,30 @@ const EMPTY_STATE: ActionPanelState = {
   type: ActionPanelType.DETAIL
 };
 
-export function actionPanelReducer(state: ActionPanelState = EMPTY_STATE, action: any) {
+export function actionPanelReducer(state: ActionPanelState = EMPTY_STATE, action: any): ActionPanelState {
   switch (action.type) {
     case TOGGLE_DETAIL_PANEL:
       return Object.assign({}, state, {
         locationId: action.payload.locationId,
-        isVisible: state.type !== ActionPanelType.DETAIL
-                    ? true
-                    : (action.payload.locationId === state.locationId) ? !state.isVisible : true,
+        isVisible: state.type === ActionPanelType.DETAIL && action.payload.locationId === state.locationId
+                    ? !state.isVisible
+                    : true,
         type: ActionPanelType.DETAIL
-      } as ActionPanelState);
+      });
 
     case TOGGLE_EDIT_PANEL:
       return Object.assign({}, state, {
         locationId: action.payload.locationId,
-        isVisible: state.type !== ActionPanelType.EDIT
-                    ? true
-                    : (action.payload.locationId === state.locationId) ? !state.isVisible : true,
+        isVisible: state.type === ActionPanelType.EDIT && action.payload.locationId === state.locationId
+                    ? !state.isVisible
+                    : true,
         type: ActionPanelType.EDIT
-      } as ActionPanelState);
+      });
 
     case CLOSE_PANEL:
       return Object.assign({}, state, {
         isVisible: false
-      } as ActionPanelState);
+      });
 
     default:
       return state;

@@ -19,6 +19,10 @@ export class FirebaseApi implements BackendApi {
     }
   }
 
+  deleteLocation(id: string) {
+    return Promise.resolve(firebase.database().ref(this.getLocationKey(id)).remove());
+  }
+
   getLocation(id: string) {
     return Promise.resolve(firebase.database().ref(this.getLocationKey(id)).once('value'))
     .then((snapshot) => this.appifyLocation(snapshot.val()));

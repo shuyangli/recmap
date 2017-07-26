@@ -8,45 +8,37 @@ import { ConnectedLocationItem } from './LocationItem';
 import { FilterControls } from './FilterControls';
 import { FilterState } from './types';
 import { RootState } from '../../store/store';
-import { toggleEditPanel } from '../../store/actions';
+import { loadLocations, toggleEditPanel } from '../../store/actions';
 
 import './LocationSidebar.less'
 
 interface ConnectedProps {
   locations: {[id: string]: Location};
-  isLoading: boolean;
 }
 
 interface DispatchProps {
   openEditPanel: () => void;
+  loadLocations: () => Promise<any>;
 }
 
 interface State {
   filters: FilterState;
-}
-
-const EMPTY_STATE: State = {
-  filters: {
-    searchTerm: ''
-  }
-};
-
-function mapStateToProps(state: any): ConnectedProps {
-  return {
-    locations: state.location.locations,
-    isLoading: state.location.isLoading
-  };
-}
-
-function mapDispatchToProps(dispatch: Dispatch<RootState>): DispatchProps {
-  return {
-    openEditPanel: () => dispatch(toggleEditPanel())
-  };
+  isLoadingLocations: boolean;
 }
 
 class LocationSidebar extends React.PureComponent<ConnectedProps & DispatchProps, State> {
+  state: State = {
+    filters: {
+      searchTerm: ''
+    },
+    isLoadingLocations: false
+  };
 
-  state: State = EMPTY_STATE;
+  componentWillMount() {
+    this.setState({ isLoadingLocations: true });
+    this.props.loadLocations()
+    .then(() => this.setState({ isLoadingLocations: false }));
+  }
 
   render() {
     const filteredLocations = this.getFilteredLocations();
@@ -58,7 +50,7 @@ class LocationSidebar extends React.PureComponent<ConnectedProps & DispatchProps
           onFilterChange={(newFilters: FilterState) => this.setState({ filters: newFilters })}
         />
         {
-          this.props.isLoading
+          this.state.isLoadingLocations
           ? <NonIdealState visual={<Spinner />} />
           : <div className='location-items-wrapper'>
               {_.map(filteredLocations, (location) =>
@@ -87,6 +79,19 @@ class LocationSidebar extends React.PureComponent<ConnectedProps & DispatchProps
       return this.props.locations;
     }
   }
+}
+
+function mapStateToProps(state: RootState): ConnectedProps {
+  return {
+    locations: state.location.locations
+  };
+}
+
+function mapDispatchToProps(dispatch: Dispatch<RootState>): DispatchProps {
+  return {
+    openEditPanel: () => dispatch(toggleEditPanel()),
+    loadLocations: () => dispatch(loadLocations())
+  };
 }
 
 export const ConnectedLocationSidebar = connect(mapStateToProps, mapDispatchToProps)(LocationSidebar);

@@ -17,15 +17,6 @@ interface ConnectedProps {
   locations: { [id: string]: Location };
 }
 
-function mapStateToProps(state: RootState): ConnectedProps {
-  return {
-    isVisible: state.actionPanel.isVisible,
-    type: state.actionPanel.type,
-    locationId: state.actionPanel.locationId,
-    locations: state.location.locations
-  };
-}
-
 class ActionPanel extends React.PureComponent<ConnectedProps, void> {
   render() {
     if (this.props.isVisible) {
@@ -48,6 +39,15 @@ class ActionPanel extends React.PureComponent<ConnectedProps, void> {
       return null;
     }
   }
+}
+
+function mapStateToProps(state: RootState): ConnectedProps {
+  return {
+    isVisible: state.actionPanel.isVisible,
+    type: state.actionPanel.type,
+    locationId: state.actionPanel.locationId,
+    locations: state.location.locations
+  };
 }
 
 export const ConnectedActionPanel = connect(mapStateToProps)(ActionPanel);

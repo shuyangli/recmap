@@ -12,12 +12,6 @@ interface ConnectedProps {
   getOpenDetailsPanel: (locationId: string) => () => void;
 }
 
-function mapDispatchToProps(dispatch: Dispatch<RootState>): ConnectedProps {
-  return {
-    getOpenDetailsPanel: (locationId: string) => () => dispatch(toggleDetailsPanel(locationId))
-  }
-}
-
 class LocationItem extends React.PureComponent<OwnProps & ConnectedProps, void> {
   render() {
     return (
@@ -27,6 +21,12 @@ class LocationItem extends React.PureComponent<OwnProps & ConnectedProps, void> 
         <span>{this.props.location.notes}</span>
       </div>
     );
+  }
+}
+
+function mapDispatchToProps(dispatch: Dispatch<RootState>): ConnectedProps {
+  return {
+    getOpenDetailsPanel: (locationId: string) => () => dispatch(toggleDetailsPanel(locationId))
   }
 }
 

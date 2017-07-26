@@ -16,46 +16,30 @@ interface DispatchProps {
   onSave: (location: Location, initialLocation?: Location) => void;
 }
 
-function mapDispatchToProps(dispatch: Dispatch<RootState>): DispatchProps {
-  return {
-    onCancel: (locationId?: string) => {
-      if (locationId !== undefined) {
-        dispatch(toggleDetailsPanel(locationId))
-      } else {
-        dispatch(toggleEditPanel())
-      }
-    },
-    onSave: (location: Location, initialLocation?: Location) => {
-      dispatch(createOrUpdateLocation(location, initialLocation))
-      .then((action) => dispatch(toggleDetailsPanel(action.payload.location.id)))
-    }
-  };
-}
-
 interface State {
   location: Location;
   dirtyTag: string;
   isSaving: boolean;
 }
 
-const EMPTY_STATE: State = {
-  location: {
-    name: '',
-    address: '',
-    latitude: '',
-    longitude: '',
-    notes: '',
-    tags: []
-  },
-  dirtyTag: '',
-  isSaving: false
-};
-
 class EditLocationPanel extends React.PureComponent<OwnProps & DispatchProps, State> {
-  state: State = EMPTY_STATE;
+  state: State = {
+    location: {
+      name: '',
+      address: '',
+      latitude: '',
+      longitude: '',
+      notes: '',
+      tags: []
+    },
+    dirtyTag: '',
+    isSaving: false
+  };
 
+  private nameInput: HTMLInputElement;
   private addressInput: HTMLInputElement;
-  private autocomplete: any;
+  private geocodeAutocomplete: any;
+  private establishmentAutocomplete: any;
 
   componentWillMount() {
     if (this.props.initialLocation) {
@@ -67,11 +51,18 @@ class EditLocationPanel extends React.PureComponent<OwnProps & DispatchProps, St
     // hack for loading google maps dependency in-browser
     const google = (window as any).google;
 
-    this.autocomplete = new google.maps.places.Autocomplete(this.addressInput, {
+    this.geocodeAutocomplete = new google.maps.places.Autocomplete(this.addressInput, {
       types: ['geocode']
     });
-    this.autocomplete.addListener('place_changed', () => {
-      console.log(this.autocomplete.getPlace());
+    this.geocodeAutocomplete.addListener('place_changed', () => {
+      console.log(this.geocodeAutocomplete.getPlace());
+    });
+
+    this.establishmentAutocomplete = new google.maps.places.Autocomplete(this.nameInput, {
+      types: ['establishment']
+    });
+    this.establishmentAutocomplete.addListener('place_changed', () => {
+      console.log(this.establishmentAutocomplete.getPlace());
     });
 
     getCurrentLocation().then(position => {
@@ -84,7 +75,8 @@ class EditLocationPanel extends React.PureComponent<OwnProps & DispatchProps, St
         radius: position.coords.accuracy
       });
 
-      this.autocomplete.setBounds(circle.getBounds());
+      this.geocodeAutocomplete.setBounds(circle.getBounds());
+      this.establishmentAutocomplete.setBounds(circle.getBounds());
     });
   }
 
@@ -118,6 +110,7 @@ class EditLocationPanel extends React.PureComponent<OwnProps & DispatchProps, St
           <input
             className='pt-input pt-fill location-name'
             value={this.state.location.name}
+            ref={(element) => this.nameInput = element}
             placeholder='Name'
             onChange={(event) => this.setState({
               location: Object.assign({}, this.state.location, {
@@ -173,6 +166,22 @@ class EditLocationPanel extends React.PureComponent<OwnProps & DispatchProps, St
       </div>
     );
   }
+}
+
+function mapDispatchToProps(dispatch: Dispatch<RootState>): DispatchProps {
+  return {
+    onCancel: (locationId?: string) => {
+      if (locationId !== undefined) {
+        dispatch(toggleDetailsPanel(locationId))
+      } else {
+        dispatch(toggleEditPanel())
+      }
+    },
+    onSave: (location: Location, initialLocation?: Location) => {
+      dispatch(createOrUpdateLocation(location, initialLocation))
+      .then((action) => dispatch(toggleDetailsPanel(action.payload.location.id)))
+    }
+  };
 }
 
 export const ConnectedEditLocationPanel: React.ComponentClass<OwnProps> =
