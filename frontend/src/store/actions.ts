@@ -5,6 +5,7 @@ import { Location } from '../api/interfaces';
 
 export const LOAD_LOCATIONS_FINISHED = '//LOAD_LOCATIONS_FINISHED';
 export const SAVE_LOCATION_FINISHED = '//SAVE_LOCATION_FINISHED';
+export const DELETE_LOCATION_FINISHED = '//DELETE_LOCATION_FINISHED';
 
 export function loadLocations() {
   return (dispatch: Dispatch<RootState>) =>
@@ -25,7 +26,12 @@ export function createOrUpdateLocation(newLocation: Location, oldLocation?: Loca
 }
 
 export function deleteLocation(locationId: string) {
-  return (dispatch: Dispatch<RootState>) => backendApi.deleteLocation(locationId);
+  return (dispatch: Dispatch<RootState>) =>
+    backendApi.deleteLocation(locationId)
+    .then(() => dispatch({
+      type: DELETE_LOCATION_FINISHED,
+      payload: { locationId }
+    }));
 }
 
 export const TOGGLE_DETAIL_PANEL = '//TOGGLE_DETAIL_PANEL';

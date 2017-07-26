@@ -5,7 +5,13 @@ import { Button, Intent, Spinner, Tag } from '@blueprintjs/core';
 import { Location } from '../../api/interfaces';
 import { getCurrentLocation } from '../../api/MapsApi';
 import { RootState } from '../../store/store';
-import { toggleEditPanel, toggleDetailsPanel, createOrUpdateLocation } from '../../store/actions';
+import {
+  toggleEditPanel,
+  toggleDetailsPanel,
+  closePanel,
+  createOrUpdateLocation,
+  deleteLocation
+} from '../../store/actions';
 
 interface OwnProps {
   initialLocation?: Location;
@@ -14,6 +20,7 @@ interface OwnProps {
 interface DispatchProps {
   onCancel: (locationId?: string) => void;
   onSave: (location: Location, initialLocation?: Location) => void;
+  onDelete: (locationId: string) => void;
 }
 
 interface State {
@@ -80,11 +87,9 @@ class EditLocationPanel extends React.PureComponent<OwnProps & DispatchProps, St
     });
   }
 
-  private onCancel = () => this.props.onCancel(this.state.location.id);
-
-  private onSave = () => {
-    this.props.onSave(this.state.location, this.props.initialLocation);
-  }
+  private cancelEdit = () => this.props.onCancel(this.state.location.id);
+  private saveEdit = () => this.props.onSave(this.state.location, this.props.initialLocation);
+  private deleteLocation = () => this.props.onDelete(this.state.location.id);
 
   private onAddTag = () => {
     this.setState({
@@ -160,8 +165,9 @@ class EditLocationPanel extends React.PureComponent<OwnProps & DispatchProps, St
         </div>
 
         <div className='panel-edit-controls pt-elevation-1'>
-          <Button text='Cancel' onClick={this.onCancel} />
-          <Button text='Save' intent={Intent.SUCCESS} onClick={this.onSave} />
+          <Button text='Cancel' onClick={this.cancelEdit} />
+          <Button text='Save' intent={Intent.SUCCESS} onClick={this.saveEdit} />
+          {this.state.location.id && <Button text='Delete' intent={Intent.DANGER} onClick={this.deleteLocation} />}
         </div>
       </div>
     );
@@ -170,17 +176,18 @@ class EditLocationPanel extends React.PureComponent<OwnProps & DispatchProps, St
 
 function mapDispatchToProps(dispatch: Dispatch<RootState>): DispatchProps {
   return {
-    onCancel: (locationId?: string) => {
-      if (locationId !== undefined) {
-        dispatch(toggleDetailsPanel(locationId))
-      } else {
-        dispatch(toggleEditPanel())
-      }
-    },
-    onSave: (location: Location, initialLocation?: Location) => {
+    onCancel: (locationId?: string) =>
+      dispatch(locationId
+        ? toggleDetailsPanel(locationId)
+        : toggleEditPanel()),
+
+    onSave: (location: Location, initialLocation?: Location) =>
       dispatch(createOrUpdateLocation(location, initialLocation))
-      .then((action) => dispatch(toggleDetailsPanel(action.payload.location.id)))
-    }
+      .then((action) => dispatch(toggleDetailsPanel(action.payload.location.id))),
+
+    onDelete: (locationId: string) =>
+      dispatch(deleteLocation(locationId))
+      .then(() => dispatch(closePanel()))
   };
 }
 
