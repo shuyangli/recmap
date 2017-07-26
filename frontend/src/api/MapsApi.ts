@@ -16,6 +16,19 @@ export function initialize(): Promise<any> {
   });
 }
 
+export function initializeMapElement(wrapper: HTMLDivElement) {
+  const google = (window as any).google;
+  return new google.maps.Map(wrapper, {
+    center: {
+      lat: mapsDefaults.latitude,
+      lng: mapsDefaults.longitude
+    },
+    zoom: mapsDefaults.zoom,
+    mapTypeControl: false,
+    streetViewControl: false
+  });
+}
+
 export function getCurrentLocation(): Promise<Position> {
   return new Promise((resolve, reject) => {
     if (navigator.geolocation) {
