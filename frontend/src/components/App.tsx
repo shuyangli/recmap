@@ -8,9 +8,11 @@ export class App extends React.PureComponent<{}, void> {
   render() {
     return (
       <div className='app-viewport'>
-        <ConnectedLocationSidebar />
-        <ConnectedActionPanel />
         <Map />
+        <div className='floater-viewport'>
+          <ConnectedLocationSidebar />
+          <ConnectedActionPanel />
+        </div>
       </div>
       );
   }
