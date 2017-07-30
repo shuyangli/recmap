@@ -11,7 +11,7 @@ interface Props {
   onFilterChange: (newState: FilterState) => void;
 }
 
-export class FilterControls extends React.PureComponent<Props, void> {
+export class FilterControls extends React.PureComponent<Props, {}> {
   render() {
     return (
       <div className='sidebar-filter-controls pt-elevation-1'>

@@ -4,7 +4,7 @@ import { ConnectedLocationSidebar } from './sidebar/LocationSidebar';
 import { ConnectedActionPanel } from './panel/ActionPanel';
 import { ConnectedMap } from './map/Map';
 
-export class App extends React.PureComponent<{}, void> {
+export class App extends React.PureComponent<{}, {}> {
   render() {
     return (
       <div className='app-viewport'>

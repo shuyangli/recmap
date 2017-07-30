@@ -31,4 +31,4 @@ function mapDispatchToProps(dispatch: Dispatch<RootState>): ConnectedProps {
 }
 
 export const ConnectedLocationItem: React.ComponentClass<OwnProps> =
-  connect(null, mapDispatchToProps)(LocationItem) as any;
+  connect<ConnectedProps, void, OwnProps>(null, mapDispatchToProps)(LocationItem as any);

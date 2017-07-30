@@ -50,4 +50,5 @@ function mapStateToProps(state: RootState): ConnectedProps {
   };
 }
 
-export const ConnectedActionPanel = connect(mapStateToProps)(ActionPanel);
+export const ConnectedActionPanel: React.ComponentClass<{}>
+  = connect(mapStateToProps)(ActionPanel as any);

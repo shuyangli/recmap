@@ -7,16 +7,16 @@ import { RootState } from '../../store/store';
 
 import './Map.less'
 
-interface IConnectedProps {
+interface ConnectedProps {
   locations: { [id: string]: Location };
 }
 
-class Map extends React.PureComponent<IConnectedProps, void> {
+class Map extends React.PureComponent<ConnectedProps, void> {
 
   private mapRef: HTMLDivElement;
   private map: any;
 
-  componentDidMount = () => {
+  componentDidMount() {
     this.map = initializeMapElement(this.mapRef);
   }
 
@@ -36,8 +36,9 @@ class Map extends React.PureComponent<IConnectedProps, void> {
   }
 }
 
-const mapStateToProps = (state: RootState): IConnectedProps => ({
+const mapStateToProps = (state: RootState): ConnectedProps => ({
   locations: state.location.locations
 });
 
-export const ConnectedMap = connect<IConnectedProps, {}, {}>(mapStateToProps)(Map);
+export const ConnectedMap: React.ComponentClass<{}> =
+  connect(mapStateToProps)(Map as any);

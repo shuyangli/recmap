@@ -47,4 +47,4 @@ function mapDispatchToProps(dispatch: Dispatch<RootState>): DispatchProps {
 }
 
 export const ConnectedLocationDetailsPanel: React.ComponentClass<OwnProps> =
-  connect(null, mapDispatchToProps)(LocationDetailsPanel) as any;
+  connect<void, DispatchProps, OwnProps>(null, mapDispatchToProps)(LocationDetailsPanel as any);

@@ -54,7 +54,7 @@ class EditLocationPanel extends React.PureComponent<OwnProps & DispatchProps, St
     }
   }
 
-  componentDidMount = () => {
+  componentDidMount() {
     // hack for loading google maps dependency in-browser
     const google = (window as any).google;
 
@@ -192,4 +192,4 @@ function mapDispatchToProps(dispatch: Dispatch<RootState>): DispatchProps {
 }
 
 export const ConnectedEditLocationPanel: React.ComponentClass<OwnProps> =
-  connect(null, mapDispatchToProps)(EditLocationPanel) as any;
+  connect(null, mapDispatchToProps)(EditLocationPanel);

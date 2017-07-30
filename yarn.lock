@@ -35,20 +35,20 @@
   version "4.14.71"
   resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.71.tgz#0dc383f78981216ac76e2f2c3afd998e0450e4c1"
 
-"@types/react-dom@^0.14.23":
-  version "0.14.23"
-  resolved "https://registry.yarnpkg.com/@types/react-dom/-/react-dom-0.14.23.tgz#cecfcfad754b4c2765fe5d29b81b301889ad6c2e"
+"@types/react-dom@^15.5.1":
+  version "15.5.1"
+  resolved "https://registry.yarnpkg.com/@types/react-dom/-/react-dom-15.5.1.tgz#f3c3e14c682785923c7d64583537df319442dec1"
   dependencies:
     "@types/react" "*"
 
-"@types/react-redux@^4.4.38":
+"@types/react-redux@^4.4.47":
   version "4.4.47"
   resolved "https://registry.yarnpkg.com/@types/react-redux/-/react-redux-4.4.47.tgz#12af1677116e08d413fe2620d0a85560c8a0536e"
   dependencies:
     "@types/react" "*"
     redux "^3.6.0"
 
-"@types/react@*", "@types/react@^15.0.20":
+"@types/react@*", "@types/react@^15.6.0":
   version "15.6.0"
   resolved "https://registry.yarnpkg.com/@types/react/-/react-15.6.0.tgz#3b3e92a60b65045e4df48fda324de84d83addbc4"
 
@@ -2605,7 +2605,7 @@ react-addons-css-transition-group@^15.5.2:
   dependencies:
     react-transition-group "^1.2.0"
 
-react-dom@^15.3.1:
+react-dom@^15.6.1:
   version "15.6.1"
   resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-15.6.1.tgz#2cb0ed4191038e53c209eb3a79a23e2a4cf99470"
   dependencies:
@@ -3410,7 +3410,7 @@ typedarray@^0.0.6, typedarray@~0.0.5:
   version "0.0.6"
   resolved "https://registry.yarnpkg.com/typedarray/-/typedarray-0.0.6.tgz#867ac74e3864187b1d3d47d996a78ec5c8830777"
 
-typescript@^2.2.2:
+typescript@^2.4.2:
   version "2.4.2"
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-2.4.2.tgz#f8395f85d459276067c988aa41837a8f82870844"
 
