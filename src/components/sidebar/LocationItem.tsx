@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { connect, Dispatch } from 'react-redux';
 import { RootState } from '../../store/store';
-import { toggleDetailsPanel } from '../../store/actions';
+import { toggleDetailsPanel } from '../../store/actionPanel/actions';
 import { Location } from '../../api/interfaces';
 
 interface OwnProps {

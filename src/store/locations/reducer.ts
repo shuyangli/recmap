@@ -1,21 +1,14 @@
 import * as _ from 'lodash';
 import { Location } from '../../api/interfaces';
-import { LOAD_LOCATIONS_FINISHED, SAVE_LOCATION_FINISHED, DELETE_LOCATION_FINISHED } from '../actions';
-
-export interface LocationState {
-  locations: { [id: string]: Location };
-}
-
-const EMPTY_LOCATION_STATE: LocationState = {
-  locations: {},
-};
+import { UPDATE_ALL_LOCATIONS, ADD_LOCATION, REMOVE_LOCATION, UPDATE_FILTER } from './actions';
+import { LocationState, FilterState, EMPTY_LOCATION_STATE } from './types';
 
 export function locationsReducer(state: LocationState = EMPTY_LOCATION_STATE, action: any): LocationState {
   switch (action.type) {
-    case LOAD_LOCATIONS_FINISHED:
+    case UPDATE_ALL_LOCATIONS:
       return Object.assign({}, state, { locations: action.payload.locations });
 
-    case SAVE_LOCATION_FINISHED:
+    case ADD_LOCATION:
       // Directly manipulate the locations in place
       const newLocation: Location = action.payload.location;
       const locations = Object.assign({}, state.locations, {
@@ -23,9 +16,14 @@ export function locationsReducer(state: LocationState = EMPTY_LOCATION_STATE, ac
       });
       return Object.assign({}, state, { locations });
 
-    case DELETE_LOCATION_FINISHED:
+    case REMOVE_LOCATION:
       return Object.assign({}, state, {
         locations: _.omit(state.locations, action.payload.locationId)
+      });
+
+    case UPDATE_FILTER:
+      return Object.assign({}, state, {
+        filter: action.payload.filter
       });
 
     default:

@@ -5,13 +5,8 @@ import { Button, Intent, Spinner, Tag } from '@blueprintjs/core';
 import { Location } from '../../api/interfaces';
 import { getCurrentLocation } from '../../api/MapsApi';
 import { RootState } from '../../store/store';
-import {
-  toggleEditPanel,
-  toggleDetailsPanel,
-  closePanel,
-  createOrUpdateLocation,
-  deleteLocation
-} from '../../store/actions';
+import { toggleEditPanel, toggleDetailsPanel, closePanel } from '../../store/actionPanel/actions';
+import { createOrUpdateLocation, deleteLocation } from '../../store/locations/actions';
 
 interface OwnProps {
   initialLocation?: Location;

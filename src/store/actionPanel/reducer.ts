@@ -1,22 +1,7 @@
-import { TOGGLE_DETAIL_PANEL, TOGGLE_EDIT_PANEL, CLOSE_PANEL } from '../actions';
+import { TOGGLE_DETAIL_PANEL, TOGGLE_EDIT_PANEL, CLOSE_PANEL } from './actions';
+import { ActionPanelState, ActionPanelType, EMPTY_ACTION_PANEL_STATE } from './types';
 
-export enum ActionPanelType {
-  DETAIL,
-  EDIT
-}
-
-export interface ActionPanelState {
-  locationId?: string;
-  isVisible: boolean;
-  type: ActionPanelType;
-}
-
-const EMPTY_STATE: ActionPanelState = {
-  isVisible: false,
-  type: ActionPanelType.DETAIL
-};
-
-export function actionPanelReducer(state: ActionPanelState = EMPTY_STATE, action: any): ActionPanelState {
+export function actionPanelReducer(state: ActionPanelState = EMPTY_ACTION_PANEL_STATE, action: any): ActionPanelState {
   switch (action.type) {
     case TOGGLE_DETAIL_PANEL:
       return Object.assign({}, state, {

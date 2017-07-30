@@ -4,7 +4,7 @@ import { connect, Dispatch } from 'react-redux';
 import { Button, Tag } from '@blueprintjs/core';
 import { Location } from '../../api/interfaces';
 import { RootState } from '../../store/store';
-import { toggleEditPanel } from '../../store/actions';
+import { toggleEditPanel } from '../../store/actionPanel/actions';
 
 interface OwnProps {
   location: Location;

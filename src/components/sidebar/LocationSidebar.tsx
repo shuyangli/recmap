@@ -5,15 +5,17 @@ import { connect, Dispatch } from 'react-redux';
 import { Button, NonIdealState, Spinner } from '@blueprintjs/core';
 import { Location } from '../../api/interfaces';
 import { ConnectedLocationItem } from './LocationItem';
-import { FilterControls } from './FilterControls';
-import { FilterState } from './types';
+import { ConnectedFilterControls } from './FilterControls';
 import { RootState } from '../../store/store';
-import { loadLocations, toggleEditPanel } from '../../store/actions';
+import { FilterState } from '../../store/locations/types';
+import { loadLocations } from '../../store/locations/actions';
+import { toggleEditPanel } from '../../store/actionPanel/actions';
 
 import './LocationSidebar.less'
 
 interface ConnectedProps {
   locations: {[id: string]: Location};
+  filter: FilterState;
 }
 
 interface DispatchProps {
@@ -22,15 +24,11 @@ interface DispatchProps {
 }
 
 interface State {
-  filters: FilterState;
   isLoadingLocations: boolean;
 }
 
 class LocationSidebar extends React.PureComponent<ConnectedProps & DispatchProps, State> {
   state: State = {
-    filters: {
-      searchTerm: ''
-    },
     isLoadingLocations: false
   };
 
@@ -45,10 +43,7 @@ class LocationSidebar extends React.PureComponent<ConnectedProps & DispatchProps
 
     return (
       <div className='location-sidebar pt-elevation-1'>
-        <FilterControls
-          filters={this.state.filters}
-          onFilterChange={(newFilters: FilterState) => this.setState({ filters: newFilters })}
-        />
+        <ConnectedFilterControls />
         {
           this.state.isLoadingLocations
           ? <NonIdealState visual={<Spinner />} />
@@ -66,9 +61,9 @@ class LocationSidebar extends React.PureComponent<ConnectedProps & DispatchProps
   }
 
   private getFilteredLocations = () => {
-    if (this.state.filters.searchTerm) {
+    if (this.props.filter.searchTerm) {
       const filtered = fuzzy.filter(
-        this.state.filters.searchTerm,
+        this.props.filter.searchTerm,
         _.toArray(this.props.locations),
         { extract: (location) => location.name }
       );
@@ -83,7 +78,8 @@ class LocationSidebar extends React.PureComponent<ConnectedProps & DispatchProps
 
 function mapStateToProps(state: RootState): ConnectedProps {
   return {
-    locations: state.location.locations
+    locations: state.location.locations,
+    filter: state.location.filter
   };
 }
 

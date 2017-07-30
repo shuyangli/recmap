@@ -1,7 +1,10 @@
 import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
 import thunkMiddleware from 'redux-thunk';
-import { locationsReducer, LocationState } from './reducers/locationsReducer';
-import { actionPanelReducer, ActionPanelState } from './reducers/actionPanelReducer';
+
+import { LocationState } from './locations/types';
+import { locationsReducer } from './locations/reducer';
+import { ActionPanelState } from './actionPanel/types';
+import { actionPanelReducer } from './actionPanel/reducer';
 
 const composeEnhancers = (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 

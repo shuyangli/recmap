@@ -3,7 +3,7 @@ import * as _ from 'lodash';
 import { connect } from 'react-redux';
 import { Location } from '../../api/interfaces';
 import { RootState } from '../../store/store';
-import { ActionPanelType } from '../../store/reducers/actionPanelReducer';
+import { ActionPanelType } from '../../store/actionPanel/types';
 
 import { ConnectedLocationDetailsPanel } from './LocationDetailsPanel';
 import { ConnectedEditLocationPanel } from './EditLocationPanel';

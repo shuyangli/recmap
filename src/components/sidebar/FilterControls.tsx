@@ -1,17 +1,21 @@
 import * as React from 'react';
-import * as _ from 'lodash';
-import { connect } from 'react-redux';
+import { connect, Dispatch } from 'react-redux';
+import { RootState } from '../../store/store';
 import { Checkbox } from '@blueprintjs/core';
 
-import { FilterState } from './types';
+import { FilterState } from '../../store/locations/types';
+import { updateFilter } from '../../store/locations/actions';
 import { Location } from '../../api/interfaces';
 
-interface Props {
-  filters: FilterState;
-  onFilterChange: (newState: FilterState) => void;
+interface ConnectedProps {
+  filter: FilterState;
 }
 
-export class FilterControls extends React.PureComponent<Props, {}> {
+interface DispatchProps {
+  onFilterChange: (newFilter: FilterState) => void;
+}
+
+class FilterControls extends React.PureComponent<ConnectedProps & DispatchProps, {}> {
   render() {
     return (
       <div className='sidebar-filter-controls pt-elevation-1'>
@@ -21,8 +25,8 @@ export class FilterControls extends React.PureComponent<Props, {}> {
             className='search-term-input pt-input'
             type='search'
             placeholder='Search'
-            value={this.props.filters.searchTerm}
-            onChange={(event) => this.props.onFilterChange(_.assign({}, this.props.filters,
+            value={this.props.filter.searchTerm}
+            onChange={(event) => this.props.onFilterChange(Object.assign({}, this.props.filter,
               { searchTerm: event.target.value }
             ))}
           />
@@ -38,3 +42,18 @@ export class FilterControls extends React.PureComponent<Props, {}> {
     );
   }
 }
+
+function mapStateToProps(state: RootState): ConnectedProps {
+  return {
+    filter: state.location.filter
+  };
+}
+
+function mapDispatchToProps(dispatch: Dispatch<RootState>): DispatchProps {
+  return {
+    onFilterChange: (newFilter: FilterState) => dispatch(updateFilter(newFilter))
+  };
+}
+
+export const ConnectedFilterControls: React.ComponentClass<{}>
+  = connect(mapStateToProps, mapDispatchToProps)(FilterControls as any);
