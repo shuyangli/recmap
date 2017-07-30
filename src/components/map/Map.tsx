@@ -1,14 +1,14 @@
 import * as React from 'react';
-import * as _ from 'lodash';
 import { connect } from 'react-redux';
 import { Location } from '../../api/interfaces';
 import { initializeMapElement, getCurrentLocation, mapsDefaults } from '../../api/MapsApi';
 import { RootState } from '../../store/store';
+import { getFilteredLocations } from '../../store/locations/selectors';
 
 import './Map.less'
 
 interface ConnectedProps {
-  locations: { [id: string]: Location };
+  filteredLocations: Location[];
 }
 
 class Map extends React.PureComponent<ConnectedProps, void> {
@@ -22,7 +22,7 @@ class Map extends React.PureComponent<ConnectedProps, void> {
 
   render() {
     const google = (window as any).google;
-    const markers = _.mapValues(this.props.locations, location =>
+    const markers = this.props.filteredLocations.map(location =>
       new google.maps.Marker({
         map: this.map,
         position: {
@@ -37,7 +37,7 @@ class Map extends React.PureComponent<ConnectedProps, void> {
 }
 
 const mapStateToProps = (state: RootState): ConnectedProps => ({
-  locations: state.location.locations
+  filteredLocations: getFilteredLocations(state)
 });
 
 export const ConnectedMap: React.ComponentClass<{}> =
