@@ -11,7 +11,14 @@ interface ConnectedProps {
   filteredLocations: Location[];
 }
 
-class Map extends React.PureComponent<ConnectedProps, void> {
+interface State {
+  displayedMarkers: any[];
+}
+
+class Map extends React.PureComponent<ConnectedProps, State> {
+  state: State = {
+    displayedMarkers: []
+  };
 
   private mapRef: HTMLDivElement;
   private map: any;
@@ -20,9 +27,9 @@ class Map extends React.PureComponent<ConnectedProps, void> {
     this.map = initializeMapElement(this.mapRef);
   }
 
-  render() {
+  componentWillReceiveProps(nextProps: ConnectedProps) {
     const google = (window as any).google;
-    const markers = this.props.filteredLocations.map(location =>
+    const newMarkers = nextProps.filteredLocations.map(location =>
       new google.maps.Marker({
         map: this.map,
         position: {
@@ -30,6 +37,13 @@ class Map extends React.PureComponent<ConnectedProps, void> {
           lng: parseFloat(location.longitude)
         }
       }));
+
+    this.state.displayedMarkers.forEach(marker => marker.setMap(null));
+    this.setState({ displayedMarkers: newMarkers });
+  }
+
+  render() {
+    const google = (window as any).google;
     return (
       <div id='map' ref={(element) => this.mapRef = element} />
     );
