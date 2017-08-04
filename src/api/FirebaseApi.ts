@@ -35,7 +35,10 @@ export class FirebaseApi implements BackendApi {
 
   getAllTags() {
     return Promise.resolve(firebase.database().ref('/tags/').once('value'))
-    .then((snapshot) => snapshot.val());
+    .then((snapshot) => {
+      const values = snapshot.val();
+      return values ? Object.keys(values) : [];
+    });
   }
 
   private getLocationKey(locationId: string) {

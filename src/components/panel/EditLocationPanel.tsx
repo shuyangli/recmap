@@ -1,8 +1,11 @@
 import * as React from 'react';
 import * as _ from 'lodash';
+import * as classNames from 'classnames';
 import { connect, Dispatch } from 'react-redux';
-import { Button, Intent, Spinner, Tag } from '@blueprintjs/core';
+import * as Select from 'react-select';
+import { Button, Classes, Intent, Spinner, Tag } from '@blueprintjs/core';
 import { Location } from '../../api/interfaces';
+import { backendApi } from '../../api/BackendApi';
 import { getCurrentLocation } from '../../api/MapsApi';
 import { RootState } from '../../store/store';
 import { toggleEditPanel, toggleDetailsPanel, closePanel } from '../../store/actionPanel/actions';
@@ -20,7 +23,7 @@ interface DispatchProps {
 
 interface State {
   location: Location;
-  dirtyTag: string;
+  allTags: string[];
   isSaving: boolean;
 }
 
@@ -34,7 +37,7 @@ class EditLocationPanel extends React.PureComponent<OwnProps & DispatchProps, St
       notes: '',
       tags: []
     },
-    dirtyTag: '',
+    allTags: [],
     isSaving: false
   };
 
@@ -80,26 +83,25 @@ class EditLocationPanel extends React.PureComponent<OwnProps & DispatchProps, St
       this.geocodeAutocomplete.setBounds(circle.getBounds());
       this.establishmentAutocomplete.setBounds(circle.getBounds());
     });
+
+    backendApi.getAllTags().then(allTags => this.setState({ allTags }));
   }
 
   private cancelEdit = () => this.props.onCancel(this.state.location.id);
   private saveEdit = () => this.props.onSave(this.state.location, this.props.initialLocation);
   private deleteLocation = () => this.props.onDelete(this.state.location.id);
 
-  private onAddTag = () => {
+  private onTagsChanged = (tags: string[]) => {
     this.setState({
-      location: Object.assign({}, this.state.location, {
-        tags: _.concat(this.state.location.tags, this.state.dirtyTag)
-      })
+      location: Object.assign({}, this.state.location, { tags })
     });
   }
 
-  private onDeleteTag = (tag: string) => {
-    this.setState({
-      location: Object.assign({}, this.state.location, {
-        tags: this.state.location.tags.filter((existingTag) => existingTag !== tag)
-      })
-    });
+  private getSelectOptions = (rawStrings: string[]): Select.Option<string>[] => {
+    return rawStrings.map(tag => ({
+      label: tag,
+      value: tag
+    }));
   }
 
   render() {
@@ -108,7 +110,7 @@ class EditLocationPanel extends React.PureComponent<OwnProps & DispatchProps, St
 
         <div className='location-content-wrapper'>
           <input
-            className='pt-input pt-fill location-name'
+            className={classNames(Classes.INPUT, Classes.FILL, 'location-name')}
             value={this.state.location.name}
             ref={(element) => this.nameInput = element}
             placeholder='Name'
@@ -118,25 +120,16 @@ class EditLocationPanel extends React.PureComponent<OwnProps & DispatchProps, St
               })
             })}
           />
-          <input
-            className='pt-input pt-fill location-tag-input'
-            value={this.state.dirtyTag}
+          <Select.Creatable
+            backspaceToRemoveMessage=""
+            multi={true}
+            options={this.getSelectOptions(this.state.allTags)}
+            value={this.getSelectOptions(this.state.location.tags)}
             placeholder='Add tags'
-            onChange={(event) => this.setState({ dirtyTag: event.target.value })}
-            onKeyPress={(event) => {
-              if (event.key === 'Enter') {
-                this.onAddTag();
-                this.setState({ dirtyTag: '' });
-              }
-            }}
+            onChange={(values: Select.Option<string>[]) => this.onTagsChanged(values.map(value => value.value))}
           />
-          <div className='location-tag-area'>
-            {this.state.location.tags.map((tag: string) =>
-              <Tag key={tag} onRemove={() => this.onDeleteTag(tag)}>{tag}</Tag>
-            )}
-          </div>
           <input
-            className='pt-input pt-fill location-address'
+            className={classNames(Classes.INPUT, Classes.FILL, 'location-address')}
             value={this.state.location.address}
             placeholder='Address'
             ref={(element) => this.addressInput = element}
@@ -147,7 +140,7 @@ class EditLocationPanel extends React.PureComponent<OwnProps & DispatchProps, St
             })}
           />
           <textarea
-            className='pt-input pt-fill location-notes'
+            className={classNames(Classes.INPUT, Classes.FILL, 'location-notes')}
             value={this.state.location.notes}
             placeholder='Notes'
             onChange={(event) => this.setState(
@@ -159,7 +152,7 @@ class EditLocationPanel extends React.PureComponent<OwnProps & DispatchProps, St
           />
         </div>
 
-        <div className='panel-edit-controls pt-elevation-1'>
+        <div className={classNames(Classes.ELEVATION_1, 'panel-edit-controls')}>
           <Button text='Cancel' onClick={this.cancelEdit} />
           <Button text='Save' intent={Intent.SUCCESS} onClick={this.saveEdit} />
           {this.state.location.id && <Button text='Delete' intent={Intent.DANGER} onClick={this.deleteLocation} />}

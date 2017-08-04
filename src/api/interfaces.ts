@@ -6,13 +6,14 @@ export interface Location {
   longitude: string;
   notes: string;
   tags: string[];
+  rating?: Rating;
 };
 
 export enum Rating {
-  BAD = -1,
-  NEUTRAL = 0,
-  GOOD = 1,
-  EXCELLENT = 2
+  BAD = 0,
+  NEUTRAL = 1,
+  GOOD = 2,
+  EXCELLENT = 3
 };
 
 export interface Review {

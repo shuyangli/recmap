@@ -17,6 +17,7 @@ class LocationItem extends React.PureComponent<OwnProps & ConnectedProps, void> 
     return (
       <div className='location-item' onClick={this.props.getOpenDetailsPanel(this.props.location.id)}>
         <h5 className='name'>{this.props.location.name}</h5>
+        {this.props.location.rating && <span className='rating'>{this.props.location.rating}</span>}
         <p className='address'>{this.props.location.address}</p>
         <span>{this.props.location.notes}</span>
       </div>
