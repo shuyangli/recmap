@@ -50,6 +50,7 @@ class EditLocationPanel extends React.PureComponent<OwnProps & DispatchProps, St
     if (this.props.initialLocation) {
       this.setState({ location: Object.assign({}, this.props.initialLocation) });
     }
+    backendApi.getAllTags().then(allTags => this.setState({ allTags }));
   }
 
   componentDidMount() {
@@ -83,8 +84,6 @@ class EditLocationPanel extends React.PureComponent<OwnProps & DispatchProps, St
       this.geocodeAutocomplete.setBounds(circle.getBounds());
       this.establishmentAutocomplete.setBounds(circle.getBounds());
     });
-
-    backendApi.getAllTags().then(allTags => this.setState({ allTags }));
   }
 
   private cancelEdit = () => this.props.onCancel(this.state.location.id);

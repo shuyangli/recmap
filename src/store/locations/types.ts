@@ -2,10 +2,12 @@ import { Location } from '../../api/interfaces';
 
 export interface FilterState {
   searchTerm: string;
+  tags: string[];
 }
 
 export const EMPTY_FILTER_STATE: FilterState = {
-  searchTerm: ''
+  searchTerm: '',
+  tags: []
 };
 
 export interface LocationState {

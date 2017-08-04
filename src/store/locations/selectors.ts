@@ -10,7 +10,10 @@ const getFilter = (state: RootState) => state.location.filter;
 export const getFilteredLocations = createSelector(
   [getAllLocations, getFilter],
   (locations, filter) => {
-    if (filter.searchTerm) {
+
+    let remainingLocations = _.values(locations);
+
+    if (!_.isEmpty(filter.searchTerm)) {
       const filtered = fuzzy.filter(
         filter.searchTerm,
         _.values(locations),
@@ -18,9 +21,14 @@ export const getFilteredLocations = createSelector(
       );
       // When a search term is present, the results are sorted by relevance,
       // and fuzzy already sorts them for us.
-      return filtered.map(result => result.original);
-    } else {
-      return _.values(locations);
+      remainingLocations = filtered.map(result => result.original);
     }
+
+    if (!_.isEmpty(filter.tags)) {
+      remainingLocations = remainingLocations.filter(location =>
+        filter.tags.some(tag => _.includes(location.tags, tag)));
+    }
+
+    return remainingLocations;
   }
 );
