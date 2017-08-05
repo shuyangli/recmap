@@ -48,7 +48,9 @@ class EditLocationPanel extends React.PureComponent<OwnProps & DispatchProps, St
 
   componentWillMount() {
     if (this.props.initialLocation) {
-      this.setState({ location: Object.assign({}, this.props.initialLocation) });
+      this.setState({
+        location: { ...this.props.initialLocation
+      }});
     }
     backendApi.getAllTags().then(allTags => this.setState({ allTags }));
   }
@@ -92,7 +94,7 @@ class EditLocationPanel extends React.PureComponent<OwnProps & DispatchProps, St
 
   private onTagsChanged = (tags: string[]) => {
     this.setState({
-      location: Object.assign({}, this.state.location, { tags })
+      location: { ...this.state.location, tags }
     });
   }
 
@@ -114,9 +116,7 @@ class EditLocationPanel extends React.PureComponent<OwnProps & DispatchProps, St
             ref={(element) => this.nameInput = element}
             placeholder='Name'
             onChange={(event) => this.setState({
-              location: Object.assign({}, this.state.location, {
-                name: event.target.value
-              })
+              location: { ...this.state.location, name: event.target.value }
             })}
           />
           <Select.Creatable
@@ -133,21 +133,16 @@ class EditLocationPanel extends React.PureComponent<OwnProps & DispatchProps, St
             placeholder='Address'
             ref={(element) => this.addressInput = element}
             onChange={(event) => this.setState({
-              location: Object.assign({}, this.state.location, {
-                address: event.target.value
-              })
+              location: { ...this.state.location, address: event.target.value }
             })}
           />
           <textarea
             className={classNames(Classes.INPUT, Classes.FILL, 'location-notes')}
             value={this.state.location.notes}
             placeholder='Notes'
-            onChange={(event) => this.setState(
-              {
-                location: Object.assign({}, this.state.location, {
-                  notes: event.target.value
-                })
-              })}
+            onChange={(event) => this.setState({
+              location: { ...this.state.location, notes: event.target.value }
+            })}
           />
         </div>
 

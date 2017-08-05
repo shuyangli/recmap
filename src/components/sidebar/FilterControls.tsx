@@ -34,9 +34,7 @@ class FilterControls extends React.PureComponent<ConnectedProps & DispatchProps,
   }
 
   private onTagsChanged = (newTags: string[]) => {
-    this.props.onFilterChange(Object.assign({}, this.props.filter, {
-      tags: newTags
-    }));
+    this.props.onFilterChange({ ...this.props.filter, tags: newTags });
   }
 
   componentWillMount() {
@@ -53,9 +51,10 @@ class FilterControls extends React.PureComponent<ConnectedProps & DispatchProps,
             type='search'
             placeholder='Search'
             value={this.props.filter.searchTerm}
-            onChange={(event) => this.props.onFilterChange(Object.assign({}, this.props.filter, {
+            onChange={(event) => this.props.onFilterChange({
+              ...this.props.filter,
               searchTerm: event.target.value
-            }))}
+            })}
           />
         </div>
 
