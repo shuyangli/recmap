@@ -1,13 +1,15 @@
 {
     "defaultSeverity": "error",
     "extends": [
-        "tslint:recommended"
+        "tslint:recommended",
+        "tslint-react"
     ],
     "jsRules": {},
     "rules": {
         "interface-name": [true, "never-prefix"],
         "object-literal-sort-keys": [false],
-        "member-access": false
+        "member-access": false,
+        "jsx-no-multiline-js": false
     },
     "rulesDirectory": []
 }

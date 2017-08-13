@@ -24,14 +24,17 @@ class ActionPanel extends React.PureComponent<ConnectedProps, void> {
         <div className="action-panel pt-elevation-0">
           {
             this.props.type === ActionPanelType.DETAIL
-            ? <ConnectedLocationDetailsPanel
+            ? (
+              <ConnectedLocationDetailsPanel
                 location={this.props.locations[this.props.locationId]}
               />
-            : <ConnectedEditLocationPanel
+            ) : (
+              <ConnectedEditLocationPanel
                 initialLocation={this.props.locationId
                 ? this.props.locations[this.props.locationId]
                 : undefined}
               />
+            )
           }
         </div>
       );

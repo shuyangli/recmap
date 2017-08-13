@@ -40,10 +40,7 @@ class FilterControls extends React.PureComponent<ConnectedProps & DispatchProps,
             type="search"
             placeholder="Search"
             value={this.props.filter.searchTerm}
-            onChange={(event) => this.props.onFilterChange({
-              ...this.props.filter,
-              searchTerm: event.target.value,
-            })}
+            onChange={this.onSearchTermChange}
           />
         </div>
 
@@ -54,21 +51,26 @@ class FilterControls extends React.PureComponent<ConnectedProps & DispatchProps,
           options={this.getSelectOptions(this.state.allTags)}
           value={this.getSelectOptions(this.props.filter.tags)}
           placeholder="Add tags"
-          onChange={(values: Array<Select.Option<string>>) => this.onTagsChanged(values.map((value) => value.value))}
+          onChange={this.onTagsChange}
         />
       </div>
     );
   }
 
-  private getSelectOptions = (rawStrings: string[]): Array<Select.Option<string>> => {
+  private onSearchTermChange(event: React.ChangeEvent<HTMLInputElement>) {
+    this.props.onFilterChange({ ...this.props.filter, searchTerm: event.target.value });
+  }
+
+  private getSelectOptions(rawStrings: string[]): Array<Select.Option<string>> {
     return rawStrings.map((tag) => ({
       label: tag,
       value: tag,
     }));
   }
 
-  private onTagsChanged = (newTags: string[]) => {
-    this.props.onFilterChange({ ...this.props.filter, tags: newTags });
+  private onTagsChange = (values: Array<Select.Option<string>>) => {
+    const tags = values.map((value) => value.value);
+    this.props.onFilterChange({ ...this.props.filter, tags });
   }
 }
 

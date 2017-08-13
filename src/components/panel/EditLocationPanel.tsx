@@ -99,9 +99,7 @@ class EditLocationPanel extends React.PureComponent<OwnProps & DispatchProps, St
             value={this.state.location.name}
             ref={(element) => this.nameInput = element}
             placeholder="Name"
-            onChange={(event) => this.setState({
-              location: { ...this.state.location, name: event.target.value },
-            })}
+            onChange={this.onNameChange}
           />
           <Select.Creatable
             backspaceToRemoveMessage=""
@@ -109,24 +107,20 @@ class EditLocationPanel extends React.PureComponent<OwnProps & DispatchProps, St
             options={this.getSelectOptions(this.state.allTags)}
             value={this.getSelectOptions(this.state.location.tags)}
             placeholder="Add tags"
-            onChange={(values: Array<Select.Option<string>>) => this.onTagsChanged(values.map((value) => value.value))}
+            onChange={this.onTagsChange}
           />
           <input
             className={classNames(Classes.INPUT, Classes.FILL, "location-address")}
             value={this.state.location.address}
             placeholder="Address"
             ref={(element) => this.addressInput = element}
-            onChange={(event) => this.setState({
-              location: { ...this.state.location, address: event.target.value },
-            })}
+            onChange={this.onAddressChange}
           />
           <textarea
             className={classNames(Classes.INPUT, Classes.FILL, "location-notes")}
             value={this.state.location.notes}
             placeholder="Notes"
-            onChange={(event) => this.setState({
-              location: { ...this.state.location, notes: event.target.value },
-            })}
+            onChange={this.onNotesChange}
           />
         </div>
 
@@ -139,14 +133,31 @@ class EditLocationPanel extends React.PureComponent<OwnProps & DispatchProps, St
     );
   }
 
+  private updateLocation(partial: Partial<Location>) {
+    this.setState({
+      location: { ...this.state.location,  ...partial },
+    });
+  }
+
+  private onNameChange(event: React.ChangeEvent<HTMLInputElement>) {
+    this.updateLocation({ name: event.target.value });
+  }
+
+  private onAddressChange(event: React.ChangeEvent<HTMLInputElement>) {
+    this.updateLocation({ address: event.target.value });
+  }
+
+  private onNotesChange(event: React.ChangeEvent<HTMLTextAreaElement>) {
+    this.updateLocation({ notes: event.target.value });
+  }
+
   private cancelEdit = () => this.props.onCancel(this.state.location.id);
   private saveEdit = () => this.props.onSave(this.state.location, this.props.initialLocation);
   private deleteLocation = () => this.props.onDelete(this.state.location.id);
 
-  private onTagsChanged = (tags: string[]) => {
-    this.setState({
-      location: { ...this.state.location, tags },
-    });
+  private onTagsChange = (values: Array<Select.Option<string>>) => {
+    const tags = values.map((value) => value.value);
+    this.updateLocation({ tags });
   }
 
   private getSelectOptions = (rawStrings: string[]): Array<Select.Option<string>> => {
