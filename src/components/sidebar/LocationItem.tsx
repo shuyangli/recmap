@@ -17,10 +17,16 @@ interface ConnectedProps {
 class LocationItem extends React.PureComponent<OwnProps & ConnectedProps, void> {
   render() {
     return (
-      <div className='location-item' onClick={this.props.getOpenDetailsPanel(this.props.location.id)}>
-        <h5 className='name'>{this.props.location.name}</h5>
-        {this.props.location.rating && <span className='rating'>{this.props.location.rating}</span>}
-        <p className='address'>{this.props.location.address}</p>
+      <div className="location-item" onClick={this.props.getOpenDetailsPanel(this.props.location.id)}>
+        <div className="location-item-left">
+          <h5 className="name">{this.props.location.name}</h5>
+          {!_.isEmpty(this.props.location.tags) &&
+            <Tag className={Classes.MINIMAL}>{this.props.location.tags[0]}</Tag>
+          }
+        </div>
+
+        {this.props.location.rating && <span className="rating">{this.props.location.rating}</span>}
+        <p className="address">{this.props.location.address}</p>
         <span>{this.props.location.notes}</span>
       </div>
     );

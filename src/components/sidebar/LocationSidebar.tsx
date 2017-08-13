@@ -37,7 +37,7 @@ class LocationSidebar extends React.PureComponent<ConnectedProps & DispatchProps
 
   render() {
     return (
-      <div className='location-sidebar pt-elevation-1'>
+      <div className="location-sidebar">
         <ConnectedFilterControls />
         {
           this.state.isLoadingLocations

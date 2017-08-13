@@ -43,9 +43,9 @@ class FilterControls extends React.PureComponent<ConnectedProps & DispatchProps,
 
   render() {
     return (
-      <div className='sidebar-filter-controls pt-elevation-1'>
-        <div className='search-group pt-input-group pt-large'>
-          <span className='pt-icon pt-icon-search' />
+      <div className="sidebar-filter-controls">
+        <div className="search-group pt-input-group pt-large">
+          <span className="pt-icon pt-icon-search" />
           <input
             className='search-term-input pt-input'
             type='search'

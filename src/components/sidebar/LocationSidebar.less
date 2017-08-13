@@ -2,9 +2,11 @@
 
 .location-sidebar {
   height: 100%;
-  width: 25vw;
-  min-width: 300px;
-  max-width: 400px;
+  width: 20vw;
+  min-width: 250px;
+  max-width: 350px;
+  padding: 20px;
+  border-radius: 10px;
   background-color: @white;
   display: flex;
   flex-direction: column;
@@ -17,7 +19,8 @@
 
 .location-item {
   flex: 1;
-  padding: 20px;
+  padding-top: 20px;
+  padding-bottom: 5px;
   border-bottom: solid 1px @pt-divider-black;
 
   &:hover {
@@ -26,10 +29,11 @@
 }
 
 .sidebar-filter-controls {
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  border-bottom: solid 1px @gray5;
+  padding-bottom: 20px;
   flex-shrink: 0;
-  padding: 20px;
-  box-shadow: 0 1px 1px rgba(16, 22, 26, 0.2);
-  z-index: 20;
 
   .search-term-input[type="search"] {
     background: none;
@@ -45,12 +49,13 @@
 }
 
 .sidebar-edit-controls {
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+  border-top: solid 1px @gray5;
   flex-grow: 0;
   flex-shrink: 0;
   display: flex;
   align-content: flex-end;
   width: 100%;
-  padding: 10px 20px;
-  box-shadow: 0 -1px 1px rgba(16, 22, 26, 0.2);
-  z-index: 19;
+  padding-top: 10px;
 }
