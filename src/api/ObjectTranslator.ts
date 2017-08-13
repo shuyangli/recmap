@@ -1,16 +1,14 @@
-import * as _ from 'lodash';
+import * as _ from "lodash";
 
 export class ObjectTranslator {
-  constructor(
-    private target: any
-  ) {}
+  constructor(private target: any) {}
 
   get(): any {
     return this.target;
   }
 
   objectToArray(field: string) {
-    let override: any = {};
+    const override: any = {};
     if (this.target[field]) {
       override[field] = _.keys(this.target[field]);
     } else {
@@ -21,7 +19,7 @@ export class ObjectTranslator {
   }
 
   arrayToObject(field: string) {
-    let override: any = {};
+    const override: any = {};
     if (this.target[field]) {
       const flatValues: string[] = this.target[field];
       override[field] = _.reduce(flatValues, (acc: any, val) => {

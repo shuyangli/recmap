@@ -1,15 +1,15 @@
-import * as _ from 'lodash';
-import * as firebase from 'firebase';
+import * as firebase from "firebase";
+import * as _ from "lodash";
 
-import { ObjectTranslator } from './ObjectTranslator';
-import { Location } from './interfaces';
-import { BackendApi } from './BackendApi';
-import { FirebaseConfig } from '../config';
+import { FirebaseConfig } from "@src/config";
+import { BackendApi } from "./BackendApi";
+import { Location } from "./interfaces";
+import { ObjectTranslator } from "./ObjectTranslator";
 
 export class FirebaseApi implements BackendApi {
   constructor(config: FirebaseConfig) {
     firebase.initializeApp(config);
-  };
+  }
 
   createOrUpdateLocation(newLocation: Location, oldLocation?: Location) {
     if (newLocation.id) {
@@ -24,17 +24,17 @@ export class FirebaseApi implements BackendApi {
   }
 
   getLocation(id: string) {
-    return Promise.resolve(firebase.database().ref(this.getLocationKey(id)).once('value'))
+    return Promise.resolve(firebase.database().ref(this.getLocationKey(id)).once("value"))
     .then((snapshot) => this.appifyLocation(snapshot.val()));
   }
 
   getAllLocations() {
-    return Promise.resolve(firebase.database().ref('/locations/').once('value'))
+    return Promise.resolve(firebase.database().ref("/locations/").once("value"))
     .then((snapshot) => _.mapValues(snapshot.val(), this.appifyLocation));
   }
 
   getAllTags() {
-    return Promise.resolve(firebase.database().ref('/tags/').once('value'))
+    return Promise.resolve(firebase.database().ref("/tags/").once("value"))
     .then((snapshot) => {
       const values = snapshot.val();
       return values ? Object.keys(values) : [];
@@ -50,12 +50,12 @@ export class FirebaseApi implements BackendApi {
   }
 
   private createLocation(location: Location) {
-    const newLocationRef = firebase.database().ref().child('locations').push();
+    const newLocationRef = firebase.database().ref().child("locations").push();
     const newLocation = this.firebaseifyLocation(_.defaults({ id: newLocationRef.key }, location));
     this.addLocationToTags(location.tags, newLocation.id);
     return Promise.resolve(newLocationRef.set(newLocation))
     .then(() => this.appifyLocation(newLocation));
-  };
+  }
 
   private updateLocation(newLocation: Location, oldLocation: Location) {
     const location = this.firebaseifyLocation(_.clone(newLocation));
@@ -67,24 +67,27 @@ export class FirebaseApi implements BackendApi {
 
   private setLocationValueInTags = (value: boolean | null) => (tags: string[], locationId: string) => {
     tags.forEach((tag) => {
-      let updateValue: { [locationId: string]: boolean } = {};
+      const updateValue: { [locationId: string]: boolean } = {};
       updateValue[locationId] = value;
       firebase.database().ref(this.getTagKey(tag)).update(updateValue);
     });
   }
 
+  // tslint:disable-next-line:member-ordering
   private addLocationToTags = this.setLocationValueInTags(true);
+
+  // tslint:disable-next-line:member-ordering
   private removeLocationFromTags = this.setLocationValueInTags(null);
 
   private firebaseifyLocation(appLocation: Location): any {
     return new ObjectTranslator(appLocation)
-      .arrayToObject('tags')
+      .arrayToObject("tags")
       .get();
   }
 
   private appifyLocation(firebaseLocation: any): Location {
     return new ObjectTranslator(firebaseLocation)
-      .objectToArray('tags')
+      .objectToArray("tags")
       .get();
   }
 }

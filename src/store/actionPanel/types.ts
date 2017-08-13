@@ -1,6 +1,6 @@
 export enum ActionPanelType {
   DETAIL,
-  EDIT
+  EDIT,
 }
 
 export interface ActionPanelState {
@@ -11,5 +11,5 @@ export interface ActionPanelState {
 
 export const EMPTY_ACTION_PANEL_STATE: ActionPanelState = {
   isVisible: false,
-  type: ActionPanelType.DETAIL
+  type: ActionPanelType.DETAIL,
 };

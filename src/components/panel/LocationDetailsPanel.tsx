@@ -1,10 +1,11 @@
-import * as React from 'react';
-import * as _ from 'lodash';
-import { connect, Dispatch } from 'react-redux';
-import { Button, Tag } from '@blueprintjs/core';
-import { Location } from '@src/api/interfaces';
-import { RootState } from '@src/store/store';
-import { toggleEditPanel } from '@src/store/actionPanel/actions';
+import { Button, Tag } from "@blueprintjs/core";
+import * as _ from "lodash";
+import * as React from "react";
+import { connect, Dispatch } from "react-redux";
+
+import { Location } from "@src/api/interfaces";
+import { toggleEditPanel } from "@src/store/actionPanel/actions";
+import { RootState } from "@src/store/store";
 
 interface OwnProps {
   location: Location;
@@ -15,34 +16,33 @@ interface DispatchProps {
 }
 
 class LocationDetailsPanel extends React.PureComponent<OwnProps & DispatchProps, void> {
-
-  private onEdit = () => this.props.onEdit(this.props.location.id);
-
   render() {
     return (
-      <div className='location-panel'>
-        <div className='location-content-wrapper'>
-          <h1 className='location-name'>{this.props.location.name}</h1>
-          <div className='location-tag-area'>
+      <div className="location-panel">
+        <div className="location-content-wrapper">
+          <h1 className="location-name">{this.props.location.name}</h1>
+          <div className="location-tag-area">
             {this.props.location.tags.map((tag: string) =>
-              <Tag key={tag}>{tag}</Tag>
+              <Tag key={tag}>{tag}</Tag>,
             )}
           </div>
-          <p className='location-address'>{this.props.location.address}</p>
-          <p className='location-notes'>{this.props.location.notes}</p>
+          <p className="location-address">{this.props.location.address}</p>
+          <p className="location-notes">{this.props.location.notes}</p>
         </div>
 
-        <div className='panel-edit-controls pt-elevation-1'>
-          <Button text='Edit' onClick={this.onEdit} />
+        <div className="panel-edit-controls pt-elevation-1">
+          <Button text="Edit" onClick={this.onEdit} />
         </div>
       </div>
     );
   }
+
+  private onEdit = () => this.props.onEdit(this.props.location.id);
 }
 
 function mapDispatchToProps(dispatch: Dispatch<RootState>): DispatchProps {
   return {
-    onEdit: (locationId: string) => dispatch(toggleEditPanel(locationId))
+    onEdit: (locationId: string) => dispatch(toggleEditPanel(locationId)),
   };
 }
 

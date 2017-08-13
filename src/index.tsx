@@ -1,19 +1,19 @@
-import * as React from 'react';
-import * as ReactDOM from 'react-dom';
-import { Provider } from 'react-redux';
+import * as React from "react";
+import * as ReactDOM from "react-dom";
+import { Provider } from "react-redux";
 
-import { initialize } from './api/MapsApi';
+import { initialize } from "./api/MapsApi";
 
-import { App } from './components/App';
-import { store } from './store/store';
+import { App } from "./components/App";
+import { store } from "./store/store";
 
-import './index.less';
+import "./index.less";
 
 initialize().then(() => {
   ReactDOM.render(
     <Provider store={store}>
       <App />
     </Provider>,
-    document.getElementById("root")
+    document.getElementById("root"),
   );
-})
+});

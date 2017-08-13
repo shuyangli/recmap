@@ -1,11 +1,12 @@
-import * as React from 'react';
-import { connect } from 'react-redux';
-import { Location } from '@src/api/interfaces';
-import { initializeMapElement, getCurrentLocation, mapsDefaults } from '@src/api/MapsApi';
-import { RootState } from '@src/store/store';
-import { getFilteredLocations } from '@src/store/locations/selectors';
+import * as React from "react";
+import { connect } from "react-redux";
 
-import './Map.less'
+import { Location } from "@src/api/interfaces";
+import { getCurrentLocation, initializeMapElement, mapsDefaults } from "@src/api/MapsApi";
+import { getFilteredLocations } from "@src/store/locations/selectors";
+import { RootState } from "@src/store/store";
+
+import "./Map.less";
 
 interface ConnectedProps {
   filteredLocations: Location[];
@@ -17,7 +18,7 @@ interface State {
 
 class Map extends React.PureComponent<ConnectedProps, State> {
   state: State = {
-    displayedMarkers: []
+    displayedMarkers: [],
   };
 
   private mapRef: HTMLDivElement;
@@ -29,30 +30,29 @@ class Map extends React.PureComponent<ConnectedProps, State> {
 
   componentWillReceiveProps(nextProps: ConnectedProps) {
     const google = (window as any).google;
-    const newMarkers = nextProps.filteredLocations.map(location =>
+    const newMarkers = nextProps.filteredLocations.map((location) =>
       new google.maps.Marker({
         map: this.map,
         position: {
           lat: parseFloat(location.latitude),
-          lng: parseFloat(location.longitude)
-        }
+          lng: parseFloat(location.longitude),
+        },
       }));
 
-    this.state.displayedMarkers.forEach(marker => marker.setMap(null));
+    this.state.displayedMarkers.forEach((marker) => marker.setMap(null));
     this.setState({ displayedMarkers: newMarkers });
   }
 
   render() {
     const google = (window as any).google;
     return (
-      <div id='map' ref={(element) => this.mapRef = element} />
+      <div id="map" ref={(element) => this.mapRef = element} />
     );
   }
 }
 
 const mapStateToProps = (state: RootState): ConnectedProps => ({
-  filteredLocations: getFilteredLocations(state)
+  filteredLocations: getFilteredLocations(state),
 });
 
-export const ConnectedMap: React.ComponentClass<{}> =
-  connect(mapStateToProps)(Map as any);
+export const ConnectedMap: React.ComponentClass<{}> = connect(mapStateToProps)(Map as any);

@@ -1,4 +1,4 @@
-import { Location } from '@src/api/interfaces';
+import { Location } from "@src/api/interfaces";
 
 export interface FilterState {
   searchTerm: string;
@@ -6,8 +6,8 @@ export interface FilterState {
 }
 
 export const EMPTY_FILTER_STATE: FilterState = {
-  searchTerm: '',
-  tags: []
+  searchTerm: "",
+  tags: [],
 };
 
 export interface LocationState {
@@ -17,5 +17,5 @@ export interface LocationState {
 
 export const EMPTY_LOCATION_STATE: LocationState = {
   locations: {},
-  filter: EMPTY_FILTER_STATE
+  filter: EMPTY_FILTER_STATE,
 };

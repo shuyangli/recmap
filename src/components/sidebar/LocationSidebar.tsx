@@ -1,15 +1,16 @@
-import * as React from 'react';
-import { connect, Dispatch } from 'react-redux';
-import { Button, NonIdealState, Spinner } from '@blueprintjs/core';
-import { ConnectedLocationItem } from './LocationItem';
-import { ConnectedFilterControls } from './FilterControls';
-import { Location } from '@src/api/interfaces';
-import { RootState } from '@src/store/store';
-import { getFilteredLocations } from '@src/store/locations/selectors';
-import { loadLocations } from '@src/store/locations/actions';
-import { toggleEditPanel } from '@src/store/actionPanel/actions';
+import { Button, NonIdealState, Spinner } from "@blueprintjs/core";
+import * as React from "react";
+import { connect, Dispatch } from "react-redux";
 
-import './LocationSidebar.less'
+import { Location } from "@src/api/interfaces";
+import { toggleEditPanel } from "@src/store/actionPanel/actions";
+import { loadLocations } from "@src/store/locations/actions";
+import { getFilteredLocations } from "@src/store/locations/selectors";
+import { RootState } from "@src/store/store";
+import { ConnectedFilterControls } from "./FilterControls";
+import { ConnectedLocationItem } from "./LocationItem";
+
+import "./LocationSidebar.less";
 
 interface ConnectedProps {
   filteredLocations: Location[];
@@ -26,7 +27,7 @@ interface State {
 
 class LocationSidebar extends React.PureComponent<ConnectedProps & DispatchProps, State> {
   state: State = {
-    isLoadingLocations: false
+    isLoadingLocations: false,
   };
 
   componentWillMount() {
@@ -42,14 +43,14 @@ class LocationSidebar extends React.PureComponent<ConnectedProps & DispatchProps
         {
           this.state.isLoadingLocations
           ? <NonIdealState visual={<Spinner />} />
-          : <div className='location-items-wrapper'>
-              {this.props.filteredLocations.map(location =>
-                <ConnectedLocationItem key={location.id} location={location} />
+          : <div className="location-items-wrapper">
+              {this.props.filteredLocations.map((location) =>
+                <ConnectedLocationItem key={location.id} location={location} />,
               )}
             </div>
         }
-        <div className='sidebar-edit-controls'>
-          <Button iconName='add' onClick={this.props.openEditPanel} />
+        <div className="sidebar-edit-controls">
+          <Button iconName="add" onClick={this.props.openEditPanel} />
         </div>
       </div>
     );
@@ -58,14 +59,14 @@ class LocationSidebar extends React.PureComponent<ConnectedProps & DispatchProps
 
 function mapStateToProps(state: RootState): ConnectedProps {
   return {
-    filteredLocations: getFilteredLocations(state)
+    filteredLocations: getFilteredLocations(state),
   };
 }
 
 function mapDispatchToProps(dispatch: Dispatch<RootState>): DispatchProps {
   return {
     openEditPanel: () => dispatch(toggleEditPanel()),
-    loadLocations: () => dispatch(loadLocations())
+    loadLocations: () => dispatch(loadLocations()),
   };
 }
 

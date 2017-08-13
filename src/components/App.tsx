@@ -1,15 +1,15 @@
-import * as React from 'react';
+import * as React from "react";
 
-import { ConnectedLocationSidebar } from './sidebar/LocationSidebar';
-import { ConnectedActionPanel } from './panel/ActionPanel';
-import { ConnectedMap } from './map/Map';
+import { ConnectedMap } from "./map/Map";
+import { ConnectedActionPanel } from "./panel/ActionPanel";
+import { ConnectedLocationSidebar } from "./sidebar/LocationSidebar";
 
 export class App extends React.PureComponent<{}, {}> {
   render() {
     return (
-      <div className='app-viewport'>
+      <div className="app-viewport">
         <ConnectedMap />
-        <div className='floater-viewport'>
+        <div className="floater-viewport">
           <ConnectedLocationSidebar />
           <ConnectedActionPanel />
         </div>

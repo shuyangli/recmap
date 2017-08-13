@@ -1,14 +1,14 @@
-import * as React from 'react';
-import * as _ from 'lodash';
-import { connect } from 'react-redux';
-import { Location } from '@src/api/interfaces';
-import { RootState } from '@src/store/store';
-import { ActionPanelType } from '@src/store/actionPanel/types';
+import * as _ from "lodash";
+import * as React from "react";
+import { connect } from "react-redux";
 
-import { ConnectedLocationDetailsPanel } from './LocationDetailsPanel';
-import { ConnectedEditLocationPanel } from './EditLocationPanel';
+import { Location } from "@src/api/interfaces";
+import { ActionPanelType } from "@src/store/actionPanel/types";
+import { RootState } from "@src/store/store";
+import { ConnectedEditLocationPanel } from "./EditLocationPanel";
+import { ConnectedLocationDetailsPanel } from "./LocationDetailsPanel";
 
-import './ActionPanel.less'
+import "./ActionPanel.less";
 
 interface ConnectedProps {
   isVisible: boolean;
@@ -21,7 +21,7 @@ class ActionPanel extends React.PureComponent<ConnectedProps, void> {
   render() {
     if (this.props.isVisible) {
       return (
-        <div className='action-panel pt-elevation-0'>
+        <div className="action-panel pt-elevation-0">
           {
             this.props.type === ActionPanelType.DETAIL
             ? <ConnectedLocationDetailsPanel
@@ -46,7 +46,7 @@ function mapStateToProps(state: RootState): ConnectedProps {
     isVisible: state.actionPanel.isVisible,
     type: state.actionPanel.type,
     locationId: state.actionPanel.locationId,
-    locations: state.location.locations
+    locations: state.location.locations,
   };
 }
 

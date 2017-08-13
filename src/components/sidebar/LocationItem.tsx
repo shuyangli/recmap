@@ -1,10 +1,11 @@
-import * as React from 'react';
-import * as _ from 'lodash';
-import { connect, Dispatch } from 'react-redux';
 import { Classes, Tag } from "@blueprintjs/core";
-import { RootState } from '@src/store/store';
-import { toggleDetailsPanel } from '@src/store/actionPanel/actions';
-import { Location } from '@src/api/interfaces';
+import * as _ from "lodash";
+import * as React from "react";
+import { connect, Dispatch } from "react-redux";
+
+import { Location } from "@src/api/interfaces";
+import { toggleDetailsPanel } from "@src/store/actionPanel/actions";
+import { RootState } from "@src/store/store";
 
 interface OwnProps {
   location: Location;
@@ -35,8 +36,8 @@ class LocationItem extends React.PureComponent<OwnProps & ConnectedProps, void> 
 
 function mapDispatchToProps(dispatch: Dispatch<RootState>): ConnectedProps {
   return {
-    getOpenDetailsPanel: (locationId: string) => () => dispatch(toggleDetailsPanel(locationId))
-  }
+    getOpenDetailsPanel: (locationId: string) => () => dispatch(toggleDetailsPanel(locationId)),
+  };
 }
 
 export const ConnectedLocationItem: React.ComponentClass<OwnProps> =
