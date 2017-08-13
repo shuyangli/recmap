@@ -1,6 +1,6 @@
 import { Location } from './interfaces';
 import { FirebaseApi } from './FirebaseApi';
-import { firebaseConfig } from '../config';
+import { firebaseConfig } from '@src/config';
 
 export interface BackendApi {
   createOrUpdateLocation(location: Location, oldLocation?: Location): Promise<Location>;

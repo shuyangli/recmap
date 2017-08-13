@@ -1,5 +1,5 @@
 import * as _ from 'lodash';
-import { Location } from '../../api/interfaces';
+import { Location } from '@src/api/interfaces';
 import { UPDATE_ALL_LOCATIONS, ADD_LOCATION, REMOVE_LOCATION, UPDATE_FILTER } from './actions';
 import { LocationState, FilterState, EMPTY_LOCATION_STATE } from './types';
 

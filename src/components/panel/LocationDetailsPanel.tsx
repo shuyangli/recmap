@@ -2,9 +2,9 @@ import * as React from 'react';
 import * as _ from 'lodash';
 import { connect, Dispatch } from 'react-redux';
 import { Button, Tag } from '@blueprintjs/core';
-import { Location } from '../../api/interfaces';
-import { RootState } from '../../store/store';
-import { toggleEditPanel } from '../../store/actionPanel/actions';
+import { Location } from '@src/api/interfaces';
+import { RootState } from '@src/store/store';
+import { toggleEditPanel } from '@src/store/actionPanel/actions';
 
 interface OwnProps {
   location: Location;

@@ -1,13 +1,13 @@
 import * as React from 'react';
 import { connect, Dispatch } from 'react-redux';
 import * as Select from 'react-select';
-import { RootState } from '../../store/store';
 import { Checkbox } from '@blueprintjs/core';
 
-import { backendApi } from '../../api/BackendApi';
-import { FilterState } from '../../store/locations/types';
-import { updateFilter } from '../../store/locations/actions';
-import { Location } from '../../api/interfaces';
+import { RootState } from '@src/store/store';
+import { FilterState } from '@src/store/locations/types';
+import { updateFilter } from '@src/store/locations/actions';
+import { backendApi } from '@src/api/BackendApi';
+import { Location } from '@src/api/interfaces';
 
 interface ConnectedProps {
   filter: FilterState;

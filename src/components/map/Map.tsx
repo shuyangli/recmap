@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { Location } from '../../api/interfaces';
-import { initializeMapElement, getCurrentLocation, mapsDefaults } from '../../api/MapsApi';
-import { RootState } from '../../store/store';
-import { getFilteredLocations } from '../../store/locations/selectors';
+import { Location } from '@src/api/interfaces';
+import { initializeMapElement, getCurrentLocation, mapsDefaults } from '@src/api/MapsApi';
+import { RootState } from '@src/store/store';
+import { getFilteredLocations } from '@src/store/locations/selectors';
 
 import './Map.less'
 

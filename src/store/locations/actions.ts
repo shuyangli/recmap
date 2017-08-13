@@ -1,7 +1,7 @@
 import { Dispatch } from 'redux';
-import { RootState } from '../store';
-import { backendApi } from '../../api/BackendApi';
-import { Location } from '../../api/interfaces';
+import { RootState } from '@src/store/store';
+import { backendApi } from '@src/api/BackendApi';
+import { Location } from '@src/api/interfaces';
 import { FilterState } from './types';
 
 export const UPDATE_ALL_LOCATIONS = 'UPDATE_ALL_LOCATIONS';

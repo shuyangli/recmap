@@ -4,12 +4,12 @@ import * as classNames from 'classnames';
 import { connect, Dispatch } from 'react-redux';
 import * as Select from 'react-select';
 import { Button, Classes, Intent, Spinner, Tag } from '@blueprintjs/core';
-import { Location } from '../../api/interfaces';
-import { backendApi } from '../../api/BackendApi';
-import { getCurrentLocation } from '../../api/MapsApi';
-import { RootState } from '../../store/store';
-import { toggleEditPanel, toggleDetailsPanel, closePanel } from '../../store/actionPanel/actions';
-import { createOrUpdateLocation, deleteLocation } from '../../store/locations/actions';
+import { Location } from '@src/api/interfaces';
+import { backendApi } from '@src/api/BackendApi';
+import { getCurrentLocation } from '@src/api/MapsApi';
+import { RootState } from '@src/store/store';
+import { toggleEditPanel, toggleDetailsPanel, closePanel } from '@src/store/actionPanel/actions';
+import { createOrUpdateLocation, deleteLocation } from '@src/store/locations/actions';
 
 interface OwnProps {
   initialLocation?: Location;

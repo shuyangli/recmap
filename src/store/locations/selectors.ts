@@ -2,7 +2,7 @@ import * as _ from 'lodash';
 import * as fuzzy from 'fuzzy';
 import { createSelector } from 'reselect';
 import { LocationState, FilterState } from './types';
-import { RootState } from '../store';
+import { RootState } from '@src/store/store';
 
 const getAllLocations = (state: RootState) => state.location.locations;
 const getFilter = (state: RootState) => state.location.filter;

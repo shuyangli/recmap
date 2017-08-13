@@ -1,14 +1,13 @@
 import * as React from 'react';
-
 import { connect, Dispatch } from 'react-redux';
 import { Button, NonIdealState, Spinner } from '@blueprintjs/core';
-import { Location } from '../../api/interfaces';
 import { ConnectedLocationItem } from './LocationItem';
 import { ConnectedFilterControls } from './FilterControls';
-import { RootState } from '../../store/store';
-import { getFilteredLocations } from '../../store/locations/selectors';
-import { loadLocations } from '../../store/locations/actions';
-import { toggleEditPanel } from '../../store/actionPanel/actions';
+import { Location } from '@src/api/interfaces';
+import { RootState } from '@src/store/store';
+import { getFilteredLocations } from '@src/store/locations/selectors';
+import { loadLocations } from '@src/store/locations/actions';
+import { toggleEditPanel } from '@src/store/actionPanel/actions';
 
 import './LocationSidebar.less'
 

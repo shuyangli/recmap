@@ -1,9 +1,9 @@
 import * as React from 'react';
 import * as _ from 'lodash';
 import { connect } from 'react-redux';
-import { Location } from '../../api/interfaces';
-import { RootState } from '../../store/store';
-import { ActionPanelType } from '../../store/actionPanel/types';
+import { Location } from '@src/api/interfaces';
+import { RootState } from '@src/store/store';
+import { ActionPanelType } from '@src/store/actionPanel/types';
 
 import { ConnectedLocationDetailsPanel } from './LocationDetailsPanel';
 import { ConnectedEditLocationPanel } from './EditLocationPanel';
