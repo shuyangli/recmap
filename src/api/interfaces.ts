@@ -6,19 +6,12 @@ export interface Location {
   longitude: string;
   notes: string;
   tags: string[];
-  rating?: Rating;
-}
-
-export enum Rating {
-  BAD = 0,
-  NEUTRAL = 1,
-  GOOD = 2,
-  EXCELLENT = 3,
+  rating?: number; /* 0 - 4 */
 }
 
 export interface Review {
   id: string;
   locationId: string;
-  rating: Rating;
+  rating: number;
   notes: string;
 }
