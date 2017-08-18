@@ -3,7 +3,7 @@ import * as React from "react";
 import { connect, Dispatch } from "react-redux";
 
 import { Location } from "@src/api/interfaces";
-import { toggleEditPanel } from "@src/store/actionPanel/actions";
+import { ToggleEditPanel } from "@src/store/actionPanel/actions";
 import { loadLocations } from "@src/store/locations/actions";
 import { getFilteredLocations } from "@src/store/locations/selectors";
 import { RootState } from "@src/store/store";
@@ -65,7 +65,7 @@ function mapStateToProps(state: RootState): ConnectedProps {
 
 function mapDispatchToProps(dispatch: Dispatch<RootState>): DispatchProps {
   return {
-    openEditPanel: () => dispatch(toggleEditPanel()),
+    openEditPanel: () => dispatch(ToggleEditPanel.create({})),
     loadLocations: () => dispatch(loadLocations()),
   };
 }

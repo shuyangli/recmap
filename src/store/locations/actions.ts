@@ -1,48 +1,59 @@
+import * as _ from "lodash";
+import { TypedAction, TypedReducer } from "redoodle";
 import { Dispatch } from "redux";
 
 import { backendApi } from "@src/api/BackendApi";
 import { Location } from "@src/api/interfaces";
 import { RootState } from "@src/store/store";
-import { FilterState } from "./types";
+import { EMPTY_LOCATION_STATE, FilterState, LocationState } from "./types";
 
-export const UPDATE_ALL_LOCATIONS = "UPDATE_ALL_LOCATIONS";
-export const updateAllLocations = (locations: { [id: string]: Location }) => ({
- type: UPDATE_ALL_LOCATIONS,
-  payload: { locations },
-});
 
-export const ADD_LOCATION = "ADD_LOCATION";
-export const addLocation = (location: Location) => ({
-  type: ADD_LOCATION,
-  payload: { location },
-});
+const UpdateAllLocations = TypedAction.define("UpdateAllLocations")<{
+  locations: { [id: string]: Location };
+}>();
 
-export const REMOVE_LOCATION = "REMOVE_LOCATION";
-export const removeLocation = (locationId: string) => ({
-  type: REMOVE_LOCATION,
-  payload: { locationId },
-});
+const AddLocation = TypedAction.define("AddLocation")<{
+  location: Location;
+}>();
+
+const RemoveLocation = TypedAction.define("RemoveLocation")<{
+  locationId: string;
+}>();
 
 export function loadLocations() {
   return (dispatch: Dispatch<RootState>) =>
     backendApi.getAllLocations()
-    .then((locations) => dispatch(updateAllLocations(locations)));
+    .then((locations) => dispatch(UpdateAllLocations.create({ locations })));
 }
 
 export function createOrUpdateLocation(newLocation: Location, oldLocation?: Location) {
   return (dispatch: Dispatch<RootState>) =>
     backendApi.createOrUpdateLocation(newLocation, oldLocation)
-    .then((location) => dispatch(addLocation(location)));
+    .then((location) => dispatch(AddLocation.create({ location })));
 }
 
 export function deleteLocation(locationId: string) {
   return (dispatch: Dispatch<RootState>) =>
     backendApi.deleteLocation(locationId)
-    .then(() => dispatch(removeLocation(locationId)));
+    .then(() => dispatch(RemoveLocation.create({ locationId })));
 }
 
-export const UPDATE_FILTER = "UPDATE_FILTER";
-export const updateFilter = (filter: FilterState) => ({
-  type: UPDATE_FILTER,
-  payload: { filter },
-});
+export const UpdateFilter = TypedAction.define("UpdateFilter")<{
+  filter: FilterState;
+}>();
+
+export const locationsReducer = TypedReducer.builder<LocationState>()
+  .withHandler(UpdateAllLocations.TYPE, (state, { locations }) => ({ ...state, locations }))
+  .withHandler(AddLocation.TYPE, (state, { location }) => ({
+    ...state,
+    locations: {
+      ...state.locations,
+      [location.id]: location,
+    },
+  }))
+  .withHandler(RemoveLocation.TYPE, (state, { locationId }) => ({
+    ...state,
+    locations: _.omit(state.locations, locationId),
+  }))
+  .withHandler(UpdateFilter.TYPE, (state, { filter }) => ({ ...state, filter }))
+  .build();

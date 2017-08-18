@@ -1,17 +1,30 @@
-export const TOGGLE_DETAIL_PANEL = "TOGGLE_DETAIL_PANEL";
-export const TOGGLE_EDIT_PANEL = "TOGGLE_EDIT_PANEL";
-export const CLOSE_PANEL = "CLOSE_PANEL";
+import { TypedAction, TypedReducer } from "redoodle";
+import { ActionPanelState, ActionPanelType, EMPTY_ACTION_PANEL_STATE } from "./types";
 
-export const toggleDetailsPanel = (locationId: string) => ({
-  type: TOGGLE_DETAIL_PANEL,
-  payload: { locationId },
-});
+export const ToggleDetailPanel = TypedAction.define("ToggleDetailPanel")<{
+  locationId: string;
+}>();
+export const ToggleEditPanel = TypedAction.define("ToggleEditPanel")<{
+  locationId?: string;
+}>();
+export const ClosePanel = TypedAction.defineWithoutPayload("ClosePanel")();
 
-export const toggleEditPanel = (locationId?: string) => ({
-  type: TOGGLE_EDIT_PANEL,
-  payload: { locationId },
-});
-
-export const closePanel = () => ({
-  type: CLOSE_PANEL,
-});
+export const actionPanelReducer = TypedReducer.builder<ActionPanelState>()
+  .withHandler(ToggleDetailPanel.TYPE, (state, { locationId }) => ({
+    ...state,
+    locationId,
+    isVisible: state.type === ActionPanelType.DETAIL && locationId === state.locationId
+      ? !state.isVisible
+      : true,
+    type: ActionPanelType.DETAIL,
+  }))
+  .withHandler(ToggleEditPanel.TYPE, (state, { locationId }) => ({
+    ...state,
+    locationId,
+    isVisible: state.type === ActionPanelType.EDIT && locationId === state.locationId
+      ? !state.isVisible
+      : true,
+    type: ActionPanelType.EDIT,
+  }))
+  .withHandler(ClosePanel.TYPE, (state) => ({ ...state, isVisible: false }))
+  .build();

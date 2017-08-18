@@ -5,7 +5,7 @@ import * as Select from "react-select";
 
 import { backendApi } from "@src/api/BackendApi";
 import { Location } from "@src/api/interfaces";
-import { updateFilter } from "@src/store/locations/actions";
+import { UpdateFilter } from "@src/store/locations/actions";
 import { FilterState } from "@src/store/locations/types";
 import { RootState } from "@src/store/store";
 
@@ -82,7 +82,7 @@ function mapStateToProps(state: RootState): ConnectedProps {
 
 function mapDispatchToProps(dispatch: Dispatch<RootState>): DispatchProps {
   return {
-    onFilterChange: (newFilter: FilterState) => dispatch(updateFilter(newFilter)),
+    onFilterChange: (newFilter: FilterState) => dispatch(UpdateFilter.create({ filter: newFilter })),
   };
 }
 

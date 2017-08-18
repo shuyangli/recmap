@@ -4,7 +4,7 @@ import * as React from "react";
 import { connect, Dispatch } from "react-redux";
 
 import { Location } from "@src/api/interfaces";
-import { toggleEditPanel } from "@src/store/actionPanel/actions";
+import { ToggleEditPanel } from "@src/store/actionPanel/actions";
 import { RootState } from "@src/store/store";
 
 interface OwnProps {
@@ -42,7 +42,7 @@ class LocationDetailsPanel extends React.PureComponent<OwnProps & DispatchProps,
 
 function mapDispatchToProps(dispatch: Dispatch<RootState>): DispatchProps {
   return {
-    onEdit: (locationId: string) => dispatch(toggleEditPanel(locationId)),
+    onEdit: (locationId: string) => dispatch(ToggleEditPanel.create({ locationId })),
   };
 }
 

@@ -8,7 +8,7 @@ import * as Select from "react-select";
 import { backendApi } from "@src/api/BackendApi";
 import { Location } from "@src/api/interfaces";
 import { getCurrentLocation } from "@src/api/MapsApi";
-import { closePanel, toggleDetailsPanel, toggleEditPanel } from "@src/store/actionPanel/actions";
+import { ClosePanel, ToggleDetailPanel, ToggleEditPanel } from "@src/store/actionPanel/actions";
 import { createOrUpdateLocation, deleteLocation } from "@src/store/locations/actions";
 import { RootState } from "@src/store/store";
 
@@ -172,16 +172,16 @@ function mapDispatchToProps(dispatch: Dispatch<RootState>): DispatchProps {
   return {
     onCancel: (locationId?: string) =>
       dispatch(locationId
-        ? toggleDetailsPanel(locationId)
-        : toggleEditPanel()),
+        ? ToggleDetailPanel.create({ locationId })
+        : ToggleEditPanel.create({})),
 
     onSave: (location: Location, initialLocation?: Location) =>
       dispatch(createOrUpdateLocation(location, initialLocation))
-      .then((action) => dispatch(toggleDetailsPanel(action.payload.location.id))),
+      .then((action) => dispatch(ToggleDetailPanel.create({ locationId: action.payload.location.id }))),
 
     onDelete: (locationId: string) =>
       dispatch(deleteLocation(locationId))
-      .then(() => dispatch(closePanel())),
+      .then(() => dispatch(ClosePanel.create())),
   };
 }
 
