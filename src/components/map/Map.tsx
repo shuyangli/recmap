@@ -1,8 +1,10 @@
 import * as React from "react";
 import { connect } from "react-redux";
+import { Dispatch } from "redux";
 
 import { Location } from "@src/api/interfaces";
 import { getCurrentLocation, initializeMapElement, mapsDefaults } from "@src/api/MapsApi";
+import { ToggleDetailPanel } from "@src/store/actionPanel/actions";
 import { getFilteredLocations } from "@src/store/locations/selectors";
 import { RootState } from "@src/store/store";
 
@@ -12,11 +14,15 @@ interface ConnectedProps {
   filteredLocations: Location[];
 }
 
+interface DispatchProps {
+  toggleDetailPanelForLocation: (locationId: string) => void;
+}
+
 interface State {
   displayedMarkers: any[];
 }
 
-class Map extends React.PureComponent<ConnectedProps, State> {
+class Map extends React.PureComponent<ConnectedProps & DispatchProps, State> {
   state: State = {
     displayedMarkers: [],
   };
@@ -30,14 +36,17 @@ class Map extends React.PureComponent<ConnectedProps, State> {
 
   componentWillReceiveProps(nextProps: ConnectedProps) {
     const google = (window as any).google;
-    const newMarkers = nextProps.filteredLocations.map((location) =>
-      new google.maps.Marker({
+    const newMarkers = nextProps.filteredLocations.map((location) => {
+      const marker: google.maps.Marker = new google.maps.Marker({
         map: this.map,
         position: {
           lat: parseFloat(location.latitude),
           lng: parseFloat(location.longitude),
         },
-      }));
+      });
+      marker.addListener("click", () => this.props.toggleDetailPanelForLocation(location.id));
+      return marker;
+    });
 
     this.state.displayedMarkers.forEach((marker) => marker.setMap(null));
     this.setState({ displayedMarkers: newMarkers });
@@ -55,4 +64,8 @@ const mapStateToProps = (state: RootState): ConnectedProps => ({
   filteredLocations: getFilteredLocations(state),
 });
 
-export const ConnectedMap: React.ComponentClass<{}> = connect(mapStateToProps)(Map as any);
+const mapDispatchToProps = (dispatch: Dispatch<RootState>) => ({
+  toggleDetailPanelForLocation: (locationId: string) => dispatch(ToggleDetailPanel.create({ locationId })),
+});
+
+export const ConnectedMap: React.ComponentClass<{}> = connect(mapStateToProps, mapDispatchToProps)(Map as any);
