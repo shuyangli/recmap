@@ -1,4 +1,5 @@
 import * as GoogleMapsLoader from "google-maps";
+import {} from "@types/googlemaps"; // maps type hack
 import { googleMapsApiKey } from "../config";
 
 GoogleMapsLoader.KEY = googleMapsApiKey;
@@ -17,7 +18,6 @@ export function initialize(): Promise<any> {
 }
 
 export function initializeMapElement(wrapper: HTMLDivElement) {
-  const google = (window as any).google;
   return new google.maps.Map(wrapper, {
     center: {
       lat: mapsDefaults.latitude,

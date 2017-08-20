@@ -1,6 +1,7 @@
 import * as React from "react";
 import { connect } from "react-redux";
 import { Dispatch } from "redux";
+import {} from "@types/googlemaps"; // maps type hack
 
 import { Location } from "@src/api/interfaces";
 import { getCurrentLocation, initializeMapElement, mapsDefaults } from "@src/api/MapsApi";
@@ -35,7 +36,6 @@ class Map extends React.PureComponent<ConnectedProps & DispatchProps, State> {
   }
 
   componentWillReceiveProps(nextProps: ConnectedProps) {
-    const google = (window as any).google;
     const newMarkers = nextProps.filteredLocations.map((location) => {
       const marker: google.maps.Marker = new google.maps.Marker({
         map: this.map,
