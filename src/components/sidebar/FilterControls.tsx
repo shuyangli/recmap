@@ -55,7 +55,7 @@ class FilterControls extends React.PureComponent<ConnectedProps & DispatchProps,
     );
   }
 
-  private onSearchTermChange(event: React.ChangeEvent<HTMLInputElement>) {
+  private onSearchTermChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     this.props.onFilterChange({ ...this.props.filter, searchTerm: event.target.value });
   }
 
