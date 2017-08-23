@@ -1,4 +1,4 @@
-import { combineReducers, reduceCompoundActions } from "redoodle";
+import { combineReducers, loggingMiddleware, reduceCompoundActions } from "redoodle";
 import { applyMiddleware, compose, createStore } from "redux";
 import thunkMiddleware from "redux-thunk";
 
@@ -28,6 +28,9 @@ export const store = createStore(
   reduceCompoundActions(reducer),
   initialState,
   composeEnhancers(
-    applyMiddleware(thunkMiddleware),
+    applyMiddleware(
+      thunkMiddleware,
+      loggingMiddleware({ enableInProduction: false }),
+    ),
   ),
 );
