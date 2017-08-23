@@ -1,5 +1,3 @@
-import { Classes, IconClasses, Tag } from "@blueprintjs/core";
-import * as _ from "lodash";
 import * as React from "react";
 import { connect, Dispatch } from "react-redux";
 

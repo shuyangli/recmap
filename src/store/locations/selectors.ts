@@ -3,7 +3,6 @@ import * as _ from "lodash";
 import { createSelector } from "reselect";
 
 import { RootState } from "@src/store/store";
-import { FilterState, LocationState } from "./types";
 
 const getAllLocations = (state: RootState) => state.location.locations;
 const getFilter = (state: RootState) => state.location.filter;

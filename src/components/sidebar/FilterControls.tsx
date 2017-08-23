@@ -1,10 +1,8 @@
-import { Checkbox } from "@blueprintjs/core";
 import * as React from "react";
 import { connect, Dispatch } from "react-redux";
 import * as Select from "react-select";
 
 import { backendApi } from "@src/api/BackendApi";
-import { Location } from "@src/api/interfaces";
 import { UpdateFilter } from "@src/store/locations/actions";
 import { FilterState } from "@src/store/locations/types";
 import { RootState } from "@src/store/store";

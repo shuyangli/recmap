@@ -1,5 +1,4 @@
-import { Button, Tag } from "@blueprintjs/core";
-import * as _ from "lodash";
+import { Button } from "@blueprintjs/core";
 import * as React from "react";
 import { connect, Dispatch } from "react-redux";
 

@@ -4,7 +4,7 @@ import { Dispatch } from "redux";
 import {} from "@types/googlemaps"; // maps type hack
 
 import { Location } from "@src/api/interfaces";
-import { getCurrentLocation, initializeMapElement, mapsDefaults } from "@src/api/MapsApi";
+import { initializeMapElement } from "@src/api/MapsApi";
 import { ToggleDetailPanel } from "@src/store/actionPanel/actions";
 import { getFilteredLocations } from "@src/store/locations/selectors";
 import { RootState } from "@src/store/store";
@@ -53,7 +53,6 @@ class Map extends React.PureComponent<ConnectedProps & DispatchProps, State> {
   }
 
   render() {
-    const google = (window as any).google;
     return (
       <div id="map" ref={(element) => this.mapRef = element} />
     );

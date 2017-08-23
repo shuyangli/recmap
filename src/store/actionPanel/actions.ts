@@ -1,5 +1,5 @@
 import { TypedAction, TypedReducer } from "redoodle";
-import { ActionPanelState, ActionPanelType, EMPTY_ACTION_PANEL_STATE } from "./types";
+import { ActionPanelState, ActionPanelType } from "./types";
 
 export const ToggleDetailPanel = TypedAction.define("ToggleDetailPanel")<{
   locationId: string;

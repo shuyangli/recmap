@@ -5,7 +5,7 @@ import { Dispatch } from "redux";
 import { backendApi } from "@src/api/BackendApi";
 import { Location } from "@src/api/interfaces";
 import { RootState } from "@src/store/store";
-import { EMPTY_LOCATION_STATE, FilterState, LocationState } from "./types";
+import { FilterState, LocationState } from "./types";
 
 
 const UpdateAllLocations = TypedAction.define("UpdateAllLocations")<{
