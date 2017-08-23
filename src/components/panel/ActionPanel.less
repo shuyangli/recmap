@@ -1,14 +1,15 @@
 @import (reference) "~@blueprintjs/core/dist/variables.less";
 
 .action-panel {
-  height: 100%;
-  width: 30vw;
-  min-width: 400px;
-  max-width: 600px;
+  width: 25vw;
+  min-width: 350px;
+  max-width: 450px;
+  padding: 20px;
   margin-left: 20px;
+  border-radius: 10px;
+  background-color: @white;
   display: flex;
   flex-direction: column;
-  background-color: @white;
 }
 
 .location-panel {
@@ -22,8 +23,6 @@
   flex-grow: 1;
   overflow-y: auto;
 
-  padding: 40px 20px 0 20px;
-
   .location-name {
     font-weight: 800;
   }
@@ -34,14 +33,6 @@
     padding: 5px 10px;
     height: auto;
   }
-
-  // .location-address {
-
-  // }
-
-  // .location-notes {
-
-  // }
 }
 
 .panel-edit-controls {
@@ -50,7 +41,4 @@
   display: flex;
   align-content: flex-end;
   width: 100%;
-  padding: 10px 20px;
-  box-shadow: 0 -1px 1px rgba(16, 22, 26, 0.2);
-  z-index: 19;
 }

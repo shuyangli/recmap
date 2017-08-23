@@ -21,7 +21,7 @@ class ActionPanel extends React.PureComponent<ConnectedProps, void> {
   render() {
     if (this.props.isVisible) {
       return (
-        <div className="action-panel pt-elevation-0">
+        <div className="action-panel">
           {
             this.props.type === ActionPanelType.DETAIL
             ? (

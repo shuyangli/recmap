@@ -4,6 +4,7 @@ import * as React from "react";
 import { connect, Dispatch } from "react-redux";
 
 import { Location } from "@src/api/interfaces";
+import { LocationTags } from "@src/components/location/LocationTags";
 import { ToggleEditPanel } from "@src/store/actionPanel/actions";
 import { RootState } from "@src/store/store";
 
@@ -21,16 +22,14 @@ class LocationDetailsPanel extends React.PureComponent<OwnProps & DispatchProps,
       <div className="location-panel">
         <div className="location-content-wrapper">
           <h1 className="location-name">{this.props.location.name}</h1>
-          <div className="location-tag-area">
-            {this.props.location.tags.map((tag: string) =>
-              <Tag key={tag}>{tag}</Tag>,
-            )}
-          </div>
+
+          <LocationTags tags={this.props.location.tags} />
+
           <p className="location-address">{this.props.location.address}</p>
           <p className="location-notes">{this.props.location.notes}</p>
         </div>
 
-        <div className="panel-edit-controls pt-elevation-1">
+        <div className="panel-edit-controls">
           <Button text="Edit" onClick={this.onEdit} />
         </div>
       </div>

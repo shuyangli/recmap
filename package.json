@@ -4,6 +4,7 @@
   "description": "recmap-frontend",
   "main": "./src/index.tsx",
   "scripts": {
+    "build": "webpack",
     "start": "webpack-dev-server --inline --hot",
     "clean": "rm -r ./build/*",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -19,7 +20,7 @@
   },
   "homepage": "https://github.com/shuyangli/recmap#readme",
   "dependencies": {
-    "@blueprintjs/core": "^1.16.0",
+    "@blueprintjs/core": "^1.25.1",
     "@types/classnames": "0.0.32",
     "@types/googlemaps": "^3.26.8",
     "@types/lodash": "^4.14.62",

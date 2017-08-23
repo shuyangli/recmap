@@ -4,6 +4,8 @@ import * as React from "react";
 import { connect, Dispatch } from "react-redux";
 
 import { Location } from "@src/api/interfaces";
+import { LocationRating } from "@src/components/location/LocationRating";
+import { LocationTags } from "@src/components/location/LocationTags";
 import { ToggleDetailPanel } from "@src/store/actionPanel/actions";
 import { RootState } from "@src/store/store";
 
@@ -19,33 +21,16 @@ interface ConnectedProps {
 
 class LocationItem extends React.PureComponent<OwnProps & ConnectedProps, void> {
   render() {
-
-    const ratingView: JSX.Element[] = this.props.location.rating && [
-      ..._.times(this.props.location.rating, (idx) =>
-        <span key={idx} className={`${Classes.ICON} ${IconClasses.STAR}`} />
-      ),
-      ..._.times(4 - this.props.location.rating, (idx) =>
-        <span key={4 - idx} className={`${Classes.ICON} ${IconClasses.STAR_EMPTY}`} />
-      )
-    ];
-
     return (
       <div className="location-item" onClick={this.props.getOpenDetailsPanel(this.props.location.id)}>
 
         <div className="location-name-rating-wrapper">
           <h5 className="location-name">{this.props.location.name}</h5>
-          <div className="location-rating">
-            {ratingView}
-          </div>
+          <LocationRating rating={this.props.location.rating} />
         </div>
 
-        {!_.isEmpty(this.props.location.tags) &&
-          <div className="location-tags">
-            {this.props.location.tags.map((tag) => (
-              <Tag key={tag}>{tag}</Tag>
-            ))}
-          </div>
-        }
+        <LocationTags tags={this.props.location.tags} />
+
         <p className="location-address">{this.props.location.address}</p>
 
       </div>
