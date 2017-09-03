@@ -1,0 +1,34 @@
+@import (reference) "~@blueprintjs/core/dist/variables.less";
+
+.sidebar-filter-controls {
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  border-bottom: solid 1px @gray5;
+  padding-bottom: 20px;
+  flex-shrink: 0;
+}
+
+.filter-control-group {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+
+  &:last-of-type {
+    margin-bottom: 0;
+  }
+
+  .search-term-input[type="search"] {
+    flex: 1;
+    margin-left: 10px;
+    padding-left: 0;
+    background: none;
+    border-radius: 0;
+    border-bottom: solid 1px @gray5;
+    box-shadow: none;
+  }
+
+  .tag-select {
+    flex: 1;
+    margin-left: 12px;
+  }
+}

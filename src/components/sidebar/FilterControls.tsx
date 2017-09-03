@@ -1,3 +1,5 @@
+import { Classes, Icon, IconClasses } from "@blueprintjs/core";
+import * as classNames from "classnames";
 import * as React from "react";
 import { connect, Dispatch } from "react-redux";
 import * as Select from "react-select";
@@ -6,6 +8,8 @@ import { backendApi } from "@src/api/BackendApi";
 import { UpdateFilter } from "@src/store/locations/actions";
 import { FilterState } from "@src/store/locations/types";
 import { RootState } from "@src/store/store";
+
+import "./FilterControls.less";
 
 interface ConnectedProps {
   filter: FilterState;
@@ -31,26 +35,29 @@ class FilterControls extends React.PureComponent<ConnectedProps & DispatchProps,
   render() {
     return (
       <div className="sidebar-filter-controls">
-        <div className="search-group pt-input-group pt-large">
-          <span className="pt-icon pt-icon-search" />
+        <div className="filter-control-group">
+          <Icon iconName={IconClasses.SEARCH} />
           <input
-            className="search-term-input pt-input"
+            className={classNames("search-term-input", Classes.INPUT)}
             type="search"
-            placeholder="Search"
+            placeholder="Search..."
             value={this.props.filter.searchTerm}
             onChange={this.onSearchTermChange}
           />
         </div>
 
-        <Select
-          className="tag-select"
-          backspaceToRemoveMessage=""
-          multi={true}
-          options={this.getSelectOptions(this.state.allTags)}
-          value={this.getSelectOptions(this.props.filter.tags)}
-          placeholder="Add tags"
-          onChange={this.onTagsChange}
-        />
+        <div className="filter-control-group">
+          <Icon iconName={IconClasses.FILTER} />
+          <Select
+            className="tag-select"
+            backspaceToRemoveMessage=""
+            multi={true}
+            options={this.getSelectOptions(this.state.allTags)}
+            value={this.getSelectOptions(this.props.filter.tags)}
+            placeholder="Filter by tags"
+            onChange={this.onTagsChange}
+          />
+        </div>
       </div>
     );
   }
