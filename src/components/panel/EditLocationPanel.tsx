@@ -11,6 +11,8 @@ import { ClosePanel, ToggleDetailPanel, ToggleEditPanel } from "@src/store/actio
 import { createOrUpdateLocation, deleteLocation } from "@src/store/locations/actions";
 import { RootState } from "@src/store/store";
 
+import "./EditLocationPanel.less";
+
 interface OwnProps {
   initialLocation?: Location;
 }
@@ -123,7 +125,7 @@ class EditLocationPanel extends React.PureComponent<OwnProps & DispatchProps, St
           />
         </div>
 
-        <div className={classNames(Classes.ELEVATION_1, "panel-edit-controls")}>
+        <div className="edit-location-panel-edit-controls">
           <Button text="Cancel" onClick={this.cancelEdit} />
           <Button text="Save" intent={Intent.SUCCESS} onClick={this.saveEdit} />
           {this.state.location.id && <Button text="Delete" intent={Intent.DANGER} onClick={this.deleteLocation} />}
@@ -138,15 +140,15 @@ class EditLocationPanel extends React.PureComponent<OwnProps & DispatchProps, St
     });
   }
 
-  private onNameChange(event: React.ChangeEvent<HTMLInputElement>) {
+  private onNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     this.updateLocation({ name: event.target.value });
   }
 
-  private onAddressChange(event: React.ChangeEvent<HTMLInputElement>) {
+  private onAddressChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     this.updateLocation({ address: event.target.value });
   }
 
-  private onNotesChange(event: React.ChangeEvent<HTMLTextAreaElement>) {
+  private onNotesChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     this.updateLocation({ notes: event.target.value });
   }
 

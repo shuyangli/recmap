@@ -7,6 +7,8 @@ import { LocationTags } from "@src/components/location/LocationTags";
 import { ToggleEditPanel } from "@src/store/actionPanel/actions";
 import { RootState } from "@src/store/store";
 
+import "./LocationDetailsPanel.less";
+
 interface OwnProps {
   location: Location;
 }
