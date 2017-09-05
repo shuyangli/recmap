@@ -6,7 +6,8 @@ export interface Location {
   longitude: number;
   notes: string;
   tags: string[];
-  rating?: number; /* 0 - 4 */
+  rating?: number; /* 0 - 3 */
+  googlePlaceId?: string;
 }
 
 export interface Review {

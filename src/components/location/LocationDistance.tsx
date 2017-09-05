@@ -1,5 +1,6 @@
 import * as React from "react";
 import { connect } from "react-redux";
+import { createSelector } from "reselect";
 
 import { getDistanceBetween } from "@src/api/MapsApi";
 import { RootState } from "@src/store/store";
@@ -10,23 +11,17 @@ interface OwnProps {
 }
 
 interface ConnectedProps {
-  currentLocation: {
-    longitude: number;
-    latitude: number;
-  } | undefined;
+  distance: number | undefined;
 }
 
 class LocationDistance extends React.PureComponent<OwnProps & ConnectedProps, {}> {
   render() {
-    if (this.props.currentLocation) {
+    if (this.props.distance) {
       return (
         <div className="location-distance">
-          {getDistanceBetween(
-            this.props.currentLocation.latitude,
-            this.props.currentLocation.longitude,
-            this.props.latitude,
-            this.props.longitude,
-          )}
+          {this.props.distance > 1000
+          ? `${(this.props.distance / 1000).toFixed(1).toString()}km`
+          : `${this.props.distance.toFixed(0).toString()}m`}
         </div>
       );
     } else {
@@ -35,8 +30,27 @@ class LocationDistance extends React.PureComponent<OwnProps & ConnectedProps, {}
   }
 }
 
-const mapStateToProps = (state: RootState) => ({
-  currentLocation: state.location.currentLocation,
-});
+const distanceSelectorFactory = () => createSelector(
+  (state: RootState) => state.location.currentLocation,
+  (state: RootState, ownProps: OwnProps) => ownProps.latitude,
+  (state: RootState, ownProps: OwnProps) => ownProps.longitude,
+  (currentLocation, ownLatitude, ownLongitude) => currentLocation
+    ? getDistanceBetween(
+        currentLocation.latitude,
+        currentLocation.longitude,
+        ownLatitude,
+        ownLongitude,
+      )
+    : undefined,
+);
 
-export const ConnectedLocationDistance = connect<ConnectedProps, void, OwnProps>(mapStateToProps)(LocationDistance);
+const mapStateToPropsFactory = () => {
+  const distanceSelector = distanceSelectorFactory();
+  return (state: RootState, ownProps: OwnProps) => ({
+    distance: distanceSelector(state, ownProps),
+  });
+};
+
+export const ConnectedLocationDistance = connect<ConnectedProps, void, OwnProps>(
+  mapStateToPropsFactory,
+)(LocationDistance);

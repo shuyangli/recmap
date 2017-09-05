@@ -3,7 +3,7 @@ import {} from "@types/googlemaps"; // maps type hack
 import { googleMapsApiKey } from "../config";
 
 GoogleMapsLoader.KEY = googleMapsApiKey;
-GoogleMapsLoader.LIBRARIES = ["places"];
+GoogleMapsLoader.LIBRARIES = ["places", "geometry"];
 
 export const mapsDefaults = {
   longitude: -122.42740250000001,

@@ -3,10 +3,10 @@ import * as classNames from "classnames";
 import * as React from "react";
 import { connect, Dispatch } from "react-redux";
 import * as Select from "react-select";
+import {} from "@types/googlemaps"; // maps type hack
 
 import { backendApi } from "@src/api/BackendApi";
 import { Location } from "@src/api/interfaces";
-import { getCurrentLocation } from "@src/api/MapsApi";
 import { ClosePanel, ToggleDetailPanel, ToggleEditPanel } from "@src/store/actionPanel/actions";
 import { createOrUpdateLocation, deleteLocation } from "@src/store/locations/actions";
 import { RootState } from "@src/store/store";
@@ -15,6 +15,13 @@ import "./EditLocationPanel.less";
 
 interface OwnProps {
   initialLocation?: Location;
+}
+
+interface ConnectedProps {
+  currentLocation: {
+    latitude: number;
+    longitude: number;
+  };
 }
 
 interface DispatchProps {
@@ -29,7 +36,7 @@ interface State {
   isSaving: boolean;
 }
 
-class EditLocationPanel extends React.PureComponent<OwnProps & DispatchProps, State> {
+class EditLocationPanel extends React.PureComponent<OwnProps & ConnectedProps & DispatchProps, State> {
   state: State = {
     location: {
       name: "",
@@ -45,8 +52,45 @@ class EditLocationPanel extends React.PureComponent<OwnProps & DispatchProps, St
 
   private nameInput: HTMLInputElement;
   private addressInput: HTMLInputElement;
-  private geocodeAutocomplete: any;
-  private establishmentAutocomplete: any;
+  private addressAutocomplete: google.maps.places.Autocomplete;
+  private nameAutocomplete: google.maps.places.Autocomplete;
+
+  private setupNameInput() {
+    this.nameAutocomplete = new google.maps.places.Autocomplete(this.nameInput, {
+      types: ["establishment"],
+    });
+    this.nameAutocomplete.addListener("place_changed", () => {
+      const place = this.nameAutocomplete.getPlace();
+      const name = place.name;
+      if (place.place_id) {
+        const locationUpdates: Partial<Location> = {
+          name,
+          address: place.formatted_address,
+          latitude: place.geometry.location.lat(),
+          longitude: place.geometry.location.lng(),
+          googlePlaceId: place.place_id,
+        };
+        this.setState({ location: { ...this.state.location, ...locationUpdates } });
+      } else {
+        this.setState({ location: { ...this.state.location, name }});
+      }
+    });
+  }
+
+  private setupAddressInput() {
+    this.addressAutocomplete = new google.maps.places.Autocomplete(this.addressInput, {
+      types: ["geocode"],
+    });
+    this.addressAutocomplete.addListener("place_changed", () => {
+      const place = this.addressAutocomplete.getPlace();
+      const locationUpdates: Partial<Location> = {
+        address: place.formatted_address,
+        latitude: place.geometry.location.lat(),
+        longitude: place.geometry.location.lng(),
+      };
+      this.setState({ location: { ...this.state.location, ...locationUpdates }});
+    });
+  }
 
   componentWillMount() {
     if (this.props.initialLocation) {
@@ -58,36 +102,17 @@ class EditLocationPanel extends React.PureComponent<OwnProps & DispatchProps, St
   }
 
   componentDidMount() {
-    // hack for loading google maps dependency in-browser
-    const google = (window as any).google;
+    this.setupNameInput();
+    this.setupAddressInput();
 
-    this.geocodeAutocomplete = new google.maps.places.Autocomplete(this.addressInput, {
-      types: ["geocode"],
-    });
-    this.geocodeAutocomplete.addListener("place_changed", () => {
-      // TODO: console.log(this.geocodeAutocomplete.getPlace());
-    });
+    const location = {
+      lat: this.props.currentLocation.latitude,
+      lng: this.props.currentLocation.longitude,
+    };
+    const circle = new google.maps.Circle({ center: location });
 
-    this.establishmentAutocomplete = new google.maps.places.Autocomplete(this.nameInput, {
-      types: ["establishment"],
-    });
-    this.establishmentAutocomplete.addListener("place_changed", () => {
-      // TODO: console.log(this.establishmentAutocomplete.getPlace());
-    });
-
-    getCurrentLocation().then((position) => {
-      const location = {
-        lat: position.coords.latitude,
-        lng: position.coords.longitude,
-      };
-      const circle = new google.maps.Circle({
-        center: location,
-        radius: position.coords.accuracy,
-      });
-
-      this.geocodeAutocomplete.setBounds(circle.getBounds());
-      this.establishmentAutocomplete.setBounds(circle.getBounds());
-    });
+    this.addressAutocomplete.setBounds(circle.getBounds());
+    this.nameAutocomplete.setBounds(circle.getBounds());
   }
 
   render() {
@@ -169,22 +194,24 @@ class EditLocationPanel extends React.PureComponent<OwnProps & DispatchProps, St
   }
 }
 
-function mapDispatchToProps(dispatch: Dispatch<RootState>): DispatchProps {
-  return {
-    onCancel: (locationId?: string) =>
-      dispatch(locationId
-        ? ToggleDetailPanel.create({ locationId })
-        : ToggleEditPanel.create({})),
+const mapStateToProps = (state: RootState): ConnectedProps => ({
+  currentLocation: state.location.currentLocation,
+});
 
-    onSave: (location: Location, initialLocation?: Location) =>
-      dispatch(createOrUpdateLocation(location, initialLocation))
-      .then((action) => dispatch(ToggleDetailPanel.create({ locationId: action.payload.location.id }))),
+const mapDispatchToProps = (dispatch: Dispatch<RootState>): DispatchProps => ({
+  onCancel: (locationId?: string) =>
+    dispatch(locationId
+      ? ToggleDetailPanel.create({ locationId })
+      : ToggleEditPanel.create({})),
 
-    onDelete: (locationId: string) =>
-      dispatch(deleteLocation(locationId))
-      .then(() => dispatch(ClosePanel.create())),
-  };
-}
+  onSave: (location: Location, initialLocation?: Location) =>
+    dispatch(createOrUpdateLocation(location, initialLocation))
+    .then((action) => dispatch(ToggleDetailPanel.create({ locationId: action.payload.location.id }))),
+
+  onDelete: (locationId: string) =>
+    dispatch(deleteLocation(locationId))
+    .then(() => dispatch(ClosePanel.create())),
+});
 
 export const ConnectedEditLocationPanel: React.ComponentClass<OwnProps> =
-  connect(null, mapDispatchToProps)(EditLocationPanel);
+  connect(mapStateToProps, mapDispatchToProps)(EditLocationPanel);
