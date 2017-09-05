@@ -2,8 +2,8 @@ export interface Location {
   id?: string;
   name: string;
   address: string;
-  latitude: string;
-  longitude: string;
+  latitude: number;
+  longitude: number;
   notes: string;
   tags: string[];
   rating?: number; /* 0 - 4 */

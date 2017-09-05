@@ -2,8 +2,7 @@ import * as React from "react";
 import { connect, Dispatch } from "react-redux";
 
 import { Location } from "@src/api/interfaces";
-import { LocationRating } from "@src/components/location/LocationRating";
-import { LocationTags } from "@src/components/location/LocationTags";
+import { ConnectedLocationDistance, LocationRating, LocationTags } from "@src/components/location";
 import { ToggleDetailPanel } from "@src/store/actionPanel/actions";
 import { RootState } from "@src/store/store";
 
@@ -13,34 +12,32 @@ interface OwnProps {
   location: Location;
 }
 
-interface ConnectedProps {
+interface DispatchProps {
   getOpenDetailsPanel: (locationId: string) => () => void;
 }
 
-class LocationItem extends React.PureComponent<OwnProps & ConnectedProps, void> {
+class LocationItem extends React.PureComponent<OwnProps & DispatchProps, {}> {
   render() {
+    const { location } = this.props;
     return (
-      <div className="location-item" onClick={this.props.getOpenDetailsPanel(this.props.location.id)}>
-
-        <div className="location-name-rating-wrapper">
-          <h5 className="location-name">{this.props.location.name}</h5>
-          <LocationRating rating={this.props.location.rating} />
+      <div className="location-item" onClick={this.props.getOpenDetailsPanel(location.id)}>
+        <div className="location-row-wrapper">
+          <h5 className="location-name">{location.name}</h5>
+          <LocationRating rating={location.rating} />
         </div>
-
-        <LocationTags tags={this.props.location.tags} />
-
-        <p className="location-address">{this.props.location.address}</p>
-
+        <div className="location-row-wrapper">
+          <LocationTags tags={location.tags} />
+          <ConnectedLocationDistance latitude={location.latitude} longitude={location.longitude} />
+        </div>
       </div>
     );
   }
 }
 
-function mapDispatchToProps(dispatch: Dispatch<RootState>): ConnectedProps {
+function mapDispatchToProps(dispatch: Dispatch<RootState>): DispatchProps {
   return {
     getOpenDetailsPanel: (locationId: string) => () => dispatch(ToggleDetailPanel.create({ locationId })),
   };
 }
 
-export const ConnectedLocationItem: React.ComponentClass<OwnProps> =
-  connect<ConnectedProps, void, OwnProps>(null, mapDispatchToProps)(LocationItem as any);
+export const ConnectedLocationItem = connect<void, DispatchProps, OwnProps>(null, mapDispatchToProps)(LocationItem);

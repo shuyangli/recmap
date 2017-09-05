@@ -34,8 +34,8 @@ class EditLocationPanel extends React.PureComponent<OwnProps & DispatchProps, St
     location: {
       name: "",
       address: "",
-      latitude: "",
-      longitude: "",
+      latitude: 0,
+      longitude: 0,
       notes: "",
       tags: [],
     },

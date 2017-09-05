@@ -40,8 +40,8 @@ class Map extends React.PureComponent<ConnectedProps & DispatchProps, State> {
       const marker: google.maps.Marker = new google.maps.Marker({
         map: this.map,
         position: {
-          lat: parseFloat(location.latitude),
-          lng: parseFloat(location.longitude),
+          lat: location.latitude,
+          lng: location.longitude,
         },
       });
       marker.addListener("click", () => this.props.toggleDetailPanelForLocation(location.id));
