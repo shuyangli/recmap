@@ -11,19 +11,13 @@ interface OwnProps {
 }
 
 interface ConnectedProps {
-  distance: number | undefined;
+  formattedDistance: string | undefined;
 }
 
 class LocationDistance extends React.PureComponent<OwnProps & ConnectedProps, {}> {
   render() {
-    if (this.props.distance) {
-      return (
-        <div className="location-distance">
-          {this.props.distance > 1000
-          ? `${(this.props.distance / 1000).toFixed(1).toString()}km`
-          : `${this.props.distance.toFixed(0).toString()}m`}
-        </div>
-      );
+    if (this.props.formattedDistance) {
+      return <div className="location-distance">{this.props.formattedDistance}</div>;
     } else {
       return null;
     }
@@ -44,10 +38,25 @@ const distanceSelectorFactory = () => createSelector(
     : undefined,
 );
 
+const formattedDistanceSelectorFactory = () => createSelector(
+  distanceSelectorFactory(),
+  (distance) => {
+    if (distance) {
+      if (distance > 1000) {
+        return `${(distance / 1000).toFixed(1).toString()}km`;
+      } else {
+        return `${distance.toFixed(0).toString()}m`;
+      }
+    } else {
+      return undefined;
+    }
+  },
+);
+
 const mapStateToPropsFactory = () => {
-  const distanceSelector = distanceSelectorFactory();
+  const formattedDistanceSelector = formattedDistanceSelectorFactory();
   return (state: RootState, ownProps: OwnProps) => ({
-    distance: distanceSelector(state, ownProps),
+    formattedDistance: formattedDistanceSelector(state, ownProps),
   });
 };
 
