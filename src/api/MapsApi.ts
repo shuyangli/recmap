@@ -38,3 +38,10 @@ export function getCurrentLocation(): Promise<Position> {
     }
   });
 }
+
+export function getDistanceBetween(latitude1: number, longitude1: number, latitude2: number, longitude2: number) {
+  return google.maps.geometry.spherical.computeDistanceBetween(
+    new google.maps.LatLng(latitude1, longitude1),
+    new google.maps.LatLng(latitude2, longitude2),
+  );
+}

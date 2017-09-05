@@ -11,11 +11,16 @@ export const EMPTY_FILTER_STATE: FilterState = {
 };
 
 export interface LocationState {
+  currentLocation: {
+    latitude: number;
+    longitude: number;
+  } | undefined;
   locations: { [id: string]: Location };
   filter: FilterState;
 }
 
 export const EMPTY_LOCATION_STATE: LocationState = {
+  currentLocation: undefined,
   locations: {},
   filter: EMPTY_FILTER_STATE,
 };
