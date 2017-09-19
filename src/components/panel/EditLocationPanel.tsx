@@ -152,8 +152,10 @@ class EditLocationPanel extends React.PureComponent<OwnProps & ConnectedProps & 
 
         <div className="edit-location-panel-edit-controls">
           <Button text="Cancel" onClick={this.cancelEdit} />
-          <Button text="Save" intent={Intent.SUCCESS} onClick={this.saveEdit} />
-          {this.state.location.id && <Button text="Delete" intent={Intent.DANGER} onClick={this.deleteLocation} />}
+          <div className="right-group">
+            {this.state.location.id && <Button text="Delete" intent={Intent.DANGER} onClick={this.deleteLocation} />}
+            <Button text="Save" intent={Intent.SUCCESS} onClick={this.saveEdit} />
+          </div>
         </div>
       </div>
     );
