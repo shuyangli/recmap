@@ -116,9 +116,6 @@
   width: 100%;
   padding: 0 10px; }
 
-.Select:not(.is-searchable):not(.Select--multi) > .Select-control {
-  font-family: "DIN-Next", "Helvetica", sans-serif, "Icons16"; }
-
 .Select:not(.is-searchable):not(.Select--multi).pt-large > .Select-control {
   padding: 0 10px; }
 
@@ -145,8 +142,7 @@
   font-size: 14px;
   font-weight: 400;
   transition: box-shadow 100ms cubic-bezier(0.4, 1, 0.75, 0.9);
-  line-height: initial;
-  font-family: "DIN-Next", "Helvetica", sans-serif, "Icons16"; }
+  line-height: initial; }
   .is-searchable > .Select-control::-webkit-input-placeholder,
   .Select--multi > .Select-control::-webkit-input-placeholder {
     opacity: 1;

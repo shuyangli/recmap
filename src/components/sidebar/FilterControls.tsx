@@ -38,7 +38,7 @@ class FilterControls extends React.PureComponent<ConnectedProps & DispatchProps,
         <div className="filter-control-group">
           <Icon iconName={IconClasses.SEARCH} />
           <input
-            className={classNames("search-term-input", Classes.INPUT)}
+            className={classNames("search-term-input", Classes.INPUT, Classes.FILL)}
             type="search"
             placeholder="Search..."
             value={this.props.filter.searchTerm}
