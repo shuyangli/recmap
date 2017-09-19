@@ -3,7 +3,7 @@ import * as React from "react";
 import { connect, Dispatch } from "react-redux";
 
 import { Location } from "@src/api/interfaces";
-import { LocationTags } from "@src/components/location/LocationTags";
+import { LocationRating, LocationTags } from "@src/components/location";
 import { ToggleEditPanel } from "@src/store/actionPanel/actions";
 import { RootState } from "@src/store/store";
 
@@ -22,7 +22,10 @@ class LocationDetailsPanel extends React.PureComponent<OwnProps & DispatchProps,
     return (
       <div className="location-panel">
         <div className="location-content-wrapper">
-          <h1 className="location-name">{this.props.location.name}</h1>
+          <div className="location-name-wrapper">
+            <h1 className="location-name">{this.props.location.name}</h1>
+            <LocationRating rating={this.props.location.rating} />
+          </div>
 
           <LocationTags tags={this.props.location.tags} />
 

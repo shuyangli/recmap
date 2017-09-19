@@ -192,8 +192,8 @@ class EditLocationPanel extends React.PureComponent<OwnProps & ConnectedProps & 
     this.updateLocation({ address: event.target.value });
   }
 
-  private onRatingChange = (rating: Select.Option<number>) => {
-    this.updateLocation({ rating: rating.value });
+  private onRatingChange = (rating?: Select.Option<number>) => {
+    this.updateLocation({ rating: rating ? rating.value : undefined });
   }
 
   private onNotesChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
