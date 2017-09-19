@@ -7,6 +7,7 @@ import {} from "@types/googlemaps"; // maps type hack
 
 import { backendApi } from "@src/api/BackendApi";
 import { Location } from "@src/api/interfaces";
+import { LocationRating } from "@src/components/location";
 import { ClosePanel, ToggleDetailPanel, ToggleEditPanel } from "@src/store/actionPanel/actions";
 import { createOrUpdateLocation, deleteLocation } from "@src/store/locations/actions";
 import { RootState } from "@src/store/store";
@@ -35,6 +36,13 @@ interface State {
   allTags: string[];
   isSaving: boolean;
 }
+
+const ratings: Array<Select.Option<number>> = [
+  { value: 0 },
+  { value: 1 },
+  { value: 2 },
+  { value: 3 },
+];
 
 class EditLocationPanel extends React.PureComponent<OwnProps & ConnectedProps & DispatchProps, State> {
   state: State = {
@@ -127,6 +135,15 @@ class EditLocationPanel extends React.PureComponent<OwnProps & ConnectedProps & 
             placeholder="Name"
             onChange={this.onNameChange}
           />
+          <Select
+            backspaceToRemoveMessage=""
+            options={ratings}
+            optionRenderer={this.ratingRenderer}
+            value={this.state.location.rating}
+            valueRenderer={this.ratingRenderer}
+            placeholder="Select rating"
+            onChange={this.onRatingChange}
+          />
           <Select.Creatable
             backspaceToRemoveMessage=""
             multi={true}
@@ -175,6 +192,10 @@ class EditLocationPanel extends React.PureComponent<OwnProps & ConnectedProps & 
     this.updateLocation({ address: event.target.value });
   }
 
+  private onRatingChange = (rating: Select.Option<number>) => {
+    this.updateLocation({ rating: rating.value });
+  }
+
   private onNotesChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     this.updateLocation({ notes: event.target.value });
   }
@@ -194,6 +215,8 @@ class EditLocationPanel extends React.PureComponent<OwnProps & ConnectedProps & 
       value: tag,
     }));
   }
+
+  private ratingRenderer = (option: Select.Option<number>) => <LocationRating rating={option.value} />;
 }
 
 const mapStateToProps = (state: RootState): ConnectedProps => ({

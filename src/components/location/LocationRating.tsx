@@ -1,20 +1,25 @@
-import { Icon, IconClasses } from "@blueprintjs/core";
+import { Colors, Icon, IconClasses } from "@blueprintjs/core";
 import * as React from "react";
 
-const THUMBS_UP = (<Icon iconName={IconClasses.THUMBS_UP} />);
-const THUMBS_DOWN = (<Icon iconName={IconClasses.THUMBS_DOWN} />);
+import "./LocationRating.less";
 
+const THUMBS_UP = (<Icon className="location-rating-icon" iconName={IconClasses.THUMBS_UP} />);
+const THUMBS_DOWN = (<Icon className="location-rating-icon" iconName={IconClasses.THUMBS_DOWN} />);
+
+// These are not actually in an array
+// tslint:disable:jsx-key
 const RATING_MAP = [
-  <div className="location-rating">{THUMBS_DOWN}</div>,
-  <div className="location-rating">"~"</div>,
-  <div className="location-rating">{THUMBS_UP}</div>,
-  <div className="location-rating">{THUMBS_UP}{THUMBS_UP}</div>,
+  <div className="location-rating" style={{ color: Colors.RED1 }}>{THUMBS_DOWN}</div>,
+  <div className="location-rating" style={{ color: Colors.ORANGE1 }}>~</div>,
+  <div className="location-rating" style={{ color: Colors.GREEN1 }}>{THUMBS_UP}</div>,
+  <div className="location-rating" style={{ color: Colors.GREEN1 }}>{THUMBS_UP}{THUMBS_UP}</div>,
 ];
+// tslint:enable:jsx-key
 
 interface Props {
-  rating?: number
+  rating?: number;
 }
 
 export function LocationRating(props: Props) {
-  return props.rating ? RATING_MAP[props.rating] : null;
+  return props.rating != null ? RATING_MAP[props.rating] : null;
 }
