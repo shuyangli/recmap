@@ -26,7 +26,7 @@ class LocationItem extends React.PureComponent<OwnProps & DispatchProps, {}> {
           <LocationRating rating={location.rating} />
         </div>
         <div className="location-row-wrapper">
-          <LocationTags tags={location.tags} />
+          <LocationTags tags={location.tags} showNumberOfTags={2} />
           <ConnectedLocationDistance latitude={location.latitude} longitude={location.longitude} />
         </div>
       </div>
