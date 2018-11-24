@@ -1,4 +1,4 @@
-import { Location } from "@src/api/interfaces";
+import { Location } from "../../api/interfaces";
 
 export interface FilterState {
   searchTerm: string;

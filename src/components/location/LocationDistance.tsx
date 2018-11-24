@@ -2,8 +2,8 @@ import * as React from "react";
 import { connect } from "react-redux";
 import { createSelector } from "reselect";
 
-import { getDistanceBetween } from "@src/api/MapsApi";
-import { RootState } from "@src/store/store";
+import { getDistanceBetween } from "../../api/MapsApi";
+import { RootState } from "../../store/store";
 
 interface OwnProps {
   latitude: number;

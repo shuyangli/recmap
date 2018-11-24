@@ -1,10 +1,10 @@
 import * as firebase from "firebase";
-import * as _ from "lodash";
 
-import { FirebaseConfig } from "@src/config";
+import { FirebaseConfig } from "../config";
 import { BackendApi } from "./BackendApi";
 import { Location } from "./interfaces";
 import { ObjectTranslator } from "./ObjectTranslator";
+import { mapValues, defaults, clone } from "lodash-es";
 
 export class FirebaseApi implements BackendApi {
   constructor(config: FirebaseConfig) {
@@ -30,7 +30,7 @@ export class FirebaseApi implements BackendApi {
 
   getAllLocations() {
     return Promise.resolve(firebase.database().ref("/locations/").once("value"))
-    .then((snapshot) => _.mapValues(snapshot.val(), this.appifyLocation));
+    .then((snapshot) => mapValues(snapshot.val(), this.appifyLocation));
   }
 
   getAllTags() {
@@ -51,14 +51,14 @@ export class FirebaseApi implements BackendApi {
 
   private createLocation(location: Location) {
     const newLocationRef = firebase.database().ref().child("locations").push();
-    const newLocation = this.firebaseifyLocation(_.defaults({ id: newLocationRef.key }, location));
+    const newLocation = this.firebaseifyLocation(defaults({ id: newLocationRef.key }, location));
     this.addLocationToTags(location.tags, newLocation.id);
     return Promise.resolve(newLocationRef.set(newLocation))
     .then(() => this.appifyLocation(newLocation));
   }
 
   private updateLocation(newLocation: Location, oldLocation: Location) {
-    const location = this.firebaseifyLocation(_.clone(newLocation));
+    const location = this.firebaseifyLocation(clone(newLocation));
     this.removeLocationFromTags(oldLocation.tags, newLocation.id);
     this.addLocationToTags(newLocation.tags, newLocation.id);
     return Promise.resolve(firebase.database().ref(this.getLocationKey(location.id)).set(location))

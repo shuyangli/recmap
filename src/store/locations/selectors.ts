@@ -1,8 +1,8 @@
 import * as fuzzy from "fuzzy";
-import * as _ from "lodash";
 import { createSelector } from "reselect";
 
-import { RootState } from "@src/store/store";
+import { RootState } from "../../store/store";
+import { values, isEmpty, includes } from "lodash-es";
 
 const getAllLocations = (state: RootState) => state.location.locations;
 const getFilter = (state: RootState) => state.location.filter;
@@ -11,12 +11,12 @@ export const getFilteredLocations = createSelector(
   [getAllLocations, getFilter],
   (locations, filter) => {
 
-    let remainingLocations = _.values(locations);
+    let remainingLocations = values(locations);
 
-    if (!_.isEmpty(filter.searchTerm)) {
+    if (!isEmpty(filter.searchTerm)) {
       const filtered = fuzzy.filter(
         filter.searchTerm,
-        _.values(locations),
+        values(locations),
         { extract: (location) => location.name },
       );
       // When a search term is present, the results are sorted by relevance,
@@ -24,9 +24,9 @@ export const getFilteredLocations = createSelector(
       remainingLocations = filtered.map((result) => result.original);
     }
 
-    if (!_.isEmpty(filter.tags)) {
+    if (!isEmpty(filter.tags)) {
       remainingLocations = remainingLocations.filter((location) =>
-        filter.tags.some((tag) => _.includes(location.tags, tag)));
+        filter.tags.some((tag) => includes(location.tags, tag)));
     }
 
     return remainingLocations;

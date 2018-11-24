@@ -1,11 +1,11 @@
 import { Button } from "@blueprintjs/core";
 import * as React from "react";
-import { connect, Dispatch } from "react-redux";
+import { connect } from "react-redux";
+import { Dispatch } from "redux";
 
-import { Location } from "@src/api/interfaces";
-import { LocationRating, LocationTags } from "@src/components/location";
-import { ToggleEditPanel } from "@src/store/actionPanel/actions";
-import { RootState } from "@src/store/store";
+import { Location } from "../../api/interfaces";
+import { LocationRating, LocationTags } from "../../components/location";
+import { ToggleEditPanel } from "../../store/actionPanel/actions";
 
 import "./LocationDetailsPanel.less";
 
@@ -43,7 +43,7 @@ class LocationDetailsPanel extends React.PureComponent<OwnProps & DispatchProps,
   private onEdit = () => this.props.onEdit(this.props.location.id);
 }
 
-function mapDispatchToProps(dispatch: Dispatch<RootState>): DispatchProps {
+function mapDispatchToProps(dispatch: Dispatch): DispatchProps {
   return {
     onEdit: (locationId: string) => dispatch(ToggleEditPanel.create({ locationId })),
   };

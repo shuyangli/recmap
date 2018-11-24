@@ -1,6 +1,6 @@
 import { combineReducers, loggingMiddleware, reduceCompoundActions } from "redoodle";
-import { applyMiddleware, compose, createStore } from "redux";
-import thunkMiddleware from "redux-thunk";
+import { applyMiddleware, compose, createStore, Action } from "redux";
+import thunkMiddleware, { ThunkDispatch } from "redux-thunk";
 
 import { actionPanelReducer } from "./actionPanel/actions";
 import { EMPTY_ACTION_PANEL_STATE, ActionPanelState } from "./actionPanel/types";
@@ -28,7 +28,7 @@ export const store = createStore(
   reduceCompoundActions(reducer),
   initialState,
   composeEnhancers(
-    applyMiddleware(
+    applyMiddleware<ThunkDispatch<RootState, void, Action>>(
       thunkMiddleware,
       loggingMiddleware({ enableInProduction: false }),
     ),

@@ -1,13 +1,13 @@
-import { Classes, Icon, IconClasses } from "@blueprintjs/core";
+import { Classes, Icon } from "@blueprintjs/core";
 import * as classNames from "classnames";
 import * as React from "react";
-import { connect, Dispatch } from "react-redux";
-import * as Select from "react-select";
+import { connect } from "react-redux";
+import { Dispatch } from "redux";
 
-import { backendApi } from "@src/api/BackendApi";
-import { UpdateFilter } from "@src/store/locations/actions";
-import { FilterState } from "@src/store/locations/types";
-import { RootState } from "@src/store/store";
+import { backendApi } from "../../api/BackendApi";
+import { UpdateFilter } from "../../store/locations/actions";
+import { FilterState } from "../../store/locations/types";
+import { RootState } from "../../store/store";
 
 import "./FilterControls.less";
 
@@ -36,7 +36,7 @@ class FilterControls extends React.PureComponent<ConnectedProps & DispatchProps,
     return (
       <div className="sidebar-filter-controls">
         <div className="filter-control-group">
-          <Icon iconName={IconClasses.SEARCH} />
+          <Icon icon="search" />
           <input
             className={classNames("search-term-input", Classes.INPUT, Classes.FILL)}
             type="search"
@@ -47,8 +47,8 @@ class FilterControls extends React.PureComponent<ConnectedProps & DispatchProps,
         </div>
 
         <div className="filter-control-group">
-          <Icon iconName={IconClasses.FILTER} />
-          <Select
+          <Icon icon="filter" />
+          {/* <Select
             className="tag-select"
             backspaceToRemoveMessage=""
             multi={true}
@@ -56,7 +56,7 @@ class FilterControls extends React.PureComponent<ConnectedProps & DispatchProps,
             value={this.getSelectOptions(this.props.filter.tags)}
             placeholder="Filter by tags"
             onChange={this.onTagsChange}
-          />
+          /> */}
         </div>
       </div>
     );
@@ -66,17 +66,17 @@ class FilterControls extends React.PureComponent<ConnectedProps & DispatchProps,
     this.props.onFilterChange({ ...this.props.filter, searchTerm: event.target.value });
   }
 
-  private getSelectOptions(rawStrings: string[]): Array<Select.Option<string>> {
-    return rawStrings.map((tag) => ({
-      label: tag,
-      value: tag,
-    }));
-  }
+  // private getSelectOptions(rawStrings: string[]): Array<Select.Option<string>> {
+  //   return rawStrings.map((tag) => ({
+  //     label: tag,
+  //     value: tag,
+  //   }));
+  // }
 
-  private onTagsChange = (values: Array<Select.Option<string>>) => {
-    const tags = values.map((value) => value.value);
-    this.props.onFilterChange({ ...this.props.filter, tags });
-  }
+  // private onTagsChange = (values: Array<Select.Option<string>>) => {
+  //   const tags = values.map((value) => value.value);
+  //   this.props.onFilterChange({ ...this.props.filter, tags });
+  // }
 }
 
 function mapStateToProps(state: RootState): ConnectedProps {
@@ -85,7 +85,7 @@ function mapStateToProps(state: RootState): ConnectedProps {
   };
 }
 
-function mapDispatchToProps(dispatch: Dispatch<RootState>): DispatchProps {
+function mapDispatchToProps(dispatch: Dispatch): DispatchProps {
   return {
     onFilterChange: (newFilter: FilterState) => dispatch(UpdateFilter.create({ filter: newFilter })),
   };

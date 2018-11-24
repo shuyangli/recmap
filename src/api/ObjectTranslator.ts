@@ -1,4 +1,4 @@
-import * as _ from "lodash";
+import { assign, keys, reduce } from "lodash-es";
 
 export class ObjectTranslator {
   constructor(private target: any) {}
@@ -10,11 +10,11 @@ export class ObjectTranslator {
   objectToArray(field: string) {
     const override: any = {};
     if (this.target[field]) {
-      override[field] = _.keys(this.target[field]);
+      override[field] = keys(this.target[field]);
     } else {
       override[field] = [];
     }
-    this.target = _.assign({}, this.target, override);
+    this.target = assign({}, this.target, override);
     return this;
   }
 
@@ -22,14 +22,14 @@ export class ObjectTranslator {
     const override: any = {};
     if (this.target[field]) {
       const flatValues: string[] = this.target[field];
-      override[field] = _.reduce(flatValues, (acc: any, val) => {
+      override[field] = reduce(flatValues, (acc: any, val) => {
         acc[val] = true;
         return acc;
       }, {});
     } else {
       override[field] = {};
     }
-    this.target = _.assign({}, this.target, override);
+    this.target = assign({}, this.target, override);
     return this;
   }
 }

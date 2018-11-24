@@ -1,16 +1,15 @@
 import { Button, Classes, Intent } from "@blueprintjs/core";
 import * as classNames from "classnames";
 import * as React from "react";
-import { connect, Dispatch } from "react-redux";
-import * as Select from "react-select";
-import {} from "@types/googlemaps"; // maps type hack
+import { connect } from "react-redux";
+import { Dispatch } from "redux";
+// import * as Select from "react-select";
 
-import { backendApi } from "@src/api/BackendApi";
-import { Location } from "@src/api/interfaces";
-import { LocationRating } from "@src/components/location";
-import { ClosePanel, ToggleDetailPanel, ToggleEditPanel } from "@src/store/actionPanel/actions";
-import { createOrUpdateLocation, deleteLocation } from "@src/store/locations/actions";
-import { RootState } from "@src/store/store";
+import { backendApi } from "../../api/BackendApi";
+import { Location } from "../../api/interfaces";
+import { ClosePanel, ToggleDetailPanel, ToggleEditPanel } from "../../store/actionPanel/actions";
+import { createOrUpdateLocation, deleteLocation } from "../../store/locations/actions";
+import { RootState } from "../../store/store";
 
 import "./EditLocationPanel.less";
 
@@ -37,12 +36,12 @@ interface State {
   isSaving: boolean;
 }
 
-const ratings: Array<Select.Option<number>> = [
-  { value: 0 },
-  { value: 1 },
-  { value: 2 },
-  { value: 3 },
-];
+// const ratings: Array<Select.Option<number>> = [
+//   { value: 0 },
+//   { value: 1 },
+//   { value: 2 },
+//   { value: 3 },
+// ];
 
 class EditLocationPanel extends React.PureComponent<OwnProps & ConnectedProps & DispatchProps, State> {
   state: State = {
@@ -135,7 +134,7 @@ class EditLocationPanel extends React.PureComponent<OwnProps & ConnectedProps & 
             placeholder="Name"
             onChange={this.onNameChange}
           />
-          <Select
+          {/* <Select
             backspaceToRemoveMessage=""
             options={ratings}
             optionRenderer={this.ratingRenderer}
@@ -151,7 +150,7 @@ class EditLocationPanel extends React.PureComponent<OwnProps & ConnectedProps & 
             value={this.getSelectOptions(this.state.location.tags)}
             placeholder="Add tags"
             onChange={this.onTagsChange}
-          />
+          /> */}
           <input
             className={classNames(Classes.INPUT, Classes.FILL, "location-address")}
             value={this.state.location.address}
@@ -192,9 +191,9 @@ class EditLocationPanel extends React.PureComponent<OwnProps & ConnectedProps & 
     this.updateLocation({ address: event.target.value });
   }
 
-  private onRatingChange = (rating?: Select.Option<number>) => {
-    this.updateLocation({ rating: rating ? rating.value : undefined });
-  }
+  // private onRatingChange = (rating?: Select.Option<number>) => {
+  //   this.updateLocation({ rating: rating ? rating.value : undefined });
+  // }
 
   private onNotesChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     this.updateLocation({ notes: event.target.value });
@@ -204,26 +203,26 @@ class EditLocationPanel extends React.PureComponent<OwnProps & ConnectedProps & 
   private saveEdit = () => this.props.onSave(this.state.location, this.props.initialLocation);
   private deleteLocation = () => this.props.onDelete(this.state.location.id);
 
-  private onTagsChange = (values: Array<Select.Option<string>>) => {
-    const tags = values.map((value) => value.value);
-    this.updateLocation({ tags });
-  }
+  // private onTagsChange = (values: Array<Select.Option<string>>) => {
+  //   const tags = values.map((value) => value.value);
+  //   this.updateLocation({ tags });
+  // }
 
-  private getSelectOptions = (rawStrings: string[]): Array<Select.Option<string>> => {
-    return rawStrings.map((tag) => ({
-      label: tag,
-      value: tag,
-    }));
-  }
+  // private getSelectOptions = (rawStrings: string[]): Array<Select.Option<string>> => {
+  //   return rawStrings.map((tag) => ({
+  //     label: tag,
+  //     value: tag,
+  //   }));
+  // }
 
-  private ratingRenderer = (option: Select.Option<number>) => <LocationRating rating={option.value} />;
+  // private ratingRenderer = (option: Select.Option<number>) => <LocationRating rating={option.value} />;
 }
 
 const mapStateToProps = (state: RootState): ConnectedProps => ({
   currentLocation: state.location.currentLocation,
 });
 
-const mapDispatchToProps = (dispatch: Dispatch<RootState>): DispatchProps => ({
+const mapDispatchToProps = (dispatch: Dispatch): DispatchProps => ({
   onCancel: (locationId?: string) =>
     dispatch(locationId
       ? ToggleDetailPanel.create({ locationId })

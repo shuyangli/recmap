@@ -1,13 +1,12 @@
-import { Button, Classes, IconClasses } from "@blueprintjs/core";
-import * as classNames from "classnames";
+import { Button } from "@blueprintjs/core";
 import * as React from "react";
 import { connect } from "react-redux";
 import { Dispatch } from "redux";
 
-import { Location } from "@src/api/interfaces";
-import { ClosePanel } from "@src/store/actionPanel/actions";
-import { ActionPanelType } from "@src/store/actionPanel/types";
-import { RootState } from "@src/store/store";
+import { Location } from "../../api/interfaces";
+import { ClosePanel } from "../../store/actionPanel/actions";
+import { ActionPanelType } from "../../store/actionPanel/types";
+import { RootState } from "../../store/store";
 import { ConnectedEditLocationPanel } from "./EditLocationPanel";
 import { ConnectedLocationDetailsPanel } from "./LocationDetailsPanel";
 
@@ -31,8 +30,9 @@ class ActionPanel extends React.PureComponent<ConnectedProps & DispatchProps, vo
         <div className="action-panel">
           <div className="action-panel-header">
             <Button
-              className={classNames(Classes.MINIMAL, Classes.SMALL)}
-              iconName={IconClasses.CROSS}
+              minimal={true}
+              small={true}
+              icon="cross"
               onClick={this.props.closePanel}
             />
           </div>
@@ -73,7 +73,7 @@ const mapStateToProps = (state: RootState): ConnectedProps => ({
   locations: state.location.locations,
 });
 
-const mapDispatchToProps = (dispatch: Dispatch<RootState>): DispatchProps => ({
+const mapDispatchToProps = (dispatch: Dispatch): DispatchProps => ({
   closePanel: () => dispatch(ClosePanel.create()),
 });
 

@@ -1,13 +1,12 @@
 import * as React from "react";
 import { connect } from "react-redux";
 import { Dispatch } from "redux";
-import {} from "@types/googlemaps"; // maps type hack
 
-import { Location } from "@src/api/interfaces";
-import { initializeMapElement } from "@src/api/MapsApi";
-import { ToggleDetailPanel } from "@src/store/actionPanel/actions";
-import { getFilteredLocations } from "@src/store/locations/selectors";
-import { RootState } from "@src/store/store";
+import { Location } from "../../api/interfaces";
+import { initializeMapElement } from "../../api/MapsApi";
+import { ToggleDetailPanel } from "../../store/actionPanel/actions";
+import { getFilteredLocations } from "../../store/locations/selectors";
+import { RootState } from "../../store/store";
 
 import "./Map.less";
 
@@ -63,7 +62,7 @@ const mapStateToProps = (state: RootState): ConnectedProps => ({
   filteredLocations: getFilteredLocations(state),
 });
 
-const mapDispatchToProps = (dispatch: Dispatch<RootState>) => ({
+const mapDispatchToProps = (dispatch: Dispatch) => ({
   toggleDetailPanelForLocation: (locationId: string) => dispatch(ToggleDetailPanel.create({ locationId })),
 });
 

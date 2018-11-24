@@ -1,11 +1,9 @@
-import * as _ from "lodash";
-import { setWith, TypedAction, TypedReducer } from "redoodle";
+import { setWith, TypedAction, TypedReducer, omit } from "redoodle";
 import { Dispatch } from "redux";
 
-import { backendApi } from "@src/api/BackendApi";
-import { getCurrentLocation } from "@src/api/MapsApi";
-import { Location } from "@src/api/interfaces";
-import { RootState } from "@src/store/store";
+import { backendApi } from "../../api/BackendApi";
+import { getCurrentLocation } from "../../api/MapsApi";
+import { Location } from "../../api/interfaces";
 import { FilterState, LocationState } from "./types";
 
 const UpdateAllLocations = TypedAction.define("UpdateAllLocations")<{
@@ -21,19 +19,19 @@ const RemoveLocation = TypedAction.define("RemoveLocation")<{
 }>();
 
 export function loadLocations() {
-  return (dispatch: Dispatch<RootState>) =>
+  return (dispatch: Dispatch) =>
     backendApi.getAllLocations()
     .then((locations) => dispatch(UpdateAllLocations.create({ locations })));
 }
 
 export function createOrUpdateLocation(newLocation: Location, oldLocation?: Location) {
-  return (dispatch: Dispatch<RootState>) =>
+  return (dispatch: Dispatch) =>
     backendApi.createOrUpdateLocation(newLocation, oldLocation)
     .then((location) => dispatch(AddLocation.create({ location })));
 }
 
 export function deleteLocation(locationId: string) {
-  return (dispatch: Dispatch<RootState>) =>
+  return (dispatch: Dispatch) =>
     backendApi.deleteLocation(locationId)
     .then(() => dispatch(RemoveLocation.create({ locationId })));
 }
@@ -47,7 +45,7 @@ export const SetCurrentLocation = TypedAction.define("SetCurrentLocation")<{
   longitude: number;
 }>();
 export function updateCurrentLocation() {
-  return (dispatch: Dispatch<RootState>) =>
+  return (dispatch: Dispatch) =>
     getCurrentLocation().then((position) => dispatch(SetCurrentLocation.create({
       latitude: position.coords.latitude,
       longitude: position.coords.longitude,
@@ -60,7 +58,7 @@ export const locationsReducer = TypedReducer.builder<LocationState>()
     locations: setWith(state.locations, { [location.id]: location }),
   }))
   .withHandler(RemoveLocation.TYPE, (state, { locationId }) => setWith(state, {
-    locations: _.omit(state.locations, locationId) as { [id: string]: Location },
+    locations: omit(state.locations, [locationId]),
   }))
   .withHandler(UpdateFilter.TYPE, (state, { filter }) => setWith(state, { filter }))
   .withHandler(SetCurrentLocation.TYPE, (state, { latitude, longitude }) => setWith(state, {

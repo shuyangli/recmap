@@ -1,10 +1,10 @@
-import { Colors, Icon, IconClasses } from "@blueprintjs/core";
+import { Colors, Icon } from "@blueprintjs/core";
 import * as React from "react";
 
 import "./LocationRating.less";
 
-const THUMBS_UP = (<Icon className="location-rating-icon" iconName={IconClasses.THUMBS_UP} />);
-const THUMBS_DOWN = (<Icon className="location-rating-icon" iconName={IconClasses.THUMBS_DOWN} />);
+const THUMBS_UP = (<Icon className="location-rating-icon" icon="thumbs-up" />);
+const THUMBS_DOWN = (<Icon className="location-rating-icon" icon="thumbs-down" />);
 
 // These are not actually in an array
 // tslint:disable:jsx-key

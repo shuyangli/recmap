@@ -1,16 +1,17 @@
 import { Button, NonIdealState, Spinner } from "@blueprintjs/core";
 import * as React from "react";
-import { connect, Dispatch } from "react-redux";
+import { connect } from "react-redux";
 
-import { Location } from "@src/api/interfaces";
-import { ToggleEditPanel } from "@src/store/actionPanel/actions";
-import { loadLocations } from "@src/store/locations/actions";
-import { getFilteredLocations } from "@src/store/locations/selectors";
-import { RootState } from "@src/store/store";
+import { Location } from "../../api/interfaces";
+import { ToggleEditPanel } from "../../store/actionPanel/actions";
+import { loadLocations } from "../../store/locations/actions";
+import { getFilteredLocations } from "../../store/locations/selectors";
+import { RootState } from "../../store/store";
 import { ConnectedFilterControls } from "./FilterControls";
 import { ConnectedLocationItem } from "./LocationItem";
 
 import "./LocationSidebar.less";
+import { Dispatch } from "redux";
 
 interface ConnectedProps {
   filteredLocations: Location[];
@@ -42,7 +43,7 @@ class LocationSidebar extends React.PureComponent<ConnectedProps & DispatchProps
         <ConnectedFilterControls />
         {
           this.state.isLoadingLocations
-          ? <NonIdealState visual={<Spinner />} />
+          ? <NonIdealState icon={<Spinner />} />
           : <div className="location-items-wrapper">
               {this.props.filteredLocations.map((location) =>
                 <ConnectedLocationItem key={location.id} location={location} />,
@@ -50,7 +51,7 @@ class LocationSidebar extends React.PureComponent<ConnectedProps & DispatchProps
             </div>
         }
         <div className="sidebar-edit-controls">
-          <Button iconName="add" onClick={this.props.openEditPanel} />
+          <Button icon="add" onClick={this.props.openEditPanel} />
         </div>
       </div>
     );
@@ -63,7 +64,7 @@ function mapStateToProps(state: RootState): ConnectedProps {
   };
 }
 
-function mapDispatchToProps(dispatch: Dispatch<RootState>): DispatchProps {
+function mapDispatchToProps(dispatch: Dispatch): DispatchProps {
   return {
     openEditPanel: () => dispatch(ToggleEditPanel.create({})),
     loadLocations: () => dispatch(loadLocations()),

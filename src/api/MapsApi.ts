@@ -1,9 +1,8 @@
 import * as GoogleMapsLoader from "google-maps";
-import {} from "@types/googlemaps"; // maps type hack
 import { googleMapsApiKey } from "../config";
 
-GoogleMapsLoader.KEY = googleMapsApiKey;
-GoogleMapsLoader.LIBRARIES = ["places", "geometry"];
+(GoogleMapsLoader as any).KEY = googleMapsApiKey;
+(GoogleMapsLoader as any).LIBRARIES = ["places", "geometry"];
 
 export const mapsDefaults = {
   longitude: -122.42740250000001,

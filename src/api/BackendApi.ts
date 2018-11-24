@@ -1,4 +1,4 @@
-import { firebaseConfig } from "@src/config";
+import { firebaseConfig } from "../config";
 import { FirebaseApi } from "./FirebaseApi";
 import { Location } from "./interfaces";
 
