@@ -6,7 +6,7 @@ export interface Location {
   longitude: number;
   notes: string;
   tags: string[];
-  rating?: number; /* 0 - 3 */
+  rating?: number; /* -1 - 2 */
   googlePlaceId?: string;
 }
 
