@@ -6,7 +6,7 @@ import { Dispatch } from "redux";
 import { Location } from "../../api/interfaces";
 import { ClosePanel } from "../../store/actionPanel/actions";
 import { ActionPanelType } from "../../store/actionPanel/types";
-import { RootState } from "../../store/store";
+import { RootState } from "../../store/RootState";
 import { ConnectedEditLocationPanel } from "./EditLocationPanel";
 import { ConnectedLocationDetailsPanel } from "./LocationDetailsPanel";
 

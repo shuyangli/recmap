@@ -7,7 +7,7 @@ import { Dispatch } from "redux";
 import { backendApi } from "../../api/BackendApi";
 import { UpdateFilter } from "../../store/locations/actions";
 import { FilterState } from "../../store/locations/types";
-import { RootState } from "../../store/store";
+import { RootState } from "../../store/RootState";
 
 import "./FilterControls.less";
 

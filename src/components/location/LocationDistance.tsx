@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import { createSelector } from "reselect";
 
 import { getDistanceBetween } from "../../api/MapsApi";
-import { RootState } from "../../store/store";
+import { RootState } from "../../store/RootState";
 
 interface OwnProps {
   latitude: number;

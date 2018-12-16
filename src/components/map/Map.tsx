@@ -6,7 +6,7 @@ import { Location } from "../../api/interfaces";
 import { initializeMapElement } from "../../api/MapsApi";
 import { ToggleDetailPanel } from "../../store/actionPanel/actions";
 import { getFilteredLocations } from "../../store/locations/selectors";
-import { RootState } from "../../store/store";
+import { RootState } from "../../store/RootState";
 
 import "./Map.less";
 

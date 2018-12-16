@@ -1,7 +1,7 @@
 import * as fuzzy from "fuzzy";
 import { createSelector } from "reselect";
 
-import { RootState } from "../../store/store";
+import { RootState } from "../../store/RootState";
 import { values, isEmpty, includes } from "lodash-es";
 
 const getAllLocations = (state: RootState) => state.location.locations;

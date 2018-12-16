@@ -1,23 +1,12 @@
 import { combineReducers, loggingMiddleware, reduceCompoundActions } from "redoodle";
-import { applyMiddleware, compose, createStore, Action } from "redux";
-import thunkMiddleware, { ThunkDispatch } from "redux-thunk";
+import { applyMiddleware, compose, createStore } from "redux";
+import thunkMiddleware, { ThunkMiddleware } from "redux-thunk";
 
 import { actionPanelReducer } from "./actionPanel/actions";
-import { EMPTY_ACTION_PANEL_STATE, ActionPanelState } from "./actionPanel/types";
 import { locationsReducer } from "./locations/actions";
-import { EMPTY_LOCATION_STATE, LocationState } from "./locations/types";
+import { initialState, RootState } from "./RootState";
 
-const composeEnhancers = (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
-
-export interface RootState {
-  location: LocationState;
-  actionPanel: ActionPanelState;
-}
-
-const initialState: RootState = {
-  location: EMPTY_LOCATION_STATE,
-  actionPanel: EMPTY_ACTION_PANEL_STATE,
-};
+const composeEnhancers: typeof compose = (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
 export const reducer = combineReducers({
   location: locationsReducer,
@@ -28,8 +17,8 @@ export const store = createStore(
   reduceCompoundActions(reducer),
   initialState,
   composeEnhancers(
-    applyMiddleware<ThunkDispatch<RootState, void, Action>>(
-      thunkMiddleware,
+    applyMiddleware(
+      thunkMiddleware as ThunkMiddleware<RootState>,
       loggingMiddleware({ enableInProduction: false }),
     ),
   ),

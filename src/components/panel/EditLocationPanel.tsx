@@ -2,14 +2,14 @@ import { Button, Classes, Intent } from "@blueprintjs/core";
 import * as classNames from "classnames";
 import * as React from "react";
 import { connect } from "react-redux";
-import { Dispatch } from "redux";
 // import * as Select from "react-select";
 
 import { backendApi } from "../../api/BackendApi";
 import { Location } from "../../api/interfaces";
 import { ClosePanel, ToggleDetailPanel, ToggleEditPanel } from "../../store/actionPanel/actions";
 import { createOrUpdateLocation, deleteLocation } from "../../store/locations/actions";
-import { RootState } from "../../store/store";
+import { RootState } from "../../store/RootState";
+import { TypedDispatch } from "../../store/TypedDispatch";
 
 import "./EditLocationPanel.less";
 
@@ -222,7 +222,7 @@ const mapStateToProps = (state: RootState): ConnectedProps => ({
   currentLocation: state.location.currentLocation,
 });
 
-const mapDispatchToProps = (dispatch: Dispatch): DispatchProps => ({
+const mapDispatchToProps = (dispatch: TypedDispatch): DispatchProps => ({
   onCancel: (locationId?: string) =>
     dispatch(locationId
       ? ToggleDetailPanel.create({ locationId })

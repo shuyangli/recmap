@@ -44,6 +44,7 @@ export const SetCurrentLocation = TypedAction.define("SetCurrentLocation")<{
   latitude: number;
   longitude: number;
 }>();
+
 export function updateCurrentLocation() {
   return (dispatch: Dispatch) =>
     getCurrentLocation().then((position) => dispatch(SetCurrentLocation.create({

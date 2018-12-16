@@ -6,12 +6,12 @@ import { Location } from "../../api/interfaces";
 import { ToggleEditPanel } from "../../store/actionPanel/actions";
 import { loadLocations } from "../../store/locations/actions";
 import { getFilteredLocations } from "../../store/locations/selectors";
-import { RootState } from "../../store/store";
+import { RootState } from "../../store/RootState";
+import { TypedDispatch } from "../../store/TypedDispatch";
 import { ConnectedFilterControls } from "./FilterControls";
 import { ConnectedLocationItem } from "./LocationItem";
 
 import "./LocationSidebar.less";
-import { Dispatch } from "redux";
 
 interface ConnectedProps {
   filteredLocations: Location[];
@@ -64,7 +64,7 @@ function mapStateToProps(state: RootState): ConnectedProps {
   };
 }
 
-function mapDispatchToProps(dispatch: Dispatch): DispatchProps {
+function mapDispatchToProps(dispatch: TypedDispatch): DispatchProps {
   return {
     openEditPanel: () => dispatch(ToggleEditPanel.create({})),
     loadLocations: () => dispatch(loadLocations()),
