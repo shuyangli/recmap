@@ -33,7 +33,7 @@ class LocationItem extends React.PureComponent<OwnProps & DispatchProps, {}> {
     );
   }
 
-  private openDetailsPanel() {
+  private openDetailsPanel = () => {
     this.props.getOpenDetailsPanel(this.props.location.id);
   }
 }
