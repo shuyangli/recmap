@@ -20,7 +20,7 @@ export function LocationTags(props: Props) {
 
   return (
     <div className="location-tags">
-      {displayedTags.map((tag) => <Tag key={tag}>{tag}</Tag>)}
+      {displayedTags.map((tag) => <Tag key={tag} minimal={true} className="location-tag">{tag}</Tag>)}
       {remainingTagsCount > 0 && `+${remainingTagsCount}`}
     </div>
   );

@@ -4,12 +4,12 @@ import * as React from "react";
 import { connect } from "react-redux";
 import { Dispatch } from "redux";
 
-import { backendApi } from "../../api/BackendApi";
 import { UpdateFilter } from "../../store/locations/actions";
 import { FilterState } from "../../store/locations/types";
 import { RootState } from "../../store/RootState";
 
 import "./FilterControls.less";
+import { TagSelect } from "./TagSelect";
 
 interface ConnectedProps {
   filter: FilterState;
@@ -19,19 +19,7 @@ interface DispatchProps {
   onFilterChange: (newFilter: FilterState) => void;
 }
 
-interface State {
-  allTags: string[];
-}
-
-class FilterControls extends React.PureComponent<ConnectedProps & DispatchProps, State> {
-  state: State = {
-    allTags: [],
-  };
-
-  componentWillMount() {
-    backendApi.getAllTags().then((allTags) => this.setState({ allTags }));
-  }
-
+class FilterControls extends React.PureComponent<ConnectedProps & DispatchProps, never> {
   render() {
     return (
       <div className="sidebar-filter-controls">
@@ -48,15 +36,11 @@ class FilterControls extends React.PureComponent<ConnectedProps & DispatchProps,
 
         <div className="filter-control-group">
           <Icon icon="filter" />
-          {/* <Select
-            className="tag-select"
-            backspaceToRemoveMessage=""
-            multi={true}
-            options={this.getSelectOptions(this.state.allTags)}
-            value={this.getSelectOptions(this.props.filter.tags)}
-            placeholder="Filter by tags"
-            onChange={this.onTagsChange}
-          /> */}
+          <TagSelect
+            selectedTags={this.props.filter.tags}
+            onSelect={this.onSelectTag}
+            onDeselectAtIndex={this.onDeselectTag}
+          />
         </div>
       </div>
     );
@@ -66,17 +50,23 @@ class FilterControls extends React.PureComponent<ConnectedProps & DispatchProps,
     this.props.onFilterChange({ ...this.props.filter, searchTerm: event.target.value });
   }
 
-  // private getSelectOptions(rawStrings: string[]): Array<Select.Option<string>> {
-  //   return rawStrings.map((tag) => ({
-  //     label: tag,
-  //     value: tag,
-  //   }));
-  // }
+  private onSelectTag = (selectedTag: string) => {
+    if (!this.props.filter.tags.includes(selectedTag)) {
+      this.props.onFilterChange({
+        ...this.props.filter,
+        tags: [...this.props.filter.tags, selectedTag],
+      });
+    }
+  }
 
-  // private onTagsChange = (values: Array<Select.Option<string>>) => {
-  //   const tags = values.map((value) => value.value);
-  //   this.props.onFilterChange({ ...this.props.filter, tags });
-  // }
+  private onDeselectTag = (tagIndex: number) => {
+    const newTags = [...this.props.filter.tags];
+    newTags.splice(tagIndex, 1);
+    this.props.onFilterChange({
+      ...this.props.filter,
+      tags: newTags,
+    });
+  }
 }
 
 function mapStateToProps(state: RootState): ConnectedProps {
