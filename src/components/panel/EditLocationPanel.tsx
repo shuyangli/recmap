@@ -1,4 +1,4 @@
-import { Button, Classes, Intent, NonIdealState, Spinner } from "@blueprintjs/core";
+import { Button, Classes, Intent } from "@blueprintjs/core";
 import * as classNames from "classnames";
 import * as React from "react";
 import { connect } from "react-redux";
@@ -109,10 +109,6 @@ class EditLocationPanel extends React.PureComponent<EditLocationPanelProps, Stat
   }
 
   render() {
-    if (this.state.isLoadingCurrentLocation) {
-      return (<NonIdealState icon={<Spinner />} />);
-    }
-
     return (
       <div className="edit-location-panel">
         <div className="location-content-wrapper">
@@ -120,6 +116,7 @@ class EditLocationPanel extends React.PureComponent<EditLocationPanelProps, Stat
           <div className="edit-location-panel-entry">
             <div className="edit-location-panel-heading">Name</div>
             <input
+              disabled={this.state.isLoadingCurrentLocation}
               className={classNames(Classes.INPUT, Classes.FILL, "location-name")}
               value={this.state.location.name}
               ref={(element) => this.nameInput = element}
@@ -131,6 +128,7 @@ class EditLocationPanel extends React.PureComponent<EditLocationPanelProps, Stat
           <div className="edit-location-panel-entry">
             <div className="edit-location-panel-heading">Address</div>
             <input
+              disabled={this.state.isLoadingCurrentLocation}
               className={classNames(Classes.INPUT, Classes.FILL, "location-address")}
               value={this.state.location.address}
               placeholder="Address"
