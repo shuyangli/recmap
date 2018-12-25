@@ -42,6 +42,9 @@ export class TagSelect extends React.PureComponent<TagSelectProps, State> {
           tagProps: { minimal: true },
           onRemove: this.onDeselect,
         }}
+        popoverProps={{
+          targetTagName: "div",
+        }}
       />
     );
   }

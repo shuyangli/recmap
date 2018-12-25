@@ -23,7 +23,7 @@ class FilterControls extends React.PureComponent<ConnectedProps & DispatchProps,
   render() {
     return (
       <div className="sidebar-filter-controls">
-        <div className="filter-control-group">
+        <div className={classNames(Classes.INPUT_GROUP, "filter-control-group")}>
           <Icon icon="search" />
           <input
             className={classNames("search-term-input", Classes.INPUT, Classes.FILL)}

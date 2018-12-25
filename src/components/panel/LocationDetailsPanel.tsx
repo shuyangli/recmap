@@ -1,4 +1,4 @@
-import { Button } from "@blueprintjs/core";
+import { Button, H2 } from "@blueprintjs/core";
 import * as React from "react";
 import { connect } from "react-redux";
 import { Dispatch } from "redux";
@@ -22,14 +22,12 @@ class LocationDetailsPanel extends React.PureComponent<OwnProps & DispatchProps,
     return (
       <div className="location-panel">
         <div className="location-content-wrapper">
-          <div className="location-name-wrapper">
-            <h1 className="location-name">{this.props.location.name}</h1>
-            <LocationRating rating={this.props.location.rating} />
-          </div>
+          <H2 className="location-name">{this.props.location.name}</H2>
+          <div className="location-address">{this.props.location.address}</div>
 
+          <LocationRating rating={this.props.location.rating} />
           <LocationTags tags={this.props.location.tags} />
 
-          <p className="location-address">{this.props.location.address}</p>
           <p className="location-notes">{this.props.location.notes}</p>
         </div>
 

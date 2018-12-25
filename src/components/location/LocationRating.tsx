@@ -20,6 +20,6 @@ interface Props {
   rating?: number;
 }
 
-export function LocationRating(props: Props) {
-  return props.rating != null ? RATING_MAP[props.rating] : null;
+export function LocationRating(props: Props): JSX.Element {
+  return props.rating != null ? RATING_MAP[props.rating + 1] : null;
 }

@@ -12,6 +12,7 @@ import { RootState } from "../../store/RootState";
 import { TypedDispatch } from "../../store/TypedDispatch";
 
 import "./EditLocationPanel.less";
+import { RatingSelect } from "./RatingSelect";
 
 interface OwnProps {
   initialLocation?: Location;
@@ -50,7 +51,7 @@ class EditLocationPanel extends React.PureComponent<OwnProps & ConnectedProps & 
       address: "",
       latitude: 0,
       longitude: 0,
-      notes: "",
+      notes: {},
       tags: [],
     },
     allTags: [],
@@ -134,23 +135,7 @@ class EditLocationPanel extends React.PureComponent<OwnProps & ConnectedProps & 
             placeholder="Name"
             onChange={this.onNameChange}
           />
-          {/* <Select
-            backspaceToRemoveMessage=""
-            options={ratings}
-            optionRenderer={this.ratingRenderer}
-            value={this.state.location.rating}
-            valueRenderer={this.ratingRenderer}
-            placeholder="Select rating"
-            onChange={this.onRatingChange}
-          />
-          <Select.Creatable
-            backspaceToRemoveMessage=""
-            multi={true}
-            options={this.getSelectOptions(this.state.allTags)}
-            value={this.getSelectOptions(this.state.location.tags)}
-            placeholder="Add tags"
-            onChange={this.onTagsChange}
-          /> */}
+          <RatingSelect rating={this.state.location.rating} onSelect={this.onRatingChange} />
           <input
             className={classNames(Classes.INPUT, Classes.FILL, "location-address")}
             value={this.state.location.address}
@@ -160,7 +145,7 @@ class EditLocationPanel extends React.PureComponent<OwnProps & ConnectedProps & 
           />
           <textarea
             className={classNames(Classes.INPUT, Classes.FILL, "location-notes")}
-            value={this.state.location.notes}
+            value={this.state.location.notes.notes}
             placeholder="Notes"
             onChange={this.onNotesChange}
           />
@@ -191,12 +176,17 @@ class EditLocationPanel extends React.PureComponent<OwnProps & ConnectedProps & 
     this.updateLocation({ address: event.target.value });
   }
 
-  // private onRatingChange = (rating?: Select.Option<number>) => {
-  //   this.updateLocation({ rating: rating ? rating.value : undefined });
-  // }
+  private onRatingChange = (rating: number) => {
+    this.updateLocation({ rating });
+  }
 
   private onNotesChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-    this.updateLocation({ notes: event.target.value });
+    this.updateLocation({
+      notes: {
+        ...this.state.location.notes,
+        notes: event.target.value,
+      },
+    });
   }
 
   private cancelEdit = () => this.props.onCancel(this.state.location.id);

@@ -5,7 +5,6 @@
   width: 20vw;
   min-width: 250px;
   max-width: 350px;
-  padding: 20px;
   border-radius: 10px;
   background-color: @white;
   display: flex;
@@ -18,13 +17,11 @@
 }
 
 .sidebar-edit-controls {
-  border-bottom-left-radius: 10px;
-  border-bottom-right-radius: 10px;
   border-top: solid 1px @gray5;
   flex-grow: 0;
   flex-shrink: 0;
   display: flex;
-  align-content: flex-end;
-  width: 100%;
-  padding-top: 10px;
+  flex-direction: row;
+  justify-content: flex-end;
+  padding: 10px;
 }

@@ -1,3 +1,4 @@
+import { H5 } from "@blueprintjs/core";
 import * as React from "react";
 import { connect } from "react-redux";
 import { Dispatch } from "redux";
@@ -21,14 +22,12 @@ class LocationItem extends React.PureComponent<OwnProps & DispatchProps, {}> {
     const { location } = this.props;
     return (
       <div className="location-item" onClick={this.openDetailsPanel}>
+        <H5 className="location-name">{location.name}</H5>
         <div className="location-row-wrapper">
-          <h5 className="location-name">{location.name}</h5>
           <LocationRating rating={location.rating} />
-        </div>
-        <div className="location-row-wrapper">
-          <LocationTags tags={location.tags} showNumberOfTags={2} />
           <ConnectedLocationDistance latitude={location.latitude} longitude={location.longitude} />
         </div>
+        <LocationTags tags={location.tags} showNumberOfTags={2} />
       </div>
     );
   }

@@ -1,4 +1,3 @@
-import { Button } from "@blueprintjs/core";
 import * as React from "react";
 import { connect } from "react-redux";
 import { Dispatch } from "redux";
@@ -28,14 +27,6 @@ class ActionPanel extends React.PureComponent<ConnectedProps & DispatchProps, vo
     if (this.props.isVisible) {
       return (
         <div className="action-panel">
-          <div className="action-panel-header">
-            <Button
-              minimal={true}
-              small={true}
-              icon="cross"
-              onClick={this.props.closePanel}
-            />
-          </div>
           {this.getActionPanel()}
         </div>
       );
