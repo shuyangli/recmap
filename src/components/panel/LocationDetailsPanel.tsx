@@ -2,14 +2,13 @@ import { Button, H2, AnchorButton } from "@blueprintjs/core";
 import * as React from "react";
 import { connect } from "react-redux";
 
-import { LocationRating } from "../shared";
+import { RatingAndPrice } from "../shared";
 import { Location } from "../../api/interfaces";
 import { LocationTags } from "../shared";
 import { ToggleEditPanel } from "../../store/actionPanel/actions";
 import { TypedDispatch } from "../../store/TypedDispatch";
 
 import "./LocationDetailsPanel.less";
-import { getPriceRangeText } from "../shared/getPriceRangeText";
 import { getGoogleMapsUrl } from "../../store/locations/actions";
 
 interface OwnProps {
@@ -57,9 +56,7 @@ class LocationDetailsPanel extends React.PureComponent<LocationDetailsPanelProps
           <div className="location-entry location-address">{location.address}</div>
 
           <div className="location-entry aligned">
-            <LocationRating rating={location.rating} />
-            {location.rating != null && location.priceRange != null && <div className="location-middot">·</div>}
-            <div className="location-price-range">{getPriceRangeText(location.priceRange)}</div>
+            <RatingAndPrice location={location} />
           </div>
           <LocationTags tags={location.tags} />
 
