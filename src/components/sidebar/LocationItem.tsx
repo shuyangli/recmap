@@ -4,7 +4,8 @@ import { connect } from "react-redux";
 import { Dispatch } from "redux";
 
 import { Location } from "../../api/interfaces";
-import { ConnectedLocationDistance, LocationRating, LocationTags } from "../../components/location";
+import { LocationRating } from "../shared";
+import { ConnectedLocationDistance, LocationTags } from "../location";
 import { ToggleDetailPanel } from "../../store/actionPanel/actions";
 
 import "./LocationItem.less";

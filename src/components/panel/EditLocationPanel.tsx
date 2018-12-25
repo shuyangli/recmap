@@ -2,17 +2,17 @@ import { Button, Classes, Intent } from "@blueprintjs/core";
 import * as classNames from "classnames";
 import * as React from "react";
 import { connect } from "react-redux";
-// import * as Select from "react-select";
 
 import { backendApi } from "../../api/BackendApi";
-import { Location } from "../../api/interfaces";
+import { Location, Rating, PriceRange } from "../../api/interfaces";
 import { ClosePanel, ToggleDetailPanel, ToggleEditPanel } from "../../store/actionPanel/actions";
 import { createOrUpdateLocation, deleteLocation } from "../../store/locations/actions";
 import { RootState } from "../../store/RootState";
 import { TypedDispatch } from "../../store/TypedDispatch";
+import { RatingSelect } from "../shared/RatingSelect";
+import { PriceRangeSelect } from "../shared/PriceRangeSelect";
 
 import "./EditLocationPanel.less";
-import { RatingSelect } from "./RatingSelect";
 
 interface OwnProps {
   initialLocation?: Location;
@@ -36,13 +36,6 @@ interface State {
   allTags: string[];
   isSaving: boolean;
 }
-
-// const ratings: Array<Select.Option<number>> = [
-//   { value: 0 },
-//   { value: 1 },
-//   { value: 2 },
-//   { value: 3 },
-// ];
 
 class EditLocationPanel extends React.PureComponent<OwnProps & ConnectedProps & DispatchProps, State> {
   state: State = {
@@ -125,30 +118,51 @@ class EditLocationPanel extends React.PureComponent<OwnProps & ConnectedProps & 
 
   render() {
     return (
-      <div className="location-panel">
+      <div className="edit-location-panel">
 
         <div className="location-content-wrapper">
-          <input
-            className={classNames(Classes.INPUT, Classes.FILL, "location-name")}
-            value={this.state.location.name}
-            ref={(element) => this.nameInput = element}
-            placeholder="Name"
-            onChange={this.onNameChange}
-          />
-          <RatingSelect rating={this.state.location.rating} onSelect={this.onRatingChange} />
-          <input
-            className={classNames(Classes.INPUT, Classes.FILL, "location-address")}
-            value={this.state.location.address}
-            placeholder="Address"
-            ref={(element) => this.addressInput = element}
-            onChange={this.onAddressChange}
-          />
-          <textarea
-            className={classNames(Classes.INPUT, Classes.FILL, "location-notes")}
-            value={this.state.location.notes.notes}
-            placeholder="Notes"
-            onChange={this.onNotesChange}
-          />
+
+          <div className="edit-location-panel-entry">
+            <div className="edit-location-panel-heading">Name</div>
+            <input
+              className={classNames(Classes.INPUT, Classes.FILL, "location-name")}
+              value={this.state.location.name}
+              ref={(element) => this.nameInput = element}
+              placeholder="Name"
+              onChange={this.onNameChange}
+            />
+          </div>
+
+          <div className="edit-location-panel-entry">
+            <div className="edit-location-panel-heading">Address</div>
+            <input
+              className={classNames(Classes.INPUT, Classes.FILL, "location-address")}
+              value={this.state.location.address}
+              placeholder="Address"
+              ref={(element) => this.addressInput = element}
+              onChange={this.onAddressChange}
+            />
+          </div>
+
+          <div className="edit-location-panel-entry inline-entry">
+            <div className="edit-location-panel-heading">Rating</div>
+            <RatingSelect rating={this.state.location.rating} onSelect={this.onRatingChange} />
+          </div>
+
+          <div className="edit-location-panel-entry inline-entry">
+            <div className="edit-location-panel-heading">Price Range</div>
+            <PriceRangeSelect priceRange={this.state.location.priceRange} onSelect={this.onPriceRangeChange} />
+          </div>
+
+          <div className="edit-location-panel-entry">
+            <div className="edit-location-panel-heading">Review</div>
+            <textarea
+              className={classNames(Classes.INPUT, Classes.FILL, "location-notes")}
+              value={this.state.location.notes.notes}
+              placeholder="Notes"
+              onChange={this.onNotesChange}
+            />
+          </div>
         </div>
 
         <div className="edit-location-panel-edit-controls">
@@ -176,8 +190,12 @@ class EditLocationPanel extends React.PureComponent<OwnProps & ConnectedProps & 
     this.updateLocation({ address: event.target.value });
   }
 
-  private onRatingChange = (rating: number) => {
+  private onRatingChange = (rating: Rating) => {
     this.updateLocation({ rating });
+  }
+
+  private onPriceRangeChange = (priceRange: PriceRange) => {
+    this.updateLocation({ priceRange });
   }
 
   private onNotesChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -192,20 +210,6 @@ class EditLocationPanel extends React.PureComponent<OwnProps & ConnectedProps & 
   private cancelEdit = () => this.props.onCancel(this.state.location.id);
   private saveEdit = () => this.props.onSave(this.state.location, this.props.initialLocation);
   private deleteLocation = () => this.props.onDelete(this.state.location.id);
-
-  // private onTagsChange = (values: Array<Select.Option<string>>) => {
-  //   const tags = values.map((value) => value.value);
-  //   this.updateLocation({ tags });
-  // }
-
-  // private getSelectOptions = (rawStrings: string[]): Array<Select.Option<string>> => {
-  //   return rawStrings.map((tag) => ({
-  //     label: tag,
-  //     value: tag,
-  //   }));
-  // }
-
-  // private ratingRenderer = (option: Select.Option<number>) => <LocationRating rating={option.value} />;
 }
 
 const mapStateToProps = (state: RootState): ConnectedProps => ({

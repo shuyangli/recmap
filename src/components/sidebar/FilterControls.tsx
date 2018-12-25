@@ -7,9 +7,9 @@ import { Dispatch } from "redux";
 import { UpdateFilter } from "../../store/locations/actions";
 import { FilterState } from "../../store/locations/types";
 import { RootState } from "../../store/RootState";
+import { TagSelect } from "../select/TagSelect";
 
 import "./FilterControls.less";
-import { TagSelect } from "./TagSelect";
 
 interface ConnectedProps {
   filter: FilterState;
@@ -23,11 +23,10 @@ class FilterControls extends React.PureComponent<ConnectedProps & DispatchProps,
   render() {
     return (
       <div className="sidebar-filter-controls">
-        <div className={classNames(Classes.INPUT_GROUP, "filter-control-group")}>
-          <Icon icon="search" />
+        <div className="filter-control-group">
+          <Icon className="filter-control-icon" icon="search" />
           <input
             className={classNames("search-term-input", Classes.INPUT, Classes.FILL)}
-            type="search"
             placeholder="Search..."
             value={this.props.filter.searchTerm}
             onChange={this.onSearchTermChange}
@@ -35,7 +34,7 @@ class FilterControls extends React.PureComponent<ConnectedProps & DispatchProps,
         </div>
 
         <div className="filter-control-group">
-          <Icon icon="filter" />
+          <Icon className="filter-control-icon" icon="filter" />
           <TagSelect
             selectedTags={this.props.filter.tags}
             onSelect={this.onSelectTag}

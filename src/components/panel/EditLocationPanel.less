@@ -1,3 +1,30 @@
+@import (reference) "~@blueprintjs/core/lib/less/variables.less";
+
+.edit-location-panel {
+  .edit-location-panel-entry {
+    margin-bottom: 5px;
+
+    &.inline-entry {
+      display: inline-block;
+      margin-right: 10px;
+    }
+  }
+
+  .edit-location-panel-heading {
+    text-transform: uppercase;
+    font-size: 11px;
+    font-weight: 600;
+    color: @pt-text-color-muted;
+  }
+
+
+  input.location-name {
+    font-weight: 800;
+    font-size: 32px;
+    height: auto;
+  }
+}
+
 .edit-location-panel-edit-controls {
   flex-grow: 0;
   flex-shrink: 0;

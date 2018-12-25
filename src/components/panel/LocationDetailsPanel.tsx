@@ -28,7 +28,9 @@ class LocationDetailsPanel extends React.PureComponent<OwnProps & DispatchProps,
           <LocationRating rating={this.props.location.rating} />
           <LocationTags tags={this.props.location.tags} />
 
-          <p className="location-notes">{this.props.location.notes}</p>
+          {this.props.location.notes.notes && (
+            <p className="location-notes">{this.props.location.notes.notes}</p>
+          )}
         </div>
 
         <div className="panel-edit-controls">

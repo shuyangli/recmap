@@ -2,15 +2,17 @@ import { Classes, MenuItem, Button } from "@blueprintjs/core";
 import { Select, ItemRenderer } from "@blueprintjs/select";
 import * as React from "react";
 import * as classNames from "classnames";
-import { LocationRating } from "../location";
 
-const RawRatingSelect = Select.ofType<number>();
+import { LocationRating } from "./";
+import { Rating } from "../../api/interfaces";
 
-const allowedRatings = [2, 1, 0, -1];
+const RawRatingSelect = Select.ofType<Rating>();
+
+const allowedRatings = [Rating.GREAT, Rating.GOOD, Rating.NEUTRAL, Rating.BAD];
 
 export interface RatingSelectProps {
-  rating?: number;
-  onSelect: (rating: number) => void;
+  rating?: Rating;
+  onSelect: (rating: Rating) => void;
 }
 
 export class RatingSelect extends React.PureComponent<RatingSelectProps, never> {
@@ -29,9 +31,10 @@ export class RatingSelect extends React.PureComponent<RatingSelectProps, never> 
     );
   }
 
-  private renderItem: ItemRenderer<number> = (rating, { modifiers, handleClick }) => {
+  private renderItem: ItemRenderer<Rating> = (rating, { modifiers, handleClick }) => {
     return (
         <MenuItem
+            key={`${rating}`}
             active={modifiers.active}
             onClick={handleClick}
             text={<LocationRating rating={rating} />}
