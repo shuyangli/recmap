@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import { Dispatch } from "redux";
 
 import { Location } from "../../api/interfaces";
-import { initializeMapElement } from "../../api/MapsApi";
+import { mapsApi } from "../../api/MapsApi";
 import { ToggleDetailPanel } from "../../store/actionPanel/actions";
 import { getFilteredLocations } from "../../store/locations/selectors";
 import { RootState } from "../../store/RootState";
@@ -31,7 +31,7 @@ class Map extends React.PureComponent<ConnectedProps & DispatchProps, State> {
   private map: any;
 
   componentDidMount() {
-    this.map = initializeMapElement(this.mapRef);
+    this.map = mapsApi.initializeMapElement(this.mapRef);
   }
 
   componentWillReceiveProps(nextProps: ConnectedProps) {

@@ -1,13 +1,11 @@
-import { Button, Classes, Intent } from "@blueprintjs/core";
+import { Button, Classes, Intent, NonIdealState, Spinner } from "@blueprintjs/core";
 import * as classNames from "classnames";
 import * as React from "react";
 import { connect } from "react-redux";
 
-import { backendApi } from "../../api/BackendApi";
-import { Location, Rating, PriceRange } from "../../api/interfaces";
+import { Location, Rating, PriceRange, LocationReview } from "../../api/interfaces";
 import { ClosePanel, ToggleDetailPanel, ToggleEditPanel } from "../../store/actionPanel/actions";
-import { createOrUpdateLocation, deleteLocation } from "../../store/locations/actions";
-import { RootState } from "../../store/RootState";
+import { createOrUpdateLocation, deleteLocation, getCurrentLocation } from "../../store/locations/actions";
 import { TypedDispatch } from "../../store/TypedDispatch";
 import { RatingSelect } from "../shared/RatingSelect";
 import { PriceRangeSelect } from "../shared/PriceRangeSelect";
@@ -18,38 +16,37 @@ interface OwnProps {
   initialLocation?: Location;
 }
 
-interface ConnectedProps {
-  currentLocation: {
-    latitude: number;
-    longitude: number;
-  };
-}
-
 interface DispatchProps {
   onCancel: (locationId?: string) => void;
   onSave: (location: Location, initialLocation?: Location) => void;
   onDelete: (locationId: string) => void;
+  getCurrentLocation: () => Promise<Position>;
 }
 
 interface State {
+  isLoadingCurrentLocation: boolean;
   location: Location;
-  allTags: string[];
   isSaving: boolean;
 }
 
-class EditLocationPanel extends React.PureComponent<OwnProps & ConnectedProps & DispatchProps, State> {
-  state: State = {
-    location: {
-      name: "",
-      address: "",
-      latitude: 0,
-      longitude: 0,
-      notes: {},
-      tags: [],
-    },
-    allTags: [],
-    isSaving: false,
-  };
+type EditLocationPanelProps = OwnProps & DispatchProps;
+
+class EditLocationPanel extends React.PureComponent<EditLocationPanelProps, State> {
+  constructor(props: EditLocationPanelProps) {
+    super(props);
+    this.state = {
+      isLoadingCurrentLocation: false,
+      location: props.initialLocation || {
+        name: "",
+        address: "",
+        latitude: 0,
+        longitude: 0,
+        notes: {},
+        tags: [],
+      },
+      isSaving: false,
+    };
+  }
 
   private nameInput: HTMLInputElement;
   private addressInput: HTMLInputElement;
@@ -93,33 +90,31 @@ class EditLocationPanel extends React.PureComponent<OwnProps & ConnectedProps & 
     });
   }
 
-  componentWillMount() {
-    if (this.props.initialLocation) {
-      this.setState({
-        location: { ...this.props.initialLocation },
-      });
-    }
-    backendApi.getAllTags().then((allTags) => this.setState({ allTags }));
-  }
-
   componentDidMount() {
     this.setupNameInput();
     this.setupAddressInput();
 
-    const location = {
-      lat: this.props.currentLocation.latitude,
-      lng: this.props.currentLocation.longitude,
-    };
-    const circle = new google.maps.Circle({ center: location });
+    this.setState({ isLoadingCurrentLocation: true });
+    this.props.getCurrentLocation().then((position) => {
+      this.setState({ isLoadingCurrentLocation: false });
 
-    this.addressAutocomplete.setBounds(circle.getBounds());
-    this.nameAutocomplete.setBounds(circle.getBounds());
+      const location: google.maps.LatLngLiteral = {
+        lat: position.coords.latitude,
+        lng: position.coords.longitude,
+      };
+      const circle = new google.maps.Circle({ center: location });
+      this.addressAutocomplete.setBounds(circle.getBounds());
+      this.nameAutocomplete.setBounds(circle.getBounds());
+    });
   }
 
   render() {
+    if (this.state.isLoadingCurrentLocation) {
+      return (<NonIdealState icon={<Spinner />} />);
+    }
+
     return (
       <div className="edit-location-panel">
-
         <div className="location-content-wrapper">
 
           <div className="edit-location-panel-entry">
@@ -155,12 +150,32 @@ class EditLocationPanel extends React.PureComponent<OwnProps & ConnectedProps & 
           </div>
 
           <div className="edit-location-panel-entry">
-            <div className="edit-location-panel-heading">Review</div>
+            <div className="edit-location-panel-heading">Notes</div>
             <textarea
               className={classNames(Classes.INPUT, Classes.FILL, "location-notes")}
               value={this.state.location.notes.notes}
               placeholder="Notes"
               onChange={this.onNotesChange}
+            />
+          </div>
+
+          <div className="edit-location-panel-entry">
+            <div className="edit-location-panel-heading">What to Order</div>
+            <textarea
+              className={classNames(Classes.INPUT, Classes.FILL, "location-to-order")}
+              value={this.state.location.notes.order}
+              placeholder="What to order at this place"
+              onChange={this.onToOrderChange}
+            />
+          </div>
+
+          <div className="edit-location-panel-entry">
+            <div className="edit-location-panel-heading">What to Avoid</div>
+            <textarea
+              className={classNames(Classes.INPUT, Classes.FILL, "location-to-avoid")}
+              value={this.state.location.notes.avoid}
+              placeholder="What to avoid at this place"
+              onChange={this.onToAvoidChange}
             />
           </div>
         </div>
@@ -198,23 +213,25 @@ class EditLocationPanel extends React.PureComponent<OwnProps & ConnectedProps & 
     this.updateLocation({ priceRange });
   }
 
-  private onNotesChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+  private updateReview = (change: Partial<LocationReview>) => {
     this.updateLocation({
-      notes: {
-        ...this.state.location.notes,
-        notes: event.target.value,
-      },
+      notes: { ...this.state.location.notes, ...change },
     });
+  }
+  private onNotesChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+    this.updateReview({ notes: event.target.value });
+  }
+  private onToOrderChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+    this.updateReview({ order: event.target.value });
+  }
+  private onToAvoidChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+    this.updateReview({ avoid: event.target.value });
   }
 
   private cancelEdit = () => this.props.onCancel(this.state.location.id);
   private saveEdit = () => this.props.onSave(this.state.location, this.props.initialLocation);
   private deleteLocation = () => this.props.onDelete(this.state.location.id);
 }
-
-const mapStateToProps = (state: RootState): ConnectedProps => ({
-  currentLocation: state.location.currentLocation,
-});
 
 const mapDispatchToProps = (dispatch: TypedDispatch): DispatchProps => ({
   onCancel: (locationId?: string) =>
@@ -229,7 +246,9 @@ const mapDispatchToProps = (dispatch: TypedDispatch): DispatchProps => ({
   onDelete: (locationId: string) =>
     dispatch(deleteLocation(locationId))
     .then(() => dispatch(ClosePanel.create())),
+
+  getCurrentLocation: () => dispatch(getCurrentLocation()),
 });
 
 export const ConnectedEditLocationPanel: React.ComponentClass<OwnProps> =
-  connect(mapStateToProps, mapDispatchToProps)(EditLocationPanel);
+  connect(null, mapDispatchToProps)(EditLocationPanel);

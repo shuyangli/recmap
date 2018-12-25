@@ -7,7 +7,6 @@ import { Dispatch } from "redux";
 import { UpdateFilter } from "../../store/locations/actions";
 import { FilterState } from "../../store/locations/types";
 import { RootState } from "../../store/RootState";
-import { TagSelect } from "../select/TagSelect";
 
 import "./FilterControls.less";
 
@@ -32,39 +31,12 @@ class FilterControls extends React.PureComponent<ConnectedProps & DispatchProps,
             onChange={this.onSearchTermChange}
           />
         </div>
-
-        <div className="filter-control-group">
-          <Icon className="filter-control-icon" icon="filter" />
-          <TagSelect
-            selectedTags={this.props.filter.tags}
-            onSelect={this.onSelectTag}
-            onDeselectAtIndex={this.onDeselectTag}
-          />
-        </div>
       </div>
     );
   }
 
   private onSearchTermChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     this.props.onFilterChange({ ...this.props.filter, searchTerm: event.target.value });
-  }
-
-  private onSelectTag = (selectedTag: string) => {
-    if (!this.props.filter.tags.includes(selectedTag)) {
-      this.props.onFilterChange({
-        ...this.props.filter,
-        tags: [...this.props.filter.tags, selectedTag],
-      });
-    }
-  }
-
-  private onDeselectTag = (tagIndex: number) => {
-    const newTags = [...this.props.filter.tags];
-    newTags.splice(tagIndex, 1);
-    this.props.onFilterChange({
-      ...this.props.filter,
-      tags: newTags,
-    });
   }
 }
 

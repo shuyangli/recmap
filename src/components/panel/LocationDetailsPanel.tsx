@@ -3,11 +3,13 @@ import * as React from "react";
 import { connect } from "react-redux";
 import { Dispatch } from "redux";
 
+import { LocationRating } from "../shared";
 import { Location } from "../../api/interfaces";
-import { LocationRating, LocationTags } from "../../components/location";
+import { LocationTags } from "../shared";
 import { ToggleEditPanel } from "../../store/actionPanel/actions";
 
 import "./LocationDetailsPanel.less";
+import { getPriceRangeText } from "../shared/getPriceRangeText";
 
 interface OwnProps {
   location: Location;
@@ -19,23 +21,37 @@ interface DispatchProps {
 
 class LocationDetailsPanel extends React.PureComponent<OwnProps & DispatchProps, void> {
   render() {
+    const location = this.props.location;
     return (
       <div className="location-panel">
         <div className="location-content-wrapper">
-          <H2 className="location-name">{this.props.location.name}</H2>
-          <div className="location-address">{this.props.location.address}</div>
+          <H2 className="location-entry location-name">{location.name}</H2>
+          <div className="location-entry location-address">{location.address}</div>
 
-          <LocationRating rating={this.props.location.rating} />
-          <LocationTags tags={this.props.location.tags} />
+          <div className="location-entry aligned">
+            <LocationRating rating={location.rating} />
+            {location.rating != null && location.priceRange != null && <div className="location-middot">·</div>}
+            <div className="location-price-range">{getPriceRangeText(location.priceRange)}</div>
+          </div>
+          <LocationTags tags={location.tags} />
 
-          {this.props.location.notes.notes && (
-            <p className="location-notes">{this.props.location.notes.notes}</p>
-          )}
+          {this.maybeRenderNotes("Notes", location.notes.notes)}
+          {this.maybeRenderNotes("What to Order", location.notes.order)}
+          {this.maybeRenderNotes("What to Avoid", location.notes.avoid)}
         </div>
 
         <div className="panel-edit-controls">
           <Button text="Edit" onClick={this.onEdit} />
         </div>
+      </div>
+    );
+  }
+
+  private maybeRenderNotes(heading: string, notes?: string) {
+    return notes && (
+      <div className="location-entry">
+        <span className="notes-heading">{heading}</span>
+        <span className="notes">{notes}</span>
       </div>
     );
   }

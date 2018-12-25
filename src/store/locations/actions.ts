@@ -1,10 +1,10 @@
 import { setWith, TypedAction, TypedReducer, omit } from "redoodle";
 import { Dispatch } from "redux";
 
-import { backendApi } from "../../api/BackendApi";
-import { getCurrentLocation } from "../../api/MapsApi";
+import { ApplicationApi } from "../../api/ApplicationApi";
 import { Location } from "../../api/interfaces";
 import { FilterState, LocationState } from "./types";
+import { RootState } from "../RootState";
 
 const UpdateAllLocations = TypedAction.define("UpdateAllLocations")<{
   locations: { [id: string]: Location };
@@ -19,20 +19,20 @@ const RemoveLocation = TypedAction.define("RemoveLocation")<{
 }>();
 
 export function loadLocations() {
-  return (dispatch: Dispatch) =>
-    backendApi.getAllLocations()
+  return (dispatch: Dispatch, getState: () => RootState, api: ApplicationApi) =>
+    api.backendApi.getAllLocations()
     .then((locations) => dispatch(UpdateAllLocations.create({ locations })));
 }
 
 export function createOrUpdateLocation(newLocation: Location, oldLocation?: Location) {
-  return (dispatch: Dispatch) =>
-    backendApi.createOrUpdateLocation(newLocation, oldLocation)
+  return (dispatch: Dispatch, getState: () => RootState, api: ApplicationApi) =>
+    api.backendApi.createOrUpdateLocation(newLocation, oldLocation)
     .then((location) => dispatch(AddLocation.create({ location })));
 }
 
 export function deleteLocation(locationId: string) {
-  return (dispatch: Dispatch) =>
-    backendApi.deleteLocation(locationId)
+  return (dispatch: Dispatch, getState: () => RootState, api: ApplicationApi) =>
+    api.backendApi.deleteLocation(locationId)
     .then(() => dispatch(RemoveLocation.create({ locationId })));
 }
 
@@ -45,12 +45,8 @@ export const SetCurrentLocation = TypedAction.define("SetCurrentLocation")<{
   longitude: number;
 }>();
 
-export function updateCurrentLocation() {
-  return (dispatch: Dispatch) =>
-    getCurrentLocation().then((position) => dispatch(SetCurrentLocation.create({
-      latitude: position.coords.latitude,
-      longitude: position.coords.longitude,
-    })));
+export function getCurrentLocation() {
+  return (dispatch: Dispatch, getState: () => RootState, api: ApplicationApi) => api.mapsApi.getCurrentLocation();
 }
 
 export const locationsReducer = TypedReducer.builder<LocationState>()
@@ -62,7 +58,4 @@ export const locationsReducer = TypedReducer.builder<LocationState>()
     locations: omit(state.locations, [locationId]),
   }))
   .withHandler(UpdateFilter.TYPE, (state, { filter }) => setWith(state, { filter }))
-  .withHandler(SetCurrentLocation.TYPE, (state, { latitude, longitude }) => setWith(state, {
-    currentLocation: { latitude, longitude },
-  }))
   .build();

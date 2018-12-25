@@ -1,5 +1,3 @@
-import { firebaseConfig } from "../config";
-import { FirebaseApi } from "./FirebaseApi";
 import { Location } from "./interfaces";
 
 export interface BackendApi {
@@ -9,5 +7,3 @@ export interface BackendApi {
   getAllLocations(): Promise<{ [id: string]: Location }>;
   getAllTags(): Promise<string[]>;
 }
-
-export const backendApi: BackendApi = new FirebaseApi(firebaseConfig);

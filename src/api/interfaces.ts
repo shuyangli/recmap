@@ -12,17 +12,19 @@ export enum PriceRange {
   OVER_FIFTY = 51,
 }
 
+export interface LocationReview {
+  notes?: string;
+  order?: string;
+  avoid?: string;
+}
+
 export interface Location {
   id?: string;
   name: string;
   address?: string;
   latitude: number;
   longitude: number;
-  notes: {
-    notes?: string;
-    order?: string;
-    avoid?: string;
-  };
+  notes: LocationReview;
   tags: string[];
   rating?: Rating;
   priceRange?: PriceRange;

@@ -4,11 +4,11 @@ import { connect } from "react-redux";
 import { Dispatch } from "redux";
 
 import { Location } from "../../api/interfaces";
-import { LocationRating } from "../shared";
-import { ConnectedLocationDistance, LocationTags } from "../location";
+import { LocationRating, LocationTags } from "../shared";
 import { ToggleDetailPanel } from "../../store/actionPanel/actions";
 
 import "./LocationItem.less";
+import { getPriceRangeText } from "../shared/getPriceRangeText";
 
 interface OwnProps {
   location: Location;
@@ -24,9 +24,9 @@ class LocationItem extends React.PureComponent<OwnProps & DispatchProps, {}> {
     return (
       <div className="location-item" onClick={this.openDetailsPanel}>
         <H5 className="location-name">{location.name}</H5>
-        <div className="location-row-wrapper">
+        <div className="location-rating-and-price">
           <LocationRating rating={location.rating} />
-          <ConnectedLocationDistance latitude={location.latitude} longitude={location.longitude} />
+          <div className="location-price-range">{getPriceRangeText(location.priceRange)}</div>
         </div>
         <LocationTags tags={location.tags} showNumberOfTags={2} />
       </div>

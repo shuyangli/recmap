@@ -3,6 +3,7 @@ import { Select, ItemRenderer } from "@blueprintjs/select";
 import * as React from "react";
 import * as classNames from "classnames";
 import { PriceRange } from "../../api/interfaces";
+import { getPriceRangeText } from "./getPriceRangeText";
 
 const RawPriceRangeSelect = Select.ofType<PriceRange>();
 
@@ -12,13 +13,6 @@ const allowedPriceRanges = [
   PriceRange.TWENTY_FIVE_TO_FIFTY,
   PriceRange.OVER_FIFTY,
 ];
-
-const priceRangeToText = {
-  [PriceRange.ZERO_TO_TEN]: "Less than $10",
-  [PriceRange.TEN_TO_TWENTY_FIVE]: "$10 - $25",
-  [PriceRange.TWENTY_FIVE_TO_FIFTY]: "$25 - $50",
-  [PriceRange.OVER_FIFTY]: "Over $50",
-};
 
 export interface PriceRangeSelectProps {
   priceRange?: PriceRange;
@@ -36,7 +30,7 @@ export class PriceRangeSelect extends React.PureComponent<PriceRangeSelectProps,
         noResults={"No results"}
         onItemSelect={this.props.onSelect}
       >
-        <Button text={this.props.priceRange == null ? "Select price range" : priceRangeToText[this.props.priceRange]} />
+        <Button text={getPriceRangeText(this.props.priceRange) || "Select price range"} />
       </RawPriceRangeSelect>
     );
   }
@@ -47,7 +41,7 @@ export class PriceRangeSelect extends React.PureComponent<PriceRangeSelectProps,
             key={`${priceRange}`}
             active={modifiers.active}
             onClick={handleClick}
-            text={priceRangeToText[priceRange]}
+            text={getPriceRangeText(priceRange)}
             shouldDismissPopover={false}
         />
     );
