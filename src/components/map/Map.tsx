@@ -1,13 +1,12 @@
 import * as React from "react";
 import { connect } from "react-redux";
-import { Dispatch } from "redux";
 
 import { Location } from "../../api/interfaces";
-import { mapsApi } from "../../api/MapsApi";
 import { ToggleDetailPanel } from "../../store/actionPanel/actions";
+import { initializeMapElement } from "../../store/locations/actions";
 import { getFilteredLocations } from "../../store/locations/selectors";
 import { RootState } from "../../store/RootState";
-
+import { TypedDispatch } from "../../store/TypedDispatch";
 import "./Map.less";
 
 interface ConnectedProps {
@@ -16,6 +15,7 @@ interface ConnectedProps {
 
 interface DispatchProps {
   toggleDetailPanelForLocation: (locationId: string) => void;
+  initializeMapElement: (ref: HTMLDivElement) => google.maps.Map;
 }
 
 interface State {
@@ -31,7 +31,7 @@ class Map extends React.PureComponent<ConnectedProps & DispatchProps, State> {
   private map: any;
 
   componentDidMount() {
-    this.map = mapsApi.initializeMapElement(this.mapRef);
+    this.map = this.props.initializeMapElement(this.mapRef);
   }
 
   componentWillReceiveProps(nextProps: ConnectedProps) {
@@ -62,8 +62,9 @@ const mapStateToProps = (state: RootState): ConnectedProps => ({
   filteredLocations: getFilteredLocations(state),
 });
 
-const mapDispatchToProps = (dispatch: Dispatch) => ({
+const mapDispatchToProps = (dispatch: TypedDispatch): DispatchProps => ({
   toggleDetailPanelForLocation: (locationId: string) => dispatch(ToggleDetailPanel.create({ locationId })),
+  initializeMapElement: (ref) => dispatch(initializeMapElement(ref)),
 });
 
-export const ConnectedMap: React.ComponentClass<{}> = connect(mapStateToProps, mapDispatchToProps)(Map as any);
+export const ConnectedMap: React.ComponentClass<{}> = connect(mapStateToProps, mapDispatchToProps)(Map);

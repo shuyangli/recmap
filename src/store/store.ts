@@ -2,14 +2,14 @@ import { combineReducers, loggingMiddleware, reduceCompoundActions } from "redoo
 import { applyMiddleware, compose, createStore } from "redux";
 import thunkMiddleware from "redux-thunk";
 
-import { actionPanelReducer } from "./actionPanel/actions";
-import { locationsReducer } from "./locations/actions";
+import { actionPanelReducer } from "./actionPanel/reducer";
+import { locationsReducer } from "./locations/reducer";
 import { initialState } from "./RootState";
-import { mapsApi } from "../api/MapsApi";
 import { ApplicationApi } from "../api/ApplicationApi";
 import { BackendApi } from "../api/BackendApi";
 import { FirebaseApi } from "../api/FirebaseApi";
 import { firebaseConfig, googleMapsApiKey } from "../config";
+import { GoogleMapsApi } from "../api/GoogleMapsApi";
 
 const composeEnhancers: typeof compose = (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
@@ -19,7 +19,8 @@ export const reducer = combineReducers({
 });
 
 export async function createApplicationStore() {
-  await mapsApi.initialize(googleMapsApiKey);
+  const mapsApi = new GoogleMapsApi(googleMapsApiKey);
+  await mapsApi.initialize();
   const backendApi: BackendApi = new FirebaseApi(firebaseConfig);
   const applicationApi: ApplicationApi = {
     mapsApi,
