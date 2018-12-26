@@ -1,9 +1,10 @@
 import { Location } from "./interfaces";
 
 export interface BackendApi {
-  createOrUpdateLocation(location: Location, oldLocation?: Location): Promise<Location>;
+  createLocation(location: Location): Promise<Location>;
+  updateLocation(locationId: string, location: Location): Promise<Location>;
   deleteLocation(locationId: string): Promise<void>;
-  getLocation(id: string): Promise<Location>;
-  getAllLocations(): Promise<{ [id: string]: Location }>;
+  getLocation(locationId: string): Promise<Location>;
+  getAllLocations(): Promise<{ [locationId: string]: Location }>;
   getAllTags(): Promise<string[]>;
 }

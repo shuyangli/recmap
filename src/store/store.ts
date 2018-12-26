@@ -7,8 +7,8 @@ import { locationsReducer } from "./locations/reducer";
 import { initialState } from "./RootState";
 import { ApplicationApi } from "../api/ApplicationApi";
 import { BackendApi } from "../api/BackendApi";
-import { FirebaseApi } from "../api/FirebaseApi";
-import { firebaseConfig, googleMapsApiKey } from "../config";
+import { ExpressApi } from "../api/ExpressApi";
+import { serverConfig, googleMapsApiKey } from "../config";
 import { GoogleMapsApi } from "../api/GoogleMapsApi";
 import { updateCurrentPosition } from "./locations/actions";
 
@@ -22,7 +22,7 @@ export const reducer = combineReducers({
 export async function createApplicationStore() {
   const mapsApi = new GoogleMapsApi(googleMapsApiKey);
   await mapsApi.initialize();
-  const backendApi: BackendApi = new FirebaseApi(firebaseConfig);
+  const backendApi: BackendApi = new ExpressApi(serverConfig);
   const applicationApi: ApplicationApi = {
     mapsApi,
     backendApi,

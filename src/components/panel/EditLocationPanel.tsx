@@ -5,7 +5,7 @@ import { connect } from "react-redux";
 
 import { Location, Rating, PriceRange, LocationReview } from "../../api/interfaces";
 import { ClosePanel, ToggleDetailPanel, ToggleEditPanel } from "../../store/actionPanel/actions";
-import { createOrUpdateLocation, deleteLocation } from "../../store/locations/actions";
+import { createLocation, updateLocation, deleteLocation } from "../../store/locations/actions";
 import { TypedDispatch } from "../../store/TypedDispatch";
 import { RatingSelect } from "../shared/RatingSelect";
 import { PriceRangeSelect } from "../shared/PriceRangeSelect";
@@ -19,7 +19,7 @@ interface OwnProps {
 
 interface DispatchProps {
   onCancel: (locationId?: string) => void;
-  onSave: (location: Location, initialLocation?: Location) => void;
+  onSave: (location: Location) => void;
   onDelete: (locationId: string) => void;
 }
 
@@ -230,7 +230,7 @@ class EditLocationPanel extends React.PureComponent<EditLocationPanelProps, Stat
   }
 
   private cancelEdit = () => this.props.onCancel(this.state.location.id);
-  private saveEdit = () => this.props.onSave(this.state.location, this.props.initialLocation);
+  private saveEdit = () => this.props.onSave(this.state.location);
   private deleteLocation = () => this.props.onDelete(this.state.location.id);
 }
 
@@ -240,9 +240,16 @@ const mapDispatchToProps = (dispatch: TypedDispatch): DispatchProps => ({
       ? ToggleDetailPanel.create({ locationId })
       : ToggleEditPanel.create({})),
 
-  onSave: (location: Location, initialLocation?: Location) =>
-    dispatch(createOrUpdateLocation(location, initialLocation))
-    .then((action) => dispatch(ToggleDetailPanel.create({ locationId: action.payload.location.id }))),
+  onSave: (location: Location) => {
+    let promise: Promise<Location>;
+    if (location.id == null) {
+      promise = dispatch(createLocation(location));
+    } else {
+      promise = dispatch(updateLocation(location.id, location));
+    }
+
+    return promise.then((loc) => dispatch(ToggleDetailPanel.create({ locationId: loc.id })));
+  },
 
   onDelete: (locationId: string) =>
     dispatch(deleteLocation(locationId))

@@ -30,13 +30,28 @@ export const SetCurrentPosition = TypedAction.define("SetCurrentPosition")<{
 export function loadLocations() {
   return (dispatch: Dispatch, getState: () => RootState, api: ApplicationApi) =>
     api.backendApi.getAllLocations()
-    .then((locations) => dispatch(UpdateAllLocations.create({ locations })));
+    .then((locations) => {
+      dispatch(UpdateAllLocations.create({ locations }));
+      return locations;
+    });
 }
 
-export function createOrUpdateLocation(newLocation: Location, oldLocation?: Location) {
+export function createLocation(location: Location) {
   return (dispatch: Dispatch, getState: () => RootState, api: ApplicationApi) =>
-    api.backendApi.createOrUpdateLocation(newLocation, oldLocation)
-    .then((location) => dispatch(AddLocation.create({ location })));
+    api.backendApi.createLocation(location)
+    .then((loc) => {
+      dispatch(AddLocation.create({ location: loc }));
+      return loc;
+    });
+}
+
+export function updateLocation(locationId: string, location: Location) {
+  return (dispatch: Dispatch, getState: () => RootState, api: ApplicationApi) =>
+    api.backendApi.updateLocation(locationId, location)
+    .then((loc) => {
+      dispatch(AddLocation.create({ location: loc }));
+      return loc;
+    });
 }
 
 export function deleteLocation(locationId: string) {

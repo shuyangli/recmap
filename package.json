@@ -5,7 +5,7 @@
   "main": "./src/index.tsx",
   "scripts": {
     "build": "webpack",
-    "start": "webpack-dev-server --inline --hot",
+    "dev": "webpack-dev-server --inline --hot",
     "clean": "rm -r ./build/*",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
