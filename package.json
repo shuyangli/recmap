@@ -5,10 +5,10 @@
   "main": "./src/index.tsx",
   "scripts": {
     "build": "source ./config.dev.sh && webpack --config ./webpack.config.dev.js",
-    "dist": "source ./config.prod.sh && webpack --config ./webpack.config.js",
+    "dist": "webpack --config ./webpack.config.js",
     "dev": "source ./config.dev.sh && webpack-dev-server --inline --hot --config ./webpack.config.dev.js",
     "clean": "rm -r ./build/*",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "heroku-postbuild": "yarn dist"
   },
   "repository": {
     "type": "git",
