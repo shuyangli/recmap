@@ -59,10 +59,11 @@ class LocationDetailsPanel extends React.PureComponent<LocationDetailsPanelProps
             <RatingAndPrice location={location} />
           </div>
           <LocationTags tags={location.tags} />
-
-          {this.maybeRenderNotes("Notes", location.notes.notes)}
-          {this.maybeRenderNotes("What to Order", location.notes.order)}
-          {this.maybeRenderNotes("What to Avoid", location.notes.avoid)}
+          {location.notes && <>
+            {this.maybeRenderNotes("Notes", location.notes.notes)}
+            {this.maybeRenderNotes("What to Order", location.notes.order)}
+            {this.maybeRenderNotes("What to Avoid", location.notes.avoid)}
+          </>}
         </div>
 
         <div className="panel-edit-controls">

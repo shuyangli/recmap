@@ -24,7 +24,7 @@ export interface Location {
   address?: string;
   latitude: number;
   longitude: number;
-  notes: LocationReview;
+  notes?: LocationReview;
   tags: string[];
   rating?: Rating;
   priceRange?: PriceRange;

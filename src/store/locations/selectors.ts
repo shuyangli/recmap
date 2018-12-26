@@ -29,7 +29,7 @@ export const getFilteredLocations = createSelector(
     if (!isEmpty(filter.searchTerm)) {
       const filtered = fuzzy.filter(
         filter.searchTerm,
-        values(locations),
+        remainingLocations,
         { extract: extractLocationString },
       );
       // When a search term is present, the results are sorted by relevance,

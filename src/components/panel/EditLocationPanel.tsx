@@ -46,6 +46,9 @@ class EditLocationPanel extends React.PureComponent<EditLocationPanelProps, Stat
       },
       isSaving: false,
     };
+    if (props.initialLocation.notes == null) {
+      this.state.location.notes = {};
+    }
   }
 
   private nameInput: HTMLInputElement;
