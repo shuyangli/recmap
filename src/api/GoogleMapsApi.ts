@@ -1,6 +1,5 @@
 import * as GoogleMapsLoader from "google-maps";
-import { memoize } from "lodash-es";
-import { MapsApi } from "./MapsApi";
+import { MapsApi, getCurrentPosition } from "./MapsApi";
 
 const mapsDefaults = {
   longitude: -122.42740250000001,
@@ -35,30 +34,13 @@ export class GoogleMapsApi implements MapsApi {
     });
     this.mapElement = mapElement;
     this.placesService = new google.maps.places.PlacesService(this.mapElement);
-    this.getCurrentLocation().then((position) => {
+    getCurrentPosition().then((position) => {
       this.mapElement.setCenter({
         lat: position.coords.latitude,
         lng: position.coords.longitude,
       });
     });
     return mapElement;
-  }
-
-  getCurrentLocation = memoize((): Promise<Position> => {
-    return new Promise((resolve, reject) => {
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(resolve, reject);
-      } else {
-        reject("Browser doesn\"t support geolocation");
-      }
-    });
-  });
-
-  getDistanceBetween(latitude1: number, longitude1: number, latitude2: number, longitude2: number) {
-    return google.maps.geometry.spherical.computeDistanceBetween(
-      new google.maps.LatLng(latitude1, longitude1),
-      new google.maps.LatLng(latitude2, longitude2),
-    );
   }
 
   getGoogleMapsUrl(placeId: string): Promise<string> {

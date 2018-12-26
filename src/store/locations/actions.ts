@@ -5,6 +5,7 @@ import { ApplicationApi } from "../../api/ApplicationApi";
 import { Location } from "../../api/interfaces";
 import { FilterState } from "./types";
 import { RootState } from "../RootState";
+import { getCurrentPosition } from "../../api/MapsApi";
 
 export const UpdateAllLocations = TypedAction.define("UpdateAllLocations")<{
   locations: { [id: string]: Location };
@@ -22,9 +23,8 @@ export const UpdateFilter = TypedAction.define("UpdateFilter")<{
   filter: FilterState;
 }>();
 
-export const SetCurrentLocation = TypedAction.define("SetCurrentLocation")<{
-  latitude: number;
-  longitude: number;
+export const SetCurrentPosition = TypedAction.define("SetCurrentPosition")<{
+  position: Position;
 }>();
 
 export function loadLocations() {
@@ -49,10 +49,11 @@ export function initializeMapElement(ref: HTMLDivElement) {
   return (dispatch: Dispatch, getState: () => RootState, api: ApplicationApi) => api.mapsApi.initializeMapElement(ref);
 }
 
-export function getCurrentLocation() {
-  return (dispatch: Dispatch, getState: () => RootState, api: ApplicationApi) => api.mapsApi.getCurrentLocation();
-}
-
 export function getGoogleMapsUrl(placeId: string) {
   return (dispatch: Dispatch, getState: () => RootState, api: ApplicationApi) => api.mapsApi.getGoogleMapsUrl(placeId);
+}
+
+export function updateCurrentPosition() {
+  return (dispatch: Dispatch) =>
+    getCurrentPosition().then((position) => dispatch(SetCurrentPosition.create({ position })));
 }

@@ -10,6 +10,7 @@ import { BackendApi } from "../api/BackendApi";
 import { FirebaseApi } from "../api/FirebaseApi";
 import { firebaseConfig, googleMapsApiKey } from "../config";
 import { GoogleMapsApi } from "../api/GoogleMapsApi";
+import { updateCurrentPosition } from "./locations/actions";
 
 const composeEnhancers: typeof compose = (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
@@ -37,5 +38,7 @@ export async function createApplicationStore() {
       ),
     ),
   );
+
+  store.dispatch(updateCurrentPosition());
   return store;
 }

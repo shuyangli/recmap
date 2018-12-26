@@ -2,17 +2,29 @@ import * as fuzzy from "fuzzy";
 import { createSelector } from "reselect";
 
 import { RootState } from "../../store/RootState";
-import { values, isEmpty } from "lodash-es";
+import { values, isEmpty, sortBy } from "lodash-es";
 import { Location } from "../../api/interfaces";
+import { getDistanceBetween } from "../../api/MapsApi";
 
 const getAllLocations = (state: RootState) => state.location.locations;
 const getFilter = (state: RootState) => state.location.filter;
+const getCurrentPosition = (state: RootState) => state.location.currentPosition;
 
 export const getFilteredLocations = createSelector(
-  [getAllLocations, getFilter],
-  (locations, filter) => {
-
+  [getAllLocations, getFilter, getCurrentPosition],
+  (locations, filter, currentPosition) => {
     let remainingLocations = values(locations);
+
+    if (currentPosition != null) {
+      remainingLocations = sortBy<Location>(remainingLocations, (location) => {
+        return getDistanceBetween(
+          location.latitude,
+          location.longitude,
+          currentPosition.coords.latitude,
+          currentPosition.coords.longitude,
+        );
+      });
+    }
 
     if (!isEmpty(filter.searchTerm)) {
       const filtered = fuzzy.filter(

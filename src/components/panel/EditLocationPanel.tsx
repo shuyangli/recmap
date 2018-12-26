@@ -5,12 +5,13 @@ import { connect } from "react-redux";
 
 import { Location, Rating, PriceRange, LocationReview } from "../../api/interfaces";
 import { ClosePanel, ToggleDetailPanel, ToggleEditPanel } from "../../store/actionPanel/actions";
-import { createOrUpdateLocation, deleteLocation, getCurrentLocation } from "../../store/locations/actions";
+import { createOrUpdateLocation, deleteLocation } from "../../store/locations/actions";
 import { TypedDispatch } from "../../store/TypedDispatch";
 import { RatingSelect } from "../shared/RatingSelect";
 import { PriceRangeSelect } from "../shared/PriceRangeSelect";
 
 import "./EditLocationPanel.less";
+import { getCurrentPosition } from "../../api/MapsApi";
 
 interface OwnProps {
   initialLocation?: Location;
@@ -20,7 +21,6 @@ interface DispatchProps {
   onCancel: (locationId?: string) => void;
   onSave: (location: Location, initialLocation?: Location) => void;
   onDelete: (locationId: string) => void;
-  getCurrentLocation: () => Promise<Position>;
 }
 
 interface State {
@@ -95,7 +95,7 @@ class EditLocationPanel extends React.PureComponent<EditLocationPanelProps, Stat
     this.setupAddressInput();
 
     this.setState({ isLoadingCurrentLocation: true });
-    this.props.getCurrentLocation().then((position) => {
+    getCurrentPosition().then((position) => {
       this.setState({ isLoadingCurrentLocation: false });
 
       const location: google.maps.LatLngLiteral = {
@@ -244,8 +244,6 @@ const mapDispatchToProps = (dispatch: TypedDispatch): DispatchProps => ({
   onDelete: (locationId: string) =>
     dispatch(deleteLocation(locationId))
     .then(() => dispatch(ClosePanel.create())),
-
-  getCurrentLocation: () => dispatch(getCurrentLocation()),
 });
 
 export const ConnectedEditLocationPanel: React.ComponentClass<OwnProps> =

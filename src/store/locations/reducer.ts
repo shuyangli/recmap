@@ -11,4 +11,5 @@ export const locationsReducer = TypedReducer.builder<LocationState>()
     locations: omit(state.locations, [locationId]),
   }))
   .withHandler(actions.UpdateFilter.TYPE, (state, { filter }) => setWith(state, { filter }))
+  .withHandler(actions.SetCurrentPosition.TYPE, (state, { position }) => setWith(state, { currentPosition: position }))
   .build();
