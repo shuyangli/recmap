@@ -1,6 +1,7 @@
 "use strict";
 
 const path = require("path");
+const webpack = require("webpack");
 
 module.exports = {
   entry: "./src/index.tsx",
@@ -21,5 +22,12 @@ module.exports = {
       { test: /\.(eot|ttf|woff|woff2)$/, use: "file-loader" }
     ]
   },
-  devtool: "inline-source-map"
-}
+  devtool: "inline-source-map",
+  plugins: [
+    new webpack.DefinePlugin({
+      "process.env.NODE_ENV": JSON.stringify(process.env.NODE_ENV),
+      "process.env.SERVER_HOST": JSON.stringify(process.env.SERVER_HOST),
+      "process.env.GOOGLE_MAPS_KEY": JSON.stringify(process.env.GOOGLE_MAPS_KEY),
+    }),
+  ],
+};
