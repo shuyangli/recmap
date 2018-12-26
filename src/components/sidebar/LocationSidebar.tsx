@@ -1,4 +1,4 @@
-import { Button, NonIdealState, Spinner } from "@blueprintjs/core";
+import { NonIdealState, Spinner } from "@blueprintjs/core";
 import * as React from "react";
 import { connect } from "react-redux";
 
@@ -50,9 +50,6 @@ class LocationSidebar extends React.PureComponent<ConnectedProps & DispatchProps
               )}
             </div>
         }
-        <div className="sidebar-edit-controls">
-          <Button icon="add" onClick={this.props.openEditPanel} />
-        </div>
       </div>
     );
   }

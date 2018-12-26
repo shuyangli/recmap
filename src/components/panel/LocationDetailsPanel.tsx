@@ -1,4 +1,4 @@
-import { Button, H2, AnchorButton } from "@blueprintjs/core";
+import { H2, AnchorButton } from "@blueprintjs/core";
 import * as React from "react";
 import { connect } from "react-redux";
 
@@ -65,10 +65,6 @@ class LocationDetailsPanel extends React.PureComponent<LocationDetailsPanelProps
             {this.maybeRenderNotes("What to Avoid", location.notes.avoid)}
           </>}
         </div>
-
-        <div className="panel-edit-controls">
-          <Button text="Edit" onClick={this.onEdit} />
-        </div>
       </div>
     );
   }
@@ -82,7 +78,7 @@ class LocationDetailsPanel extends React.PureComponent<LocationDetailsPanelProps
     );
   }
 
-  private onEdit = () => this.props.onEdit(this.props.location.id);
+  // private onEdit = () => this.props.onEdit(this.props.location.id);
 
   private async updateUrl(location: Location) {
     this.setState({ googleMapsUrl: undefined });
