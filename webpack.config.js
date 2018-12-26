@@ -2,10 +2,11 @@
 
 const path = require("path");
 const webpack = require("webpack");
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 
 module.exports = {
   entry: "./src/index.tsx",
-  mode: "development",
+  mode: "production",
   output: {
     filename: "app.js",
     path: path.resolve(__dirname, "build"),
@@ -22,7 +23,6 @@ module.exports = {
       { test: /\.(eot|ttf|woff|woff2)$/, use: "file-loader" }
     ]
   },
-  devtool: "inline-source-map",
   plugins: [
     new webpack.DefinePlugin({
       "process.env.NODE_ENV": JSON.stringify(process.env.NODE_ENV),
@@ -30,4 +30,7 @@ module.exports = {
       "process.env.GOOGLE_MAPS_KEY": JSON.stringify(process.env.GOOGLE_MAPS_KEY),
     }),
   ],
+  optimization: {
+    minimizer: [new UglifyJsPlugin()],
+  },
 };

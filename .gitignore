@@ -2,3 +2,4 @@ node_modules/
 build/
 typings/
 config.dev.sh
+config.prod.sh

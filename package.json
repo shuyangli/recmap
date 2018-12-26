@@ -4,8 +4,9 @@
   "description": "recmap-frontend",
   "main": "./src/index.tsx",
   "scripts": {
-    "build": "webpack",
-    "dev": "source ./config.dev.sh && webpack-dev-server --inline --hot",
+    "build": "source ./config.dev.sh && webpack --config ./webpack.config.dev.js",
+    "dist": "source ./config.prod.sh && webpack --config ./webpack.config.js",
+    "dev": "source ./config.dev.sh && webpack-dev-server --inline --hot --config ./webpack.config.dev.js",
     "clean": "rm -r ./build/*",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -56,6 +57,7 @@
     "tslint": "^5.11.0",
     "tslint-react": "^3.6.0",
     "typescript": "^3.1.6",
+    "uglifyjs-webpack-plugin": "^2.1.0",
     "webpack": "^4.26.0",
     "webpack-cli": "^3.1.2",
     "webpack-dev-server": "^3.1.10"
