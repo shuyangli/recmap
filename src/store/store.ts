@@ -8,15 +8,18 @@ import { initialState } from "./RootState";
 import { ApplicationApi } from "../api/ApplicationApi";
 import { BackendApi } from "../api/BackendApi";
 import { ExpressApi } from "../api/ExpressApi";
-import { serverConfig, googleMapsApiKey } from "../config";
+import { firebaseConfig, serverConfig, googleMapsApiKey } from "../config";
 import { GoogleMapsApi } from "../api/GoogleMapsApi";
 import { updateCurrentPosition } from "./locations/actions";
+import { userReducer } from "./user/reducer";
+import { initFirebase, setupFirebaseObservers } from "../initFirebase";
 
 const composeEnhancers: typeof compose = (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
 export const reducer = combineReducers({
   location: locationsReducer,
   actionPanel: actionPanelReducer,
+  user: userReducer,
 });
 
 export async function createApplicationStore() {
@@ -27,6 +30,8 @@ export async function createApplicationStore() {
     mapsApi,
     backendApi,
   };
+
+  initFirebase(firebaseConfig);
 
   const store = createStore(
     reduceCompoundActions(reducer),
@@ -39,6 +44,7 @@ export async function createApplicationStore() {
     ),
   );
 
+  setupFirebaseObservers(store);
   store.dispatch(updateCurrentPosition());
   return store;
 }

@@ -2,7 +2,13 @@
 
 const path = require("path");
 const webpack = require("webpack");
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+const UglifyJsPlugin = require("uglifyjs-webpack-plugin");
+const { forEach } = require("lodash");
+
+const environment = {};
+forEach(process.env, (value, key) => {
+  environment["process.env." + key]= JSON.stringify(value);
+});
 
 module.exports = {
   entry: "./src/index.tsx",
@@ -24,11 +30,7 @@ module.exports = {
     ]
   },
   plugins: [
-    new webpack.DefinePlugin({
-      "process.env.NODE_ENV": JSON.stringify(process.env.NODE_ENV),
-      "process.env.SERVER_HOST": JSON.stringify(process.env.SERVER_HOST),
-      "process.env.GOOGLE_MAPS_KEY": JSON.stringify(process.env.GOOGLE_MAPS_KEY),
-    }),
+    new webpack.DefinePlugin(environment),
   ],
   optimization: {
     minimizer: [new UglifyJsPlugin()],

@@ -3,15 +3,19 @@ import * as React from "react";
 import { ConnectedMap } from "./map/Map";
 import { ConnectedActionPanel } from "./panel/ActionPanel";
 import { ConnectedLocationSidebar } from "./sidebar/LocationSidebar";
+import { ConnectedUserDisplay } from "./user/UserDisplay";
 
 export class App extends React.PureComponent<{}, {}> {
   render() {
     return (
       <div className="app-viewport">
         <ConnectedMap />
-        <div className="floater-viewport">
+        <div className="columns-viewport">
           <ConnectedLocationSidebar />
           <ConnectedActionPanel />
+        </div>
+        <div className="user-viewport">
+          <ConnectedUserDisplay />
         </div>
       </div>
       );
