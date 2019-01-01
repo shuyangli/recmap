@@ -25,10 +25,9 @@ export const reducer = combineReducers({
 export async function createApplicationStore() {
   const mapsApi = new GoogleMapsApi(googleMapsApiKey);
   await mapsApi.initialize();
-  const backendApi: BackendApi = new ExpressApi(serverConfig);
   const applicationApi: ApplicationApi = {
     mapsApi,
-    backendApi,
+    backendApi: undefined,
   };
 
   initFirebase(firebaseConfig);
@@ -43,6 +42,22 @@ export async function createApplicationStore() {
       ),
     ),
   );
+
+  const authTokenProvider = () => {
+    const maybeCurrentUser = store.getState().user.currentUser;
+    if (maybeCurrentUser) {
+      return Promise.resolve(maybeCurrentUser.getToken());
+    } else {
+      return Promise.resolve(undefined);
+    }
+  }
+  const uidProvider = () => {
+    const maybeCurrentUser = store.getState().user.currentUser;
+    return maybeCurrentUser ? maybeCurrentUser.uid : undefined;
+  }
+
+  const backendApi: BackendApi = new ExpressApi(serverConfig, authTokenProvider, uidProvider);
+  applicationApi.backendApi = backendApi;
 
   setupFirebaseObservers(store);
   store.dispatch(updateCurrentPosition());

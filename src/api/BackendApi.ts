@@ -7,4 +7,5 @@ export interface BackendApi {
   getLocation(locationId: string): Promise<Location>;
   getAllLocations(): Promise<{ [locationId: string]: Location }>;
   getAllTags(): Promise<string[]>;
+  isAdmin(): Promise<boolean>;
 }
