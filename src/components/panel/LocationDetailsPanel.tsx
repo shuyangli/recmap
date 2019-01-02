@@ -5,7 +5,7 @@ import { connect } from "react-redux";
 import { RatingAndPrice } from "../shared";
 import { Location } from "../../api/interfaces";
 import { LocationTags } from "../shared";
-import { ToggleEditPanel } from "../../store/actionPanel/actions";
+import { ToggleEditPanel, ClosePanel } from "../../store/actionPanel/actions";
 import { TypedDispatch } from "../../store/TypedDispatch";
 
 import "./LocationDetailsPanel.less";
@@ -23,6 +23,7 @@ interface ConnectedProps {
 
 interface DispatchProps {
   onEdit: (locationId: string) => void;
+  closePanel: () => void;
   getGoogleMapsUrl: (placeId: string) => Promise<string>;
 }
 
@@ -55,7 +56,7 @@ class LocationDetailsPanel extends React.PureComponent<LocationDetailsPanelProps
         <div className="location-content-wrapper">
           <div className="location-entry aligned name-and-link">
             <H2 className="location-name">{location.name}</H2>
-            <div>
+            <div className="location-panel-buttons">
               {this.state.googleMapsUrl && (
                 <Tooltip content="Open in Google Maps">
                   <AnchorButton
@@ -70,6 +71,7 @@ class LocationDetailsPanel extends React.PureComponent<LocationDetailsPanelProps
               {this.props.isAdmin && (
                 <Button small={true} minimal={true} icon="edit" onClick={this.onEdit} />
               )}
+              <Button small={true} minimal={true} icon="cross" onClick={this.props.closePanel} />
             </div>
           </div>
           <div className="location-entry location-address">{location.address}</div>
@@ -117,6 +119,7 @@ function mapStateToProps(state: RootState): ConnectedProps {
 function mapDispatchToProps(dispatch: TypedDispatch): DispatchProps {
   return {
     onEdit: (locationId: string) => dispatch(ToggleEditPanel.create({ locationId })),
+    closePanel: () => dispatch(ClosePanel.create()),
     getGoogleMapsUrl: (placeId: string) => dispatch(getGoogleMapsUrl(placeId)),
   };
 }
