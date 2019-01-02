@@ -1,4 +1,4 @@
-import { H2, AnchorButton } from "@blueprintjs/core";
+import { H2, AnchorButton, Button, Tooltip } from "@blueprintjs/core";
 import * as React from "react";
 import { connect } from "react-redux";
 
@@ -10,9 +10,15 @@ import { TypedDispatch } from "../../store/TypedDispatch";
 
 import "./LocationDetailsPanel.less";
 import { getGoogleMapsUrl } from "../../store/locations/actions";
+import { RootState } from "../../store/RootState";
+import { isAdminSelector } from "../../store/user/selectors";
 
 interface OwnProps {
   location: Location;
+}
+
+interface ConnectedProps {
+  isAdmin: boolean;
 }
 
 interface DispatchProps {
@@ -20,7 +26,7 @@ interface DispatchProps {
   getGoogleMapsUrl: (placeId: string) => Promise<string>;
 }
 
-type LocationDetailsPanelProps = OwnProps & DispatchProps;
+type LocationDetailsPanelProps = OwnProps & ConnectedProps & DispatchProps;
 
 interface State {
   googleMapsUrl?: string;
@@ -49,9 +55,22 @@ class LocationDetailsPanel extends React.PureComponent<LocationDetailsPanelProps
         <div className="location-content-wrapper">
           <div className="location-entry aligned name-and-link">
             <H2 className="location-name">{location.name}</H2>
-            {this.state.googleMapsUrl && (
-              <AnchorButton small={true} minimal={true} icon="share" href={this.state.googleMapsUrl} target="_blank" />
-            )}
+            <div>
+              {this.state.googleMapsUrl && (
+                <Tooltip content="Open in Google Maps">
+                  <AnchorButton
+                    small={true}
+                    minimal={true}
+                    icon="share"
+                    href={this.state.googleMapsUrl}
+                    target="_blank"
+                  />
+                </Tooltip>
+              )}
+              {this.props.isAdmin && (
+                <Button small={true} minimal={true} icon="edit" onClick={this.onEdit} />
+              )}
+            </div>
           </div>
           <div className="location-entry location-address">{location.address}</div>
 
@@ -78,7 +97,7 @@ class LocationDetailsPanel extends React.PureComponent<LocationDetailsPanelProps
     );
   }
 
-  // private onEdit = () => this.props.onEdit(this.props.location.id);
+  private onEdit = () => this.props.onEdit(this.props.location.id);
 
   private async updateUrl(location: Location) {
     this.setState({ googleMapsUrl: undefined });
@@ -89,6 +108,12 @@ class LocationDetailsPanel extends React.PureComponent<LocationDetailsPanelProps
   }
 }
 
+function mapStateToProps(state: RootState): ConnectedProps {
+  return {
+    isAdmin: isAdminSelector(state),
+  };
+}
+
 function mapDispatchToProps(dispatch: TypedDispatch): DispatchProps {
   return {
     onEdit: (locationId: string) => dispatch(ToggleEditPanel.create({ locationId })),
@@ -96,5 +121,4 @@ function mapDispatchToProps(dispatch: TypedDispatch): DispatchProps {
   };
 }
 
-export const ConnectedLocationDetailsPanel: React.ComponentClass<OwnProps> =
-  connect<void, DispatchProps, OwnProps>(null, mapDispatchToProps)(LocationDetailsPanel as any);
+export const ConnectedLocationDetailsPanel = connect(mapStateToProps, mapDispatchToProps)(LocationDetailsPanel);

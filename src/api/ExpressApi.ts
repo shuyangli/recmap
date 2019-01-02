@@ -89,7 +89,7 @@ export class ExpressApi implements BackendApi {
   async isAdmin() {
     const authToken = await this.authTokenProvider();
     const uid = this.uidProvider();
-    const adminResponse = await fetch(this.getPath(`/users/is-admin/${uid}`), {
+    const adminResponse = await fetch(this.getPath(`/users/${uid}/is-admin`), {
       headers: {
         authorization: `Bearer ${authToken}`,
       },

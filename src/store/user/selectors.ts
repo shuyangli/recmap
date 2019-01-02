@@ -1,5 +1,5 @@
 import { RootState } from "../../store/RootState";
 
-export function canEdit(state: RootState): boolean {
+export function isAdminSelector(state: RootState): boolean {
   return state.user.isAdmin;
 }

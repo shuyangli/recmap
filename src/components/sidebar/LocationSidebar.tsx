@@ -1,4 +1,4 @@
-import { NonIdealState, Spinner } from "@blueprintjs/core";
+import { NonIdealState, Spinner, Button } from "@blueprintjs/core";
 import * as React from "react";
 import { connect } from "react-redux";
 
@@ -6,6 +6,7 @@ import { Location } from "../../api/interfaces";
 import { ToggleEditPanel } from "../../store/actionPanel/actions";
 import { loadLocations } from "../../store/locations/actions";
 import { getFilteredLocations } from "../../store/locations/selectors";
+import { isAdminSelector } from "../../store/user/selectors";
 import { RootState } from "../../store/RootState";
 import { TypedDispatch } from "../../store/TypedDispatch";
 import { ConnectedFilterControls } from "./FilterControls";
@@ -15,6 +16,7 @@ import "./LocationSidebar.less";
 
 interface ConnectedProps {
   filteredLocations: Location[];
+  isAdmin: boolean;
 }
 
 interface DispatchProps {
@@ -50,6 +52,11 @@ class LocationSidebar extends React.PureComponent<ConnectedProps & DispatchProps
               )}
             </div>
         }
+        {this.props.isAdmin && (
+          <div className="sidebar-edit-controls">
+            <Button icon="add" onClick={this.props.openEditPanel} />
+          </div>
+        )}
       </div>
     );
   }
@@ -58,6 +65,7 @@ class LocationSidebar extends React.PureComponent<ConnectedProps & DispatchProps
 function mapStateToProps(state: RootState): ConnectedProps {
   return {
     filteredLocations: getFilteredLocations(state),
+    isAdmin: isAdminSelector(state),
   };
 }
 
