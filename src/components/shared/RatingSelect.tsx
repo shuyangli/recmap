@@ -35,7 +35,6 @@ export class RatingSelect extends React.PureComponent<RatingSelectProps, never> 
     return (
         <MenuItem
             key={`${rating}`}
-            active={modifiers.active}
             onClick={handleClick}
             text={<LocationRating rating={rating} />}
             shouldDismissPopover={false}
