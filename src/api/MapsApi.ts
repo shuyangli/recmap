@@ -4,6 +4,8 @@ export interface MapsApi {
   initialize(): Promise<any>;
   initializeMapElement(wrapper: HTMLDivElement): google.maps.Map;
   getGoogleMapsUrl(placeId: string): Promise<string>;
+  setMapCenter(latitude: number, longitude: number): void;
+  getMapElement(): google.maps.Map;
 }
 
 export function getDistanceBetween(

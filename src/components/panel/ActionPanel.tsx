@@ -5,6 +5,7 @@ import { Dispatch } from "redux";
 import { Location } from "../../api/interfaces";
 import { ClosePanel } from "../../store/actionPanel/actions";
 import { ActionPanelType } from "../../store/actionPanel/types";
+import { getCurrentLocationId } from "../../store/actionPanel/selectors";
 import { RootState } from "../../store/RootState";
 import { ConnectedEditLocationPanel } from "./EditLocationPanel";
 import { ConnectedLocationDetailsPanel } from "./LocationDetailsPanel";
@@ -60,7 +61,7 @@ class ActionPanel extends React.PureComponent<ConnectedProps & DispatchProps, vo
 const mapStateToProps = (state: RootState): ConnectedProps => ({
   isVisible: state.actionPanel.isVisible,
   type: state.actionPanel.type,
-  locationId: state.actionPanel.locationId,
+  locationId: getCurrentLocationId(state),
   locations: state.location.locations,
 });
 

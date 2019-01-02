@@ -60,8 +60,21 @@ export function deleteLocation(locationId: string) {
     .then(() => dispatch(RemoveLocation.create({ locationId })));
 }
 
+export function centerMapAroundLocation(locationId: string) {
+  return (dispatch: Dispatch, getState: () => RootState, api: ApplicationApi) => {
+    const location = getState().location.locations[locationId];
+    if (location) {
+      api.mapsApi.setMapCenter(location.latitude, location.longitude);
+    }
+  };
+}
+
 export function initializeMapElement(ref: HTMLDivElement) {
   return (dispatch: Dispatch, getState: () => RootState, api: ApplicationApi) => api.mapsApi.initializeMapElement(ref);
+}
+
+export function getMapElement() {
+  return (dispatch: Dispatch, getState: () => RootState, api: ApplicationApi) => api.mapsApi.getMapElement();
 }
 
 export function getGoogleMapsUrl(placeId: string) {

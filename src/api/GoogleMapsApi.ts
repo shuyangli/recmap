@@ -39,10 +39,7 @@ export class GoogleMapsApi implements MapsApi {
     this.mapElement = mapElement;
     this.placesService = new google.maps.places.PlacesService(this.mapElement);
     getCurrentPosition().then((position) => {
-      this.mapElement.setCenter({
-        lat: position.coords.latitude,
-        lng: position.coords.longitude,
-      });
+      this.setMapCenter(position.coords.latitude, position.coords.longitude);
     });
     return mapElement;
   }
@@ -61,5 +58,16 @@ export class GoogleMapsApi implements MapsApi {
     } else {
       return Promise.reject("Google Maps is not initialized");
     }
+  }
+
+  setMapCenter(latitude: number, longitude: number) {
+    this.mapElement.panTo({
+      lat: latitude,
+      lng: longitude,
+    });
+  }
+
+  getMapElement() {
+    return this.mapElement;
   }
 }

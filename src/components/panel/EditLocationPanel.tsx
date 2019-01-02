@@ -5,13 +5,12 @@ import { connect } from "react-redux";
 
 import { Location, Rating, PriceRange, LocationReview } from "../../api/interfaces";
 import { ClosePanel, ToggleDetailPanel, ToggleEditPanel } from "../../store/actionPanel/actions";
-import { createLocation, updateLocation, deleteLocation } from "../../store/locations/actions";
+import { createLocation, updateLocation, deleteLocation, getMapElement } from "../../store/locations/actions";
 import { TypedDispatch } from "../../store/TypedDispatch";
 import { RatingSelect } from "../shared/RatingSelect";
 import { PriceRangeSelect } from "../shared/PriceRangeSelect";
 
 import "./EditLocationPanel.less";
-import { getCurrentPosition } from "../../api/MapsApi";
 
 interface OwnProps {
   initialLocation?: Location;
@@ -21,10 +20,10 @@ interface DispatchProps {
   onCancel: (locationId?: string) => void;
   onSave: (location: Location) => void;
   onDelete: (locationId: string) => void;
+  getMapElement: () => google.maps.Map;
 }
 
 interface State {
-  isLoadingCurrentLocation: boolean;
   location: Location;
   isSaving: boolean;
 }
@@ -35,7 +34,6 @@ class EditLocationPanel extends React.PureComponent<EditLocationPanelProps, Stat
   constructor(props: EditLocationPanelProps) {
     super(props);
     this.state = {
-      isLoadingCurrentLocation: false,
       location: props.initialLocation || {
         name: "",
         address: "",
@@ -97,18 +95,15 @@ class EditLocationPanel extends React.PureComponent<EditLocationPanelProps, Stat
     this.setupNameInput();
     this.setupAddressInput();
 
-    this.setState({ isLoadingCurrentLocation: true });
-    getCurrentPosition().then((position) => {
-      this.setState({ isLoadingCurrentLocation: false });
+    // Bind autocomplete bias to map bounds
+    const mapElement = this.props.getMapElement();
+    this.nameAutocomplete.bindTo("bounds", mapElement);
+    this.addressAutocomplete.bindTo("bounds", mapElement);
+  }
 
-      const location: google.maps.LatLngLiteral = {
-        lat: position.coords.latitude,
-        lng: position.coords.longitude,
-      };
-      const circle = new google.maps.Circle({ center: location });
-      this.addressAutocomplete.setBounds(circle.getBounds());
-      this.nameAutocomplete.setBounds(circle.getBounds());
-    });
+  componentWillUnmount() {
+    this.nameAutocomplete.unbindAll();
+    this.addressAutocomplete.unbindAll();
   }
 
   render() {
@@ -119,7 +114,6 @@ class EditLocationPanel extends React.PureComponent<EditLocationPanelProps, Stat
           <div className="edit-location-panel-entry">
             <div className="edit-location-panel-heading">Name</div>
             <input
-              disabled={this.state.isLoadingCurrentLocation}
               className={classNames(Classes.INPUT, Classes.FILL, "location-name")}
               value={this.state.location.name}
               ref={(element) => this.nameInput = element}
@@ -131,7 +125,6 @@ class EditLocationPanel extends React.PureComponent<EditLocationPanelProps, Stat
           <div className="edit-location-panel-entry">
             <div className="edit-location-panel-heading">Address</div>
             <input
-              disabled={this.state.isLoadingCurrentLocation}
               className={classNames(Classes.INPUT, Classes.FILL, "location-address")}
               value={this.state.location.address}
               placeholder="Address"
@@ -254,6 +247,8 @@ const mapDispatchToProps = (dispatch: TypedDispatch): DispatchProps => ({
   onDelete: (locationId: string) =>
     dispatch(deleteLocation(locationId))
     .then(() => dispatch(ClosePanel.create())),
+
+  getMapElement: () => dispatch(getMapElement()),
 });
 
 export const ConnectedEditLocationPanel: React.ComponentClass<OwnProps> =
