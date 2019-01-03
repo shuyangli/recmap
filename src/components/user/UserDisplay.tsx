@@ -10,7 +10,7 @@ interface ConnectedProps {
   currentUser: firebase.User | undefined;
 }
 
-class UserDisplay extends React.PureComponent<ConnectedProps, {}> {
+class UserDisplay extends React.PureComponent<ConnectedProps, never> {
   render() {
     return (
       <Popover

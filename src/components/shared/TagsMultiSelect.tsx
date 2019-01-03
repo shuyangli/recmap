@@ -43,6 +43,7 @@ class TagsMultiSelect extends React.PureComponent<TagsMultiSelectProps, State> {
         popoverProps={{
           targetTagName: "div",
           popoverClassName: "tags-multi-select-container",
+          minimal: true,
         }}
         items={this.state.allTags}
         selectedItems={this.props.tags}

@@ -3,9 +3,10 @@ import { Dispatch } from "redux";
 
 import { ApplicationApi } from "../../api/ApplicationApi";
 import { Location } from "../../api/interfaces";
-import { FilterState } from "./types";
+import { FilterState, PositionWithMetadata } from "./types";
 import { RootState } from "../RootState";
 import { getCurrentPosition } from "../../api/MapsApi";
+import { TypedDispatch } from "../TypedDispatch";
 
 export const UpdateAllLocations = TypedAction.define("UpdateAllLocations")<{
   locations: { [id: string]: Location };
@@ -24,7 +25,7 @@ export const UpdateFilter = TypedAction.define("UpdateFilter")<{
 }>();
 
 export const SetCurrentPosition = TypedAction.define("SetCurrentPosition")<{
-  position: Position;
+  position: PositionWithMetadata;
 }>();
 
 export function loadLocations() {
@@ -85,7 +86,20 @@ export function getGoogleMapsUrl(placeId: string) {
   return (dispatch: Dispatch, getState: () => RootState, api: ApplicationApi) => api.mapsApi.getGoogleMapsUrl(placeId);
 }
 
-export function updateCurrentPosition() {
-  return (dispatch: Dispatch) =>
-    getCurrentPosition().then((position) => dispatch(SetCurrentPosition.create({ position })));
+export function setCurrentPosition(position: PositionWithMetadata) {
+  return (dispatch: Dispatch, getState: () => RootState, api: ApplicationApi) => {
+    dispatch(SetCurrentPosition.create({ position }));
+    api.mapsApi.setMapCenter(position.position.latitude, position.position.longitude);
+  };
+}
+
+export function setCurrentPositionToGeolocation() {
+  return (dispatch: TypedDispatch) =>
+    getCurrentPosition().then((position) => dispatch(setCurrentPosition({
+      name: "Current Location",
+      position: {
+        latitude: position.coords.latitude,
+        longitude: position.coords.longitude,
+      },
+    })));
 }

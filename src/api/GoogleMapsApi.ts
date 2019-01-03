@@ -1,9 +1,10 @@
 import * as GoogleMapsLoader from "google-maps";
-import { MapsApi, getCurrentPosition } from "./MapsApi";
+import { MapsApi } from "./MapsApi";
+import { NEW_YORK_CITY_POSITION } from "../store/locations/types";
 
 const mapsDefaults = {
-  longitude: -122.42740250000001,
-  latitude: 37.77674160000001,
+  longitude: NEW_YORK_CITY_POSITION.position.longitude,
+  latitude: NEW_YORK_CITY_POSITION.position.latitude,
   zoom: 15,
 };
 
@@ -33,9 +34,6 @@ export class GoogleMapsApi implements MapsApi {
     });
     this.mapElement = mapElement;
     this.placesService = new google.maps.places.PlacesService(this.mapElement);
-    getCurrentPosition().then((position) => {
-      this.setMapCenter(position.coords.latitude, position.coords.longitude);
-    });
     return mapElement;
   }
 

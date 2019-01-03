@@ -26,14 +26,43 @@ export const EMPTY_FILTER_STATE: FilterState = {
   tags: [],
 };
 
+export interface PositionWithMetadata {
+  name: string;
+  position: {
+    latitude: number,
+    longitude: number,
+  };
+}
+
+const SAN_FRANCISCO_POSITION: PositionWithMetadata = {
+  name: "San Francisco Bay Area",
+  position: {
+    latitude: 37.7767416,
+    longitude: -122.4274025,
+  },
+};
+
+export const NEW_YORK_CITY_POSITION: PositionWithMetadata = {
+  name: "New York City",
+  position: {
+    latitude: 40.732923,
+    longitude: -74.0055911,
+  },
+};
+
+export const PresetPositions = [
+  NEW_YORK_CITY_POSITION,
+  SAN_FRANCISCO_POSITION,
+];
+
 export interface LocationState {
-  currentPosition: Position | undefined;
+  currentPosition: PositionWithMetadata;
   locations: { [id: string]: Location };
   filter: FilterState;
 }
 
 export const EMPTY_LOCATION_STATE: LocationState = {
-  currentPosition: undefined, // for synchronous access in filtering
+  currentPosition: NEW_YORK_CITY_POSITION, // for synchronous access in filtering
   locations: {},
   filter: EMPTY_FILTER_STATE,
 };

@@ -1,51 +1,42 @@
 import * as React from "react";
-import { getDistanceBetween, getCurrentPosition } from "../../api/MapsApi";
+import { connect } from "react-redux";
+import { getDistanceBetween } from "../../api/MapsApi";
 import { Location } from "../../api/interfaces";
+import { PositionWithMetadata } from "../../store/locations/types";
+import { RootState } from "../../store/RootState";
+import { currentPositionSelector } from "../../store/locations/selectors";
 
-interface LocationDistanceProps {
+interface OwnProps {
   location: Location;
 }
 
-interface State {
-  currentLatitude?: number;
-  currentLongitude?: number;
+interface ConnectedProps {
+  currentPosition: PositionWithMetadata;
 }
 
-export class LocationDistance extends React.PureComponent<LocationDistanceProps, State> {
-  constructor(props: LocationDistanceProps) {
-    super(props);
-    this.state = {
-      currentLatitude: undefined,
-      currentLongitude: undefined,
-    };
-  }
+type LocationDistanceProps = OwnProps & ConnectedProps;
 
-  componentDidMount() {
-    getCurrentPosition().then((location) => {
-      this.setState({
-        currentLatitude: location.coords.latitude,
-        currentLongitude: location.coords.longitude,
-      });
-    });
-  }
-
+class LocationDistance extends React.PureComponent<LocationDistanceProps, never> {
   render() {
-    if (this.state.currentLatitude == null || this.state.currentLongitude == null) {
-      return null;
-    }
     return (
       <div className="location-distance">
       {
         getFormattedDistance(
           this.props.location,
-          this.state.currentLatitude,
-          this.state.currentLongitude,
+          this.props.currentPosition.position.latitude,
+          this.props.currentPosition.position.longitude,
         )
       }
       </div>
     );
   }
 }
+
+const mapStateToProps = (state: RootState): ConnectedProps => ({
+  currentPosition: currentPositionSelector(state),
+});
+
+export const ConnectedLocationDistance = connect(mapStateToProps)(LocationDistance);
 
 function getFormattedDistance(location: Location, currentLatitude: number, currentLongitude: number) {
   const distance = getDistanceBetween(

@@ -7,11 +7,11 @@ import { Location } from "../../api/interfaces";
 import { getDistanceBetween } from "../../api/MapsApi";
 
 const getAllLocations = (state: RootState) => state.location.locations;
-const getCurrentPosition = (state: RootState) => state.location.currentPosition;
+export const currentPositionSelector = (state: RootState) => state.location.currentPosition;
 const getFilter = (state: RootState) => state.location.filter;
 
 const locationListSelector = createSelector(
-  [getAllLocations, getCurrentPosition, getFilter],
+  [getAllLocations, currentPositionSelector, getFilter],
   (locations, currentPosition, filter) => {
     let sortedLocations = values(locations);
 
@@ -40,8 +40,8 @@ const locationListSelector = createSelector(
         return getDistanceBetween(
           location.latitude,
           location.longitude,
-          currentPosition.coords.latitude,
-          currentPosition.coords.longitude,
+          currentPosition.position.latitude,
+          currentPosition.position.longitude,
         );
       });
     }
