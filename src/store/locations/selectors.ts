@@ -1,4 +1,4 @@
-import * as fuzzy from "fuzzy";
+import * as Fuse from "fuse.js";
 import { createSelector } from "reselect";
 
 import { RootState } from "../../store/RootState";
@@ -7,16 +7,14 @@ import { Location } from "../../api/interfaces";
 import { getDistanceBetween } from "../../api/MapsApi";
 
 const getAllLocations = (state: RootState) => state.location.locations;
-const getFilter = (state: RootState) => state.location.filter;
 const getCurrentPosition = (state: RootState) => state.location.currentPosition;
-
-export const getFilteredLocations = createSelector(
-  [getAllLocations, getFilter, getCurrentPosition],
-  (locations, filter, currentPosition) => {
-    let remainingLocations = values(locations);
-
+const locationListSelector = createSelector(
+  getAllLocations,
+  getCurrentPosition,
+  (locations, currentPosition) => {
+    let sortedLocations = values(locations);
     if (currentPosition != null) {
-      remainingLocations = sortBy<Location>(remainingLocations, (location) => {
+      sortedLocations = sortBy<Location>(sortedLocations, (location) => {
         return getDistanceBetween(
           location.latitude,
           location.longitude,
@@ -25,34 +23,34 @@ export const getFilteredLocations = createSelector(
         );
       });
     }
+    return sortedLocations;
+  });
 
-    if (!isEmpty(filter.searchTerm)) {
-      const filtered = fuzzy.filter(
-        filter.searchTerm,
-        remainingLocations,
-        { extract: extractLocationString },
-      );
-      // When a search term is present, the results are sorted by relevance,
-      // and fuzzy already sorts them for us.
-      remainingLocations = filtered.map((result) => result.original);
-    }
+const getFilter = (state: RootState) => state.location.filter;
 
-    return remainingLocations;
+const fuseSelector = createSelector(
+  locationListSelector,
+  (locations) => {
+    const fuseOptions: Fuse.FuseOptions<Location> = {
+      keys: [
+        { name: "name", weight: 0.7 },
+        { name: "tags", weight: 0.21 },
+        { name: "notes.notes", weight: 0.03 },
+        { name: "notes.order", weight: 0.04 },
+        { name: "notes.avoid", weight: 0.02 },
+      ] as any,
+    };
+    return new Fuse(locations, fuseOptions);
   },
 );
 
-function extractLocationString(location: Location): string {
-  let extracted: string = location.name;
-  if (location.notes) {
-    if (location.notes.notes) {
-      extracted = extracted + location.notes.notes;
+export const getFilteredLocations = createSelector(
+  [fuseSelector, getFilter, locationListSelector],
+  (fuse, filter, allLocations) => {
+    if (!isEmpty(filter.searchTerm)) {
+      return fuse.search(filter.searchTerm)
+    } else {
+      return allLocations;
     }
-    if (location.notes.order) {
-      extracted = extracted + location.notes.order;
-    }
-    if (location.notes.avoid) {
-      extracted = extracted + location.notes.avoid;
-    }
-  }
-  return extracted;
-}
+  },
+);

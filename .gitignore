@@ -4,3 +4,4 @@ dist/
 typings/
 config.dev.sh
 config.prod.sh
+*.log
