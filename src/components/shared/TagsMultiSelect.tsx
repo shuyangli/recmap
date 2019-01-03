@@ -1,10 +1,12 @@
 import { Classes, MenuItem, Button } from "@blueprintjs/core";
 import { MultiSelect, ItemRenderer, ItemPredicate } from "@blueprintjs/select";
 import * as React from "react";
+import { connect } from "react-redux";
 import * as classNames from "classnames";
 import { TypedDispatch } from "../../store/TypedDispatch";
 import { getAllTags } from "../../store/locations/actions";
-import { connect } from "react-redux";
+
+import "./TagsMultiSelect.less";
 
 const RawTagsMultiSelect = MultiSelect.ofType<string>();
 
@@ -38,7 +40,10 @@ class TagsMultiSelect extends React.PureComponent<TagsMultiSelectProps, State> {
       <RawTagsMultiSelect
         className={classNames("tags-multi-select", Classes.FILL)}
         activeItem={null}
-        popoverProps={{ targetTagName: "div" }}
+        popoverProps={{
+          targetTagName: "div",
+          popoverClassName: "tags-multi-select-container",
+        }}
         items={this.state.allTags}
         selectedItems={this.props.tags}
         itemRenderer={this.renderItem}
