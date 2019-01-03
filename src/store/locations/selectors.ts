@@ -8,11 +8,33 @@ import { getDistanceBetween } from "../../api/MapsApi";
 
 const getAllLocations = (state: RootState) => state.location.locations;
 const getCurrentPosition = (state: RootState) => state.location.currentPosition;
+const getFilter = (state: RootState) => state.location.filter;
+
 const locationListSelector = createSelector(
-  getAllLocations,
-  getCurrentPosition,
-  (locations, currentPosition) => {
+  [getAllLocations, getCurrentPosition, getFilter],
+  (locations, currentPosition, filter) => {
     let sortedLocations = values(locations);
+
+    if (filter.priceRange.range != null) {
+      sortedLocations = sortedLocations.filter((loc) => {
+        return loc.priceRange != null && (
+          loc.priceRange === filter.priceRange.range || (
+            filter.priceRange.includeLower && loc.priceRange < filter.priceRange.range
+          )
+        );
+      });
+    }
+
+    if (filter.rating.rating != null) {
+      sortedLocations = sortedLocations.filter((loc) => {
+        return loc.rating != null && (
+          loc.rating === filter.rating.rating || (
+            filter.rating.includeHigher && loc.rating > filter.rating.rating
+          )
+        );
+      });
+    }
+
     if (currentPosition != null) {
       sortedLocations = sortBy<Location>(sortedLocations, (location) => {
         return getDistanceBetween(
@@ -25,8 +47,6 @@ const locationListSelector = createSelector(
     }
     return sortedLocations;
   });
-
-const getFilter = (state: RootState) => state.location.filter;
 
 const fuseSelector = createSelector(
   locationListSelector,
@@ -48,7 +68,7 @@ export const getFilteredLocations = createSelector(
   [fuseSelector, getFilter, locationListSelector],
   (fuse, filter, allLocations) => {
     if (!isEmpty(filter.searchTerm)) {
-      return fuse.search(filter.searchTerm)
+      return fuse.search(filter.searchTerm);
     } else {
       return allLocations;
     }
