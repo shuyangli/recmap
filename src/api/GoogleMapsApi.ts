@@ -40,7 +40,10 @@ export class GoogleMapsApi implements MapsApi {
   getGoogleMapsUrl(placeId: string): Promise<string> {
     if (this.placesService) {
       return new Promise((resolve, reject) => {
-        this.placesService.getDetails({ placeId }, (result, status) => {
+        this.placesService.getDetails({
+          placeId,
+          fields: ["url"],
+        }, (result, status) => {
           if (status === google.maps.places.PlacesServiceStatus.OK) {
             resolve(result.url);
           } else {
