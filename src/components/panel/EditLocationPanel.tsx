@@ -56,13 +56,25 @@ class EditLocationPanel extends React.PureComponent<EditLocationPanelProps, Stat
   }
 
   private nameInput: HTMLInputElement;
-  private addressInput: HTMLInputElement;
-  private addressAutocomplete: google.maps.places.Autocomplete;
   private nameAutocomplete: google.maps.places.Autocomplete;
 
   private setupNameInput() {
     this.nameAutocomplete = new google.maps.places.Autocomplete(this.nameInput, {
       types: ["establishment"],
+      fields: [
+        "address_component",
+        "adr_address",
+        "alt_id",
+        "formatted_address",
+        "geometry",
+        "id",
+        "name",
+        "permanently_closed",
+        "place_id",
+        "scope",
+        "type",
+        "url",
+      ],
     });
     this.nameAutocomplete.addListener("place_changed", () => {
       const place = this.nameAutocomplete.getPlace();
@@ -82,34 +94,16 @@ class EditLocationPanel extends React.PureComponent<EditLocationPanelProps, Stat
     });
   }
 
-  private setupAddressInput() {
-    this.addressAutocomplete = new google.maps.places.Autocomplete(this.addressInput, {
-      types: ["geocode"],
-    });
-    this.addressAutocomplete.addListener("place_changed", () => {
-      const place = this.addressAutocomplete.getPlace();
-      const locationUpdates: Partial<Location> = {
-        address: place.formatted_address,
-        latitude: place.geometry.location.lat(),
-        longitude: place.geometry.location.lng(),
-      };
-      this.setState({ location: { ...this.state.location, ...locationUpdates }});
-    });
-  }
-
   componentDidMount() {
     this.setupNameInput();
-    this.setupAddressInput();
 
     // Bind autocomplete bias to map bounds
     const mapElement = this.props.getMapElement();
     this.nameAutocomplete.bindTo("bounds", mapElement);
-    this.addressAutocomplete.bindTo("bounds", mapElement);
   }
 
   componentWillUnmount() {
     this.nameAutocomplete.unbindAll();
-    this.addressAutocomplete.unbindAll();
   }
 
   render() {
@@ -134,7 +128,6 @@ class EditLocationPanel extends React.PureComponent<EditLocationPanelProps, Stat
               className={classNames(Classes.INPUT, Classes.FILL, "location-address")}
               value={this.state.location.address}
               placeholder="Address"
-              ref={(element) => this.addressInput = element}
               onChange={this.onAddressChange}
             />
           </div>
