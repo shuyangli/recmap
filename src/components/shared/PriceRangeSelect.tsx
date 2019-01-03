@@ -1,9 +1,11 @@
-import { Classes, MenuItem, Button } from "@blueprintjs/core";
+import { Classes, MenuItem, Button, AnchorButton } from "@blueprintjs/core";
 import { Select, ItemRenderer } from "@blueprintjs/select";
 import * as React from "react";
 import * as classNames from "classnames";
 import { PriceRange } from "../../api/interfaces";
 import { getPriceRangeText } from "./getPriceRangeText";
+
+import "./PriceRangeSelect.less";
 
 const RawPriceRangeSelect = Select.ofType<PriceRange>();
 
@@ -16,7 +18,8 @@ const allowedPriceRanges = [
 
 export interface PriceRangeSelectProps {
   priceRange?: PriceRange;
-  onSelect: (priceRange: PriceRange) => void;
+  clearable?: boolean;
+  onSelect: (priceRange: PriceRange | undefined) => void;
 }
 
 export class PriceRangeSelect extends React.PureComponent<PriceRangeSelectProps, never> {
@@ -30,7 +33,10 @@ export class PriceRangeSelect extends React.PureComponent<PriceRangeSelectProps,
         noResults={"No results"}
         onItemSelect={this.props.onSelect}
       >
-        <Button text={getPriceRangeText(this.props.priceRange) || "Select price range"} />
+        <AnchorButton className="price-range-select-outer-button">
+          {getPriceRangeText(this.props.priceRange) || "Select price range"}
+          {this.maybeRenderClearButton()}
+        </AnchorButton>
       </RawPriceRangeSelect>
     );
   }
@@ -45,5 +51,13 @@ export class PriceRangeSelect extends React.PureComponent<PriceRangeSelectProps,
             shouldDismissPopover={false}
         />
     );
+  }
+
+  private clearSelect = () => this.props.onSelect(undefined);
+
+  private maybeRenderClearButton() {
+    if (this.props.clearable && this.props.priceRange != null) {
+      return <Button small={true} minimal={true} icon="cross" onClick={this.clearSelect} />;
+    }
   }
 }

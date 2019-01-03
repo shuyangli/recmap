@@ -1,10 +1,11 @@
-import { Classes, MenuItem, Button } from "@blueprintjs/core";
+import { Classes, MenuItem, Button, AnchorButton } from "@blueprintjs/core";
 import { Select, ItemRenderer } from "@blueprintjs/select";
 import * as React from "react";
 import * as classNames from "classnames";
-
 import { LocationRating } from "./";
 import { Rating } from "../../api/interfaces";
+
+import "./RatingSelect.less";
 
 const RawRatingSelect = Select.ofType<Rating>();
 
@@ -12,7 +13,8 @@ const allowedRatings = [Rating.GREAT, Rating.GOOD, Rating.NEUTRAL, Rating.BAD];
 
 export interface RatingSelectProps {
   rating?: Rating;
-  onSelect: (rating: Rating) => void;
+  clearable?: boolean;
+  onSelect: (rating: Rating | undefined) => void;
 }
 
 export class RatingSelect extends React.PureComponent<RatingSelectProps, never> {
@@ -26,7 +28,10 @@ export class RatingSelect extends React.PureComponent<RatingSelectProps, never> 
         noResults={"No results"}
         onItemSelect={this.props.onSelect}
       >
-        <Button text={this.props.rating == null ? "Select rating" : <LocationRating rating={this.props.rating} />} />
+        <AnchorButton className="rating-select-outer-button">
+          {this.props.rating == null ? "Select rating" : <LocationRating rating={this.props.rating} />}
+          {this.maybeRenderClearButton()}
+        </AnchorButton>
       </RawRatingSelect>
     );
   }
@@ -40,5 +45,13 @@ export class RatingSelect extends React.PureComponent<RatingSelectProps, never> 
             shouldDismissPopover={false}
         />
     );
+  }
+
+  private clearSelect = () => this.props.onSelect(undefined);
+
+  private maybeRenderClearButton() {
+    if (this.props.clearable && this.props.rating != null) {
+      return <Button minimal={true} icon="cross" onClick={this.clearSelect} />;
+    }
   }
 }

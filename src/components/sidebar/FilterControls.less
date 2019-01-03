@@ -9,18 +9,32 @@
 .filter-control-group {
   display: flex;
   align-items: center;
-  margin-bottom: 15px;
 
-  &:last-of-type {
-    margin-bottom: 0;
+  &:not(:last-of-type) {
+    margin-bottom: 8px;
+    padding-bottom: 8px;
+    border-bottom: solid 1px @gray5;
   }
 
   input, .tag-select {
     flex: 1;
-    margin-left: 10px;
+  }
+
+  .filter-control-bounds-checkbox {
+    margin-bottom: 0;
+    margin-left: 15px;
+  }
+}
+
+.filter-control-sub-group {
+  display: flex;
+  align-items: center;
+  &:not(:last-of-type) {
+    margin-bottom: 8px;
   }
 }
 
 .filter-control-icon {
   color: @pt-icon-color;
+  margin-right: 10px;
 }

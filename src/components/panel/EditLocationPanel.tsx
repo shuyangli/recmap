@@ -154,7 +154,11 @@ class EditLocationPanel extends React.PureComponent<EditLocationPanelProps, Stat
 
           <div className="edit-location-panel-entry inline-entry">
             <div className="edit-location-panel-heading">Price Range</div>
-            <PriceRangeSelect priceRange={this.state.location.priceRange} onSelect={this.onPriceRangeChange} />
+            <PriceRangeSelect
+              priceRange={this.state.location.priceRange}
+              onSelect={this.onPriceRangeChange}
+              clearable={true}
+            />
           </div>
 
           <div className="edit-location-panel-entry">
@@ -217,11 +221,11 @@ class EditLocationPanel extends React.PureComponent<EditLocationPanelProps, Stat
     this.updateLocation({ tags });
   }
 
-  private onRatingChange = (rating: Rating) => {
+  private onRatingChange = (rating: Rating | undefined) => {
     this.updateLocation({ rating });
   }
 
-  private onPriceRangeChange = (priceRange: PriceRange) => {
+  private onPriceRangeChange = (priceRange: PriceRange | undefined) => {
     this.updateLocation({ priceRange });
   }
 
