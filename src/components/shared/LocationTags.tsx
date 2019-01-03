@@ -9,6 +9,10 @@ interface Props {
 }
 
 export function LocationTags(props: Props) {
+  if (props.tags.length === 0) {
+    return null;
+  }
+
   let displayedTags: string[];
   if (props.showNumberOfTags != null && props.tags.length > props.showNumberOfTags) {
     displayedTags = props.tags.slice(0, props.showNumberOfTags);
@@ -17,7 +21,6 @@ export function LocationTags(props: Props) {
   }
 
   const remainingTagsCount = props.tags.length - displayedTags.length;
-
   return (
     <div className="location-tags">
       {displayedTags.map((tag) => <Tag key={tag} minimal={true} className="location-tag">{tag}</Tag>)}

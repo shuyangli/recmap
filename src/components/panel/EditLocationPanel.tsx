@@ -5,12 +5,18 @@ import { connect } from "react-redux";
 
 import { Location, Rating, PriceRange, LocationReview } from "../../api/interfaces";
 import { ClosePanel, ToggleDetailPanel, ToggleEditPanel } from "../../store/actionPanel/actions";
-import { createLocation, updateLocation, deleteLocation, getMapElement } from "../../store/locations/actions";
+import {
+  createLocation,
+  updateLocation,
+  deleteLocation,
+  getMapElement,
+} from "../../store/locations/actions";
 import { TypedDispatch } from "../../store/TypedDispatch";
 import { RatingSelect } from "../shared/RatingSelect";
 import { PriceRangeSelect } from "../shared/PriceRangeSelect";
 
 import "./EditLocationPanel.less";
+import { ConnectedTagsMultiSelect } from "../shared/TagsMultiSelect";
 
 interface OwnProps {
   initialLocation?: Location;
@@ -133,6 +139,14 @@ class EditLocationPanel extends React.PureComponent<EditLocationPanelProps, Stat
             />
           </div>
 
+          <div className="edit-location-panel-entry">
+            <div className="edit-location-panel-heading">Tags</div>
+            <ConnectedTagsMultiSelect
+              tags={this.state.location.tags}
+              onSelect={this.onTagsChange}
+            />
+          </div>
+
           <div className="edit-location-panel-entry inline-entry">
             <div className="edit-location-panel-heading">Rating</div>
             <RatingSelect rating={this.state.location.rating} onSelect={this.onRatingChange} />
@@ -197,6 +211,10 @@ class EditLocationPanel extends React.PureComponent<EditLocationPanelProps, Stat
 
   private onAddressChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     this.updateLocation({ address: event.target.value });
+  }
+
+  private onTagsChange = (tags: string[]) => {
+    this.updateLocation({ tags });
   }
 
   private onRatingChange = (rating: Rating) => {

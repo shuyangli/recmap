@@ -79,7 +79,9 @@ class LocationDetailsPanel extends React.PureComponent<LocationDetailsPanelProps
           <div className="location-entry aligned">
             <RatingAndPrice location={location} />
           </div>
-          <LocationTags tags={location.tags} />
+          <div className="location-entry aligned">
+            <LocationTags tags={location.tags} />
+          </div>
           {location.notes && <>
             {this.maybeRenderNotes("Notes", location.notes.notes)}
             {this.maybeRenderNotes("What to Order", location.notes.order)}
@@ -93,7 +95,7 @@ class LocationDetailsPanel extends React.PureComponent<LocationDetailsPanelProps
   private maybeRenderNotes(heading: string, notes?: string) {
     return notes && (
       <div className="location-entry">
-        <span className="notes-heading">{heading}</span>
+        <span className="location-entry-heading">{heading}</span>
         <span className="notes">{notes}</span>
       </div>
     );

@@ -69,6 +69,10 @@ export function centerMapAroundLocation(locationId: string) {
   };
 }
 
+export function getAllTags() {
+  return (dispatch: Dispatch, getState: () => RootState, api: ApplicationApi) => api.backendApi.getAllTags();
+}
+
 export function initializeMapElement(ref: HTMLDivElement) {
   return (dispatch: Dispatch, getState: () => RootState, api: ApplicationApi) => api.mapsApi.initializeMapElement(ref);
 }
