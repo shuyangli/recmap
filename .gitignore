@@ -2,6 +2,5 @@ node_modules/
 build/
 dist/
 typings/
-config.dev.sh
-config.prod.sh
+config.*.sh
 *.log
