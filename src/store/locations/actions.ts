@@ -2,7 +2,7 @@ import { TypedAction } from "redoodle";
 import { Dispatch } from "redux";
 
 import { ApplicationApi } from "../../api/ApplicationApi";
-import { Location } from "../../api/interfaces";
+import { Location, CreateLocationRequest } from "../../api/interfaces";
 import { FilterState, PositionWithMetadata } from "./types";
 import { RootState } from "../RootState";
 import { getCurrentPosition } from "../../api/MapsApi";
@@ -37,18 +37,18 @@ export function loadLocations() {
     });
 }
 
-export function createLocation(location: Location) {
+export function createLocation(request: CreateLocationRequest) {
   return (dispatch: Dispatch, getState: () => RootState, api: ApplicationApi) =>
-    api.backendApi.createLocation(location)
+    api.backendApi.createLocation(request)
     .then((loc) => {
       dispatch(AddLocation.create({ location: loc }));
       return loc;
     });
 }
 
-export function updateLocation(locationId: string, location: Location) {
+export function updateLocation(locationId: string, request: Partial<CreateLocationRequest>) {
   return (dispatch: Dispatch, getState: () => RootState, api: ApplicationApi) =>
-    api.backendApi.updateLocation(locationId, location)
+    api.backendApi.updateLocation(locationId, request)
     .then((loc) => {
       dispatch(AddLocation.create({ location: loc }));
       return loc;

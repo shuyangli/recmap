@@ -1,6 +1,6 @@
 import { ServerConfig } from "../config";
 import { BackendApi } from "./BackendApi";
-import { Location } from "./interfaces";
+import { Location, CreateLocationRequest, UserRecord } from "./interfaces";
 
 export class ExpressApi implements BackendApi {
   private host: string;
@@ -17,7 +17,7 @@ export class ExpressApi implements BackendApi {
     return `${this.host}${path}`;
   }
 
-  async createLocation(location: Location): Promise<Location> {
+  async createLocation(request: CreateLocationRequest): Promise<Location> {
     const authToken = await this.authTokenProvider();
     const locationResponse = await fetch(this.getPath("/locations"), {
       method: "post",
@@ -25,13 +25,13 @@ export class ExpressApi implements BackendApi {
         "Content-Type": "application/json",
         "authorization": `Bearer ${authToken}`,
       },
-      body: JSON.stringify(location),
+      body: JSON.stringify(request),
     }).then((response) => response.json());
 
     return locationResponse;
   }
 
-  async updateLocation(locationId: string, location: Location): Promise<Location> {
+  async updateLocation(locationId: string, request: CreateLocationRequest): Promise<Location> {
     const authToken = await this.authTokenProvider();
     const locationResponse = await fetch(this.getPath(`/locations/${locationId}`), {
       method: "post",
@@ -39,7 +39,7 @@ export class ExpressApi implements BackendApi {
         "Content-Type": "application/json",
         "authorization": `Bearer ${authToken}`,
       },
-      body: JSON.stringify(location),
+      body: JSON.stringify(request),
     }).then((response) => response.json());
 
     return locationResponse;
@@ -90,6 +90,17 @@ export class ExpressApi implements BackendApi {
     const authToken = await this.authTokenProvider();
     const uid = this.uidProvider();
     const adminResponse = await fetch(this.getPath(`/users/${uid}/is-admin`), {
+      headers: {
+        authorization: `Bearer ${authToken}`,
+      },
+    }).then((response) => response.json());
+    return adminResponse;
+  }
+
+  async getUserRecord(userId: string): Promise<UserRecord> {
+    const authToken = await this.authTokenProvider();
+    const uid = this.uidProvider();
+    const adminResponse = await fetch(this.getPath(`/users/${uid}`), {
       headers: {
         authorization: `Bearer ${authToken}`,
       },

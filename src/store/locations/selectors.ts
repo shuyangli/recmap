@@ -15,11 +15,11 @@ const locationListSelector = createSelector(
   (locations, currentPosition, filter) => {
     let sortedLocations = values(locations);
 
-    if (filter.priceRange.range != null) {
+    if (filter.priceRange.foodPrice != null) {
       sortedLocations = sortedLocations.filter((loc) => {
-        return loc.priceRange != null && (
-          loc.priceRange === filter.priceRange.range || (
-            filter.priceRange.includeLower && loc.priceRange < filter.priceRange.range
+        return loc.computedFoodPrice != null && (
+          loc.computedFoodPrice === filter.priceRange.foodPrice || (
+            filter.priceRange.includeLower && loc.computedFoodPrice < filter.priceRange.foodPrice
           )
         );
       });
@@ -27,9 +27,9 @@ const locationListSelector = createSelector(
 
     if (filter.rating.rating != null) {
       sortedLocations = sortedLocations.filter((loc) => {
-        return loc.rating != null && (
-          loc.rating === filter.rating.rating || (
-            filter.rating.includeHigher && loc.rating > filter.rating.rating
+        return loc.computedRating != null && (
+          loc.computedRating === filter.rating.rating || (
+            filter.rating.includeHigher && loc.computedRating > filter.rating.rating
           )
         );
       });

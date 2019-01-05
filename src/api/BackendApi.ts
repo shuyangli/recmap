@@ -1,11 +1,12 @@
-import { Location } from "./interfaces";
+import { Location, CreateLocationRequest, UserRecord } from "./interfaces";
 
 export interface BackendApi {
-  createLocation(location: Location): Promise<Location>;
-  updateLocation(locationId: string, location: Location): Promise<Location>;
+  createLocation(request: CreateLocationRequest): Promise<Location>;
+  updateLocation(locationId: string, request: Partial<CreateLocationRequest>): Promise<Location>;
   deleteLocation(locationId: string): Promise<void>;
   getLocation(locationId: string): Promise<Location>;
   getAllLocations(): Promise<{ [locationId: string]: Location }>;
   getAllTags(): Promise<string[]>;
   isAdmin(): Promise<boolean>;
+  getUserRecord(userId: string): Promise<UserRecord>;
 }

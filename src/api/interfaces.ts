@@ -5,28 +5,64 @@ export enum Rating {
   GREAT = 2,
 }
 
-export enum PriceRange {
-  ZERO_TO_TEN = 10,
-  TEN_TO_TWENTY_FIVE = 25,
-  TWENTY_FIVE_TO_FIFTY = 50,
-  OVER_FIFTY = 51,
+export enum FoodPrice {
+  ZERO_TO_FIFTEEN = 15,
+  FIFTEEN_TO_THIRTY = 30,
+  THIRTY_TO_SIXTY = 60,
+  OVER_SIXTY = 61,
+}
+
+export enum DrinkPrice {
+  ZERO_TO_EIGHT = 8,
+  EIGHT_TO_FIFTEEN = 15,
+  OVER_FIFTEEN = 16,
 }
 
 export interface LocationReview {
+  rating: Rating;
+  foodPrice?: FoodPrice;
+  drinkPrice?: DrinkPrice;
   notes?: string;
   order?: string;
   avoid?: string;
 }
 
-export interface Location {
-  id?: string;
+export interface PersistedLocation {
+  id: string;
   name: string;
   address?: string;
+  googlePlaceId?: string;
   latitude: number;
   longitude: number;
-  notes?: LocationReview;
+  reviews: {
+    [uid: string]: LocationReview;
+  };
   tags: string[];
-  rating?: Rating;
-  priceRange?: PriceRange;
+}
+
+export interface Location extends PersistedLocation {
+  computedFoodPrice?: FoodPrice;
+  computedDrinkPrice?: DrinkPrice;
+  computedRating?: Rating;
+}
+
+export interface CreateLocationRequest {
+  name: string;
+  address?: string;
   googlePlaceId?: string;
+  latitude: number;
+  longitude: number;
+  tags: string[];
+  review?: LocationReview;
+}
+
+export interface UserRoles {
+  [role: string]: boolean;
+}
+
+export interface UserRecord {
+  uid: string;
+  displayName: string;
+  photoURL: string;
+  disabled: boolean;
 }

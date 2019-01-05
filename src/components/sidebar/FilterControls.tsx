@@ -7,8 +7,8 @@ import { Dispatch } from "redux";
 import { UpdateFilter } from "../../store/locations/actions";
 import { FilterState } from "../../store/locations/types";
 import { RootState } from "../../store/RootState";
-import { PriceRangeSelect } from "../shared/PriceRangeSelect";
-import { PriceRange, Rating } from "../../api/interfaces";
+import { FoodPriceSelect } from "../shared/FoodPriceSelect";
+import { FoodPrice, Rating } from "../../api/interfaces";
 import { RatingSelect } from "../shared/RatingSelect";
 
 import "./FilterControls.less";
@@ -38,9 +38,9 @@ class FilterControls extends React.PureComponent<ConnectedProps & DispatchProps,
           <Icon className="filter-control-icon" icon="filter" />
           <div>
             <div className="filter-control-sub-group">
-              <PriceRangeSelect
-                priceRange={this.props.filter.priceRange.range}
-                onSelect={this.handlePriceRangeChange}
+              <FoodPriceSelect
+                priceRange={this.props.filter.priceRange.foodPrice}
+                onSelect={this.handleFoodPriceChange}
                 clearable={true}
               />
               {this.maybeRenderPriceRangeCheckbox()}
@@ -64,10 +64,10 @@ class FilterControls extends React.PureComponent<ConnectedProps & DispatchProps,
     this.props.onFilterChange({ ...this.props.filter, searchTerm: event.target.value });
   }
 
-  private handlePriceRangeChange = (range: PriceRange | undefined) => {
+  private handleFoodPriceChange = (foodPrice: FoodPrice | undefined) => {
     this.props.onFilterChange({ ...this.props.filter, priceRange: {
       ...this.props.filter.priceRange,
-      range,
+      foodPrice,
     }});
   }
 
@@ -93,7 +93,7 @@ class FilterControls extends React.PureComponent<ConnectedProps & DispatchProps,
   }
 
   private maybeRenderPriceRangeCheckbox() {
-    if (this.props.filter.priceRange.range != null) {
+    if (this.props.filter.priceRange.foodPrice != null) {
       return (
         <Checkbox
           className="filter-control-bounds-checkbox"

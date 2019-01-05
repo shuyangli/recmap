@@ -1,36 +1,37 @@
-import { Button, Classes, Intent } from "@blueprintjs/core";
-import * as classNames from "classnames";
+import { Button, Intent } from "@blueprintjs/core";
+import * as firebase from "firebase";
 import * as React from "react";
 import { connect } from "react-redux";
-
-import { Location, Rating, PriceRange, LocationReview } from "../../api/interfaces";
+import { Location, CreateLocationRequest } from "../../api/interfaces";
 import { ClosePanel, ToggleDetailPanel, ToggleEditPanel } from "../../store/actionPanel/actions";
 import {
   createLocation,
   updateLocation,
   deleteLocation,
-  getMapElement,
 } from "../../store/locations/actions";
 import { TypedDispatch } from "../../store/TypedDispatch";
-import { RatingSelect } from "../shared/RatingSelect";
-import { PriceRangeSelect } from "../shared/PriceRangeSelect";
+import {
+  LocationDetailEditorState,
+  ConnectedLocationDetailEditor,
+  LocationDetailEditor,
+} from "../editors/LocationDetailEditor";
+import { ReviewEditorState, ReviewEditor } from "../editors/ReviewEditor";
 
 import "./EditLocationPanel.less";
-import { ConnectedTagsMultiSelect } from "../shared/TagsMultiSelect";
 
 interface OwnProps {
-  initialLocation?: Location;
+  location?: Location;
 }
 
 interface DispatchProps {
   onCancel: (locationId?: string) => void;
-  onSave: (location: Location) => void;
+  onSave: (request: CreateLocationRequest, locationId?: string) => void;
   onDelete: (locationId: string) => void;
-  getMapElement: () => google.maps.Map;
 }
 
 interface State {
-  location: Location;
+  locationDetail: LocationDetailEditorState;
+  review: ReviewEditorState;
   isSaving: boolean;
 }
 
@@ -39,207 +40,64 @@ type EditLocationPanelProps = OwnProps & DispatchProps;
 class EditLocationPanel extends React.PureComponent<EditLocationPanelProps, State> {
   constructor(props: EditLocationPanelProps) {
     super(props);
+    const currentUserId = firebase.auth().currentUser ? firebase.auth().currentUser.uid : null;
+    const userReview = (currentUserId && props.location) ? props.location.reviews[currentUserId] : null;
+
     this.state = {
-      location: props.initialLocation || {
-        name: "",
-        address: "",
-        latitude: 0,
-        longitude: 0,
-        notes: {},
-        tags: [],
-      },
+      locationDetail: LocationDetailEditor.convertLocationToEditorState(props.location),
+      review: ReviewEditor.convertReviewToEditorState(userReview),
       isSaving: false,
     };
-    if (this.state.location.notes == null) {
-      this.state.location.notes = {};
-    }
-  }
-
-  private nameInput: HTMLInputElement;
-  private nameAutocomplete: google.maps.places.Autocomplete;
-
-  private setupNameInput() {
-    this.nameAutocomplete = new google.maps.places.Autocomplete(this.nameInput, {
-      types: ["establishment"],
-      fields: [
-        "address_component",
-        "adr_address",
-        "alt_id",
-        "formatted_address",
-        "geometry",
-        "id",
-        "name",
-        "permanently_closed",
-        "place_id",
-        "scope",
-        "type",
-        "url",
-      ],
-    });
-    this.nameAutocomplete.addListener("place_changed", () => {
-      const place = this.nameAutocomplete.getPlace();
-      const name = place.name;
-      if (place.place_id) {
-        const locationUpdates: Partial<Location> = {
-          name,
-          address: place.formatted_address,
-          latitude: place.geometry.location.lat(),
-          longitude: place.geometry.location.lng(),
-          googlePlaceId: place.place_id,
-        };
-        this.setState({ location: { ...this.state.location, ...locationUpdates } });
-      } else {
-        this.setState({ location: { ...this.state.location, name }});
-      }
-    });
-  }
-
-  componentDidMount() {
-    this.setupNameInput();
-
-    // Bind autocomplete bias to map bounds
-    const mapElement = this.props.getMapElement();
-    this.nameAutocomplete.bindTo("bounds", mapElement);
-  }
-
-  componentWillUnmount() {
-    this.nameAutocomplete.unbindAll();
   }
 
   render() {
     return (
       <div className="edit-location-panel">
-        <div className="location-content-wrapper">
-
-          <div className="edit-location-panel-entry">
-            <div className="edit-location-panel-heading">Name</div>
-            <input
-              className={classNames(Classes.INPUT, Classes.FILL, "location-name")}
-              value={this.state.location.name}
-              ref={(element) => this.nameInput = element}
-              placeholder="Name"
-              onChange={this.onNameChange}
-            />
-          </div>
-
-          <div className="edit-location-panel-entry">
-            <div className="edit-location-panel-heading">Address</div>
-            <input
-              className={classNames(Classes.INPUT, Classes.FILL, "location-address")}
-              value={this.state.location.address}
-              placeholder="Address"
-              onChange={this.onAddressChange}
-            />
-          </div>
-
-          <div className="edit-location-panel-entry">
-            <div className="edit-location-panel-heading">Tags</div>
-            <ConnectedTagsMultiSelect
-              tags={this.state.location.tags}
-              onSelect={this.onTagsChange}
-            />
-          </div>
-
-          <div className="edit-location-panel-entry inline-entry">
-            <div className="edit-location-panel-heading">Rating</div>
-            <RatingSelect rating={this.state.location.rating} onSelect={this.onRatingChange} />
-          </div>
-
-          <div className="edit-location-panel-entry inline-entry">
-            <div className="edit-location-panel-heading">Price Range</div>
-            <PriceRangeSelect
-              priceRange={this.state.location.priceRange}
-              onSelect={this.onPriceRangeChange}
-              clearable={true}
-            />
-          </div>
-
-          <div className="edit-location-panel-entry">
-            <div className="edit-location-panel-heading">Notes</div>
-            <textarea
-              className={classNames(Classes.INPUT, Classes.FILL, "location-notes")}
-              value={this.state.location.notes.notes}
-              placeholder="Notes"
-              onChange={this.onNotesChange}
-            />
-          </div>
-
-          <div className="edit-location-panel-entry">
-            <div className="edit-location-panel-heading">What to Order</div>
-            <textarea
-              className={classNames(Classes.INPUT, Classes.FILL, "location-to-order")}
-              value={this.state.location.notes.order}
-              placeholder="What to order at this place"
-              onChange={this.onToOrderChange}
-            />
-          </div>
-
-          <div className="edit-location-panel-entry">
-            <div className="edit-location-panel-heading">What to Avoid</div>
-            <textarea
-              className={classNames(Classes.INPUT, Classes.FILL, "location-to-avoid")}
-              value={this.state.location.notes.avoid}
-              placeholder="What to avoid at this place"
-              onChange={this.onToAvoidChange}
-            />
-          </div>
-        </div>
+        <ConnectedLocationDetailEditor
+          editorState={this.state.locationDetail}
+          onStateUpdate={this.handleLocationStateUpdate}
+        />
+        <ReviewEditor
+          editorState={this.state.review}
+          onStateUpdate={this.handleReviewStateUpdate}
+        />
 
         <div className="edit-location-panel-edit-controls">
           <Button text="Cancel" onClick={this.cancelEdit} />
           <div className="right-group">
-            {this.state.location.id && <Button text="Delete" intent={Intent.DANGER} onClick={this.deleteLocation} />}
-            <Button text="Save" intent={Intent.SUCCESS} onClick={this.saveEdit} />
+            {this.props.location && <Button text="Delete" intent={Intent.DANGER} onClick={this.deleteLocation} />}
+            <Button text="Save" intent={Intent.SUCCESS} onClick={this.saveEdit} disabled={!this.canSaveLocation()} />
           </div>
         </div>
       </div>
     );
   }
 
-  private updateLocation(partial: Partial<Location>) {
-    this.setState({
-      location: { ...this.state.location,  ...partial },
-    });
+  private handleLocationStateUpdate = (newState: LocationDetailEditorState) => {
+    this.setState({ locationDetail: newState });
+  }
+  private handleReviewStateUpdate = (newState: ReviewEditorState) => {
+    this.setState({ review: newState });
   }
 
-  private onNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    this.updateLocation({ name: event.target.value });
+  private canSaveLocation = () => {
+    return LocationDetailEditor.isEditorStateComplete(this.state.locationDetail);
   }
 
-  private onAddressChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    this.updateLocation({ address: event.target.value });
+  private cancelEdit = () => this.props.onCancel(this.props.location ? this.props.location.id : null);
+  private saveEdit = () => {
+    const location = LocationDetailEditor.convertEditorStateToRequest(this.state.locationDetail);
+    if (ReviewEditor.isEditorStateComplete(this.state.review)) {
+      const review = ReviewEditor.convertEditorStateToReview(this.state.review);
+      location.review = review;
+    }
+    this.props.onSave(location, this.props.location ? this.props.location.id : null);
   }
-
-  private onTagsChange = (tags: string[]) => {
-    this.updateLocation({ tags });
+  private deleteLocation = () => {
+    if (this.props.location) {
+      this.props.onDelete(this.props.location.id);
+    }
   }
-
-  private onRatingChange = (rating: Rating | undefined) => {
-    this.updateLocation({ rating });
-  }
-
-  private onPriceRangeChange = (priceRange: PriceRange | undefined) => {
-    this.updateLocation({ priceRange });
-  }
-
-  private updateReview = (change: Partial<LocationReview>) => {
-    this.updateLocation({
-      notes: { ...this.state.location.notes, ...change },
-    });
-  }
-  private onNotesChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-    this.updateReview({ notes: event.target.value });
-  }
-  private onToOrderChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-    this.updateReview({ order: event.target.value });
-  }
-  private onToAvoidChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-    this.updateReview({ avoid: event.target.value });
-  }
-
-  private cancelEdit = () => this.props.onCancel(this.state.location.id);
-  private saveEdit = () => this.props.onSave(this.state.location);
-  private deleteLocation = () => this.props.onDelete(this.state.location.id);
 }
 
 const mapDispatchToProps = (dispatch: TypedDispatch): DispatchProps => ({
@@ -248,12 +106,12 @@ const mapDispatchToProps = (dispatch: TypedDispatch): DispatchProps => ({
       ? ToggleDetailPanel.create({ locationId })
       : ToggleEditPanel.create({})),
 
-  onSave: (location: Location) => {
+  onSave: (request: CreateLocationRequest, locationId?: string) => {
     let promise: Promise<Location>;
-    if (location.id == null) {
-      promise = dispatch(createLocation(location));
+    if (locationId == null) {
+      promise = dispatch(createLocation(request));
     } else {
-      promise = dispatch(updateLocation(location.id, location));
+      promise = dispatch(updateLocation(locationId, request));
     }
 
     return promise.then((loc) => dispatch(ToggleDetailPanel.create({ locationId: loc.id })));
@@ -262,8 +120,6 @@ const mapDispatchToProps = (dispatch: TypedDispatch): DispatchProps => ({
   onDelete: (locationId: string) =>
     dispatch(deleteLocation(locationId))
     .then(() => dispatch(ClosePanel.create())),
-
-  getMapElement: () => dispatch(getMapElement()),
 });
 
 export const ConnectedEditLocationPanel: React.ComponentClass<OwnProps> =

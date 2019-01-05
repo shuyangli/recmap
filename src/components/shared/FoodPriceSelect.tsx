@@ -2,52 +2,52 @@ import { Classes, MenuItem, Button, AnchorButton } from "@blueprintjs/core";
 import { Select, ItemRenderer } from "@blueprintjs/select";
 import * as React from "react";
 import * as classNames from "classnames";
-import { PriceRange } from "../../api/interfaces";
-import { getPriceRangeText } from "./getPriceRangeText";
+import { FoodPrice } from "../../api/interfaces";
+import { getFoodPriceText } from "./getFoodPriceText";
 
-import "./PriceRangeSelect.less";
+import "./FoodPriceSelect.less";
 
-const RawPriceRangeSelect = Select.ofType<PriceRange>();
+const RawFoodPriceSelect = Select.ofType<FoodPrice>();
 
-const allowedPriceRanges = [
-  PriceRange.ZERO_TO_TEN,
-  PriceRange.TEN_TO_TWENTY_FIVE,
-  PriceRange.TWENTY_FIVE_TO_FIFTY,
-  PriceRange.OVER_FIFTY,
+const allowedFoodPrices = [
+  FoodPrice.ZERO_TO_FIFTEEN,
+  FoodPrice.FIFTEEN_TO_THIRTY,
+  FoodPrice.THIRTY_TO_SIXTY,
+  FoodPrice.OVER_SIXTY,
 ];
 
-export interface PriceRangeSelectProps {
-  priceRange?: PriceRange;
+export interface FoodPriceSelectProps {
+  priceRange?: FoodPrice;
   clearable?: boolean;
-  onSelect: (priceRange: PriceRange | undefined) => void;
+  onSelect: (priceRange: FoodPrice | undefined) => void;
 }
 
-export class PriceRangeSelect extends React.PureComponent<PriceRangeSelectProps, never> {
+export class FoodPriceSelect extends React.PureComponent<FoodPriceSelectProps, never> {
   render() {
     return (
-      <RawPriceRangeSelect
+      <RawFoodPriceSelect
         className={classNames("price-range-select", Classes.FILL)}
-        items={allowedPriceRanges}
+        items={allowedFoodPrices}
         filterable={false}
         itemRenderer={this.renderItem}
         noResults={"No results"}
         onItemSelect={this.props.onSelect}
       >
         <AnchorButton className="price-range-select-outer-button">
-          {getPriceRangeText(this.props.priceRange) || "Select price range"}
+          {getFoodPriceText(this.props.priceRange) || "Select price range"}
           {this.maybeRenderClearButton()}
         </AnchorButton>
-      </RawPriceRangeSelect>
+      </RawFoodPriceSelect>
     );
   }
 
-  private renderItem: ItemRenderer<PriceRange> = (priceRange, { modifiers, handleClick }) => {
+  private renderItem: ItemRenderer<FoodPrice> = (priceRange, { modifiers, handleClick }) => {
     return (
         <MenuItem
             key={`${priceRange}`}
             active={modifiers.active}
             onClick={handleClick}
-            text={getPriceRangeText(priceRange)}
+            text={getFoodPriceText(priceRange)}
             shouldDismissPopover={false}
         />
     );

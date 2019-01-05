@@ -1,9 +1,9 @@
-import { Location, PriceRange, Rating } from "../../api/interfaces";
+import { Location, FoodPrice, Rating } from "../../api/interfaces";
 
 export interface FilterState {
   searchTerm: string;
   priceRange: {
-    range: PriceRange | undefined;
+    foodPrice: FoodPrice | undefined;
     includeLower: boolean;
   };
   rating: {
@@ -16,7 +16,7 @@ export interface FilterState {
 export const EMPTY_FILTER_STATE: FilterState = {
   searchTerm: "",
   priceRange: {
-    range: undefined,
+    foodPrice: undefined,
     includeLower: false,
   },
   rating: {

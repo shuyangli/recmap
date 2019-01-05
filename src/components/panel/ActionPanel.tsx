@@ -47,9 +47,7 @@ class ActionPanel extends React.PureComponent<ConnectedProps & DispatchProps, vo
       case ActionPanelType.EDIT:
         return (
           <ConnectedEditLocationPanel
-            initialLocation={this.props.locationId
-            ? this.props.locations[this.props.locationId]
-            : undefined}
+            location={this.props.locationId ? this.props.locations[this.props.locationId] : undefined}
           />
         );
       default:
