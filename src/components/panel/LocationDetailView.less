@@ -1,0 +1,42 @@
+@import (reference) "~@blueprintjs/core/lib/less/variables.less";
+
+.location-detail-view {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 10px 0;
+
+  .location-name {
+    font-weight: 800;
+    margin-bottom: 0;
+    margin-right: 5px;
+  }
+
+  .location-address {
+    color: @pt-text-color-muted;
+    font-size: 12px;
+  }
+
+  .location-detail-view-buttons {
+    display: flex;
+    justify-content: flex-end;
+    min-width: 24px * 3;
+  }
+}
+
+.location-entry {
+  padding-left: 20px;
+  text-indent: -20px;
+  margin-bottom: 12px;
+
+  &.aligned {
+    text-indent: 0;
+    padding-left: 0;
+    display: flex;
+  }
+
+  &.name-and-link {
+    justify-content: space-between;
+    align-items: center;
+  }
+}

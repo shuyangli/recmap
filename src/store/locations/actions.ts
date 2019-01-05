@@ -67,6 +67,12 @@ export function setReview(locationId: string, review: LocationReview) {
     .then((loc) => dispatch(SetLocation.create({ location: loc })));
 }
 
+export function deleteReview(locationId: string) {
+  return (dispatch: Dispatch, getState: () => RootState, api: ApplicationApi) =>
+    api.backendApi.deleteReview(locationId)
+    .then((loc) => dispatch(SetLocation.create({ location: loc })));
+}
+
 export function centerMapAroundLocation(locationId: string) {
   return (dispatch: Dispatch, getState: () => RootState, api: ApplicationApi) => {
     const location = getState().location.locations[locationId];

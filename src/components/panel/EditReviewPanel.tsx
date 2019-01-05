@@ -2,20 +2,22 @@ import { Button, Intent } from "@blueprintjs/core";
 import * as firebase from "firebase";
 import * as React from "react";
 import { connect } from "react-redux";
-import { LocationReview } from "../../api/interfaces";
+import { LocationReview, Location } from "../../api/interfaces";
 import { ToggleDetailPanel } from "../../store/actionPanel/actions";
 import { TypedDispatch } from "../../store/TypedDispatch";
 import { ReviewEditorState, ReviewEditor } from "../editors/ReviewEditor";
 
 import "./EditReviewPanel.less";
 import { RootState } from "../../store/RootState";
-import { setReview } from "../../store/locations/actions";
+import { setReview, deleteReview } from "../../store/locations/actions";
+import { LocationDetailView } from "./LocationDetailView";
 
 interface OwnProps {
   locationId: string;
 }
 
 interface ConnectedProps {
+  location: Location;
   existingReview?: LocationReview;
 }
 
@@ -44,6 +46,7 @@ class EditReviewPanel extends React.PureComponent<EditReviewPanelProps, State> {
   render() {
     return (
       <div className="edit-review-panel">
+        <LocationDetailView location={this.props.location} />
         <ReviewEditor
           editorState={this.state.review}
           onStateUpdate={this.handleReviewStateUpdate}
@@ -73,12 +76,13 @@ class EditReviewPanel extends React.PureComponent<EditReviewPanelProps, State> {
   }
 }
 
-const mapStateToProps = (state: RootState, ownProps: OwnProps) => {
+const mapStateToProps = (state: RootState, ownProps: OwnProps): ConnectedProps => {
   const currentUserId = firebase.auth().currentUser ? firebase.auth().currentUser.uid : null;
   const location = state.location.locations[ownProps.locationId];
   const userReview = location && currentUserId ? location.reviews[currentUserId] : null;
   return {
     existingReview: userReview,
+    location,
   };
 };
 
@@ -88,7 +92,9 @@ const mapDispatchToProps = (dispatch: TypedDispatch, ownProps: OwnProps): Dispat
     dispatch(setReview(ownProps.locationId, review))
     .then(() => dispatch(ToggleDetailPanel.create({ locationId: ownProps.locationId })));
   },
-  onDelete: () => dispatch(ToggleDetailPanel.create({ locationId: ownProps.locationId })),
+  onDelete: () =>
+    dispatch(deleteReview(ownProps.locationId))
+    .then(() => dispatch(ToggleDetailPanel.create({ locationId: ownProps.locationId }))),
 });
 
 export const ConnectedEditReviewPanel: React.ComponentClass<OwnProps> =

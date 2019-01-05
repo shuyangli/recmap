@@ -68,6 +68,17 @@ export class ExpressApi implements BackendApi {
     }).then((response) => response.json());
   }
 
+  async deleteReview(locationId: string) {
+    const authToken = await this.authTokenProvider();
+    return fetch(this.getPath(`/locations/${locationId}/review`), {
+      method: "delete",
+      headers: {
+        "Content-Type": "application/json",
+        "authorization": `Bearer ${authToken}`,
+      },
+    }).then((response) => response.json());
+  }
+
   async getLocation(locationId: string) {
     const authToken = await this.authTokenProvider();
     const locationResponse = await fetch(this.getPath(`/locations/${locationId}`), {

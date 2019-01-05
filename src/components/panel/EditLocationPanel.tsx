@@ -1,51 +1,51 @@
 import { Button, Intent } from "@blueprintjs/core";
-import * as firebase from "firebase";
 import * as React from "react";
 import { connect } from "react-redux";
 import { Location, CreateLocationRequest } from "../../api/interfaces";
-import { ClosePanel, ToggleDetailPanel, ToggleEditPanel } from "../../store/actionPanel/actions";
+import { ClosePanel, ToggleDetailPanel, ToggleEditPanel, OpenEditReviewPanel } from "../../store/actionPanel/actions";
 import {
   createLocation,
   updateLocation,
   deleteLocation,
 } from "../../store/locations/actions";
 import { TypedDispatch } from "../../store/TypedDispatch";
+import { RootState } from "../../store/RootState";
 import {
   LocationDetailEditorState,
   ConnectedLocationDetailEditor,
   LocationDetailEditor,
 } from "../editors/LocationDetailEditor";
-import { ReviewEditorState, ReviewEditor } from "../editors/ReviewEditor";
 
 import "./EditLocationPanel.less";
 
 interface OwnProps {
+  locationId?: string;
+}
+
+interface ConnectedProps {
   location?: Location;
 }
 
 interface DispatchProps {
-  onCancel: (locationId?: string) => void;
-  onSave: (request: CreateLocationRequest, locationId?: string) => void;
-  onDelete: (locationId: string) => void;
+  onCancel: () => void;
+  onSave: (request: CreateLocationRequest) => Promise<Location>;
+  onDelete: () => void;
+  openDetailPanel: (locationId: string) => void;
+  openEditReviewPanel: (locationId: string) => void;
 }
 
 interface State {
   locationDetail: LocationDetailEditorState;
-  review: ReviewEditorState;
   isSaving: boolean;
 }
 
-type EditLocationPanelProps = OwnProps & DispatchProps;
+type EditLocationPanelProps = OwnProps & ConnectedProps & DispatchProps;
 
 class EditLocationPanel extends React.PureComponent<EditLocationPanelProps, State> {
   constructor(props: EditLocationPanelProps) {
     super(props);
-    const currentUserId = firebase.auth().currentUser ? firebase.auth().currentUser.uid : null;
-    const userReview = (currentUserId && props.location) ? props.location.reviews[currentUserId] : null;
-
     this.state = {
       locationDetail: LocationDetailEditor.convertLocationToEditorState(props.location),
-      review: ReviewEditor.convertReviewToEditorState(userReview),
       isSaving: false,
     };
   }
@@ -57,16 +57,19 @@ class EditLocationPanel extends React.PureComponent<EditLocationPanelProps, Stat
           editorState={this.state.locationDetail}
           onStateUpdate={this.handleLocationStateUpdate}
         />
-        <ReviewEditor
-          editorState={this.state.review}
-          onStateUpdate={this.handleReviewStateUpdate}
-        />
-
         <div className="edit-location-panel-edit-controls">
-          <Button text="Cancel" onClick={this.cancelEdit} />
+          <Button text="Cancel" onClick={this.props.onCancel} />
           <div className="right-group">
-            {this.props.location && <Button text="Delete" intent={Intent.DANGER} onClick={this.deleteLocation} />}
+            {this.props.locationId && <Button text="Delete" intent={Intent.DANGER} onClick={this.props.onDelete} />}
             <Button text="Save" intent={Intent.SUCCESS} onClick={this.saveEdit} disabled={!this.canSaveLocation()} />
+            {!this.props.locationId && (
+              <Button
+                text="Save and Add Review"
+                intent={Intent.SUCCESS}
+                onClick={this.saveEditAndAddReview}
+                disabled={!this.canSaveLocation()}
+              />
+            )}
           </div>
         </div>
       </div>
@@ -76,51 +79,53 @@ class EditLocationPanel extends React.PureComponent<EditLocationPanelProps, Stat
   private handleLocationStateUpdate = (newState: LocationDetailEditorState) => {
     this.setState({ locationDetail: newState });
   }
-  private handleReviewStateUpdate = (newState: ReviewEditorState) => {
-    this.setState({ review: newState });
-  }
 
   private canSaveLocation = () => {
     return LocationDetailEditor.isEditorStateComplete(this.state.locationDetail);
   }
 
-  private cancelEdit = () => this.props.onCancel(this.props.location ? this.props.location.id : null);
-  private saveEdit = () => {
+  private saveEdit = async () => {
     const location = LocationDetailEditor.convertEditorStateToRequest(this.state.locationDetail);
-    if (ReviewEditor.isEditorStateComplete(this.state.review)) {
-      const review = ReviewEditor.convertEditorStateToReview(this.state.review);
-      location.review = review;
-    }
-    this.props.onSave(location, this.props.location ? this.props.location.id : null);
+    const savedLocation = await this.props.onSave(location);
+    this.props.openDetailPanel(savedLocation.id);
   }
-  private deleteLocation = () => {
-    if (this.props.location) {
-      this.props.onDelete(this.props.location.id);
-    }
+
+  private saveEditAndAddReview = async () => {
+    const location = LocationDetailEditor.convertEditorStateToRequest(this.state.locationDetail);
+    const savedLocation = await this.props.onSave(location);
+    this.props.openEditReviewPanel(savedLocation.id);
   }
 }
 
-const mapDispatchToProps = (dispatch: TypedDispatch): DispatchProps => ({
-  onCancel: (locationId?: string) =>
-    dispatch(locationId
-      ? ToggleDetailPanel.create({ locationId })
+function mapStateToProps(state: RootState, ownProps: OwnProps): ConnectedProps {
+  return {
+    location: ownProps.locationId ? state.location.locations[ownProps.locationId] : undefined,
+  };
+}
+
+const mapDispatchToProps = (dispatch: TypedDispatch, ownProps: OwnProps): DispatchProps => ({
+  onCancel: () =>
+    dispatch(ownProps.locationId
+      ? ToggleDetailPanel.create({ locationId: ownProps.locationId })
       : ToggleEditPanel.create({})),
 
-  onSave: (request: CreateLocationRequest, locationId?: string) => {
-    let promise: Promise<Location>;
-    if (locationId == null) {
-      promise = dispatch(createLocation(request));
+  onSave: (request: CreateLocationRequest) => {
+    if (ownProps.locationId == null) {
+      return dispatch(createLocation(request));
     } else {
-      promise = dispatch(updateLocation(locationId, request));
+      return dispatch(updateLocation(ownProps.locationId, request));
     }
-
-    return promise.then((loc) => dispatch(ToggleDetailPanel.create({ locationId: loc.id })));
   },
 
-  onDelete: (locationId: string) =>
-    dispatch(deleteLocation(locationId))
-    .then(() => dispatch(ClosePanel.create())),
+  onDelete: () => {
+    if (ownProps.locationId) {
+      dispatch(deleteLocation(ownProps.locationId)).then(() => dispatch(ClosePanel.create()));
+    }
+  },
+
+  openDetailPanel: (locationId: string) => dispatch(ToggleDetailPanel.create({ locationId })),
+  openEditReviewPanel: (locationId: string) => dispatch(OpenEditReviewPanel.create({ locationId })),
 });
 
 export const ConnectedEditLocationPanel: React.ComponentClass<OwnProps> =
-  connect(null, mapDispatchToProps)(EditLocationPanel);
+  connect(mapStateToProps, mapDispatchToProps)(EditLocationPanel);

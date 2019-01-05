@@ -1,23 +1,20 @@
 import * as React from "react";
 import { connect } from "react-redux";
 import { Dispatch } from "redux";
-
-import { Location } from "../../api/interfaces";
 import { ClosePanel } from "../../store/actionPanel/actions";
 import { ActionPanelType } from "../../store/actionPanel/types";
 import { getCurrentLocationId } from "../../store/actionPanel/selectors";
 import { RootState } from "../../store/RootState";
 import { ConnectedEditLocationPanel } from "./EditLocationPanel";
+import { ConnectedEditReviewPanel } from "./EditReviewPanel";
 import { ConnectedLocationDetailsPanel } from "./LocationDetailsPanel";
 
 import "./ActionPanel.less";
-import { ConnectedEditReviewPanel } from "./EditReviewPanel";
 
 interface ConnectedProps {
   isVisible: boolean;
   type: ActionPanelType;
   locationId?: string;
-  locations: { [id: string]: Location };
 }
 
 interface DispatchProps {
@@ -42,11 +39,7 @@ class ActionPanel extends React.PureComponent<ConnectedProps & DispatchProps, vo
       case ActionPanelType.DETAIL:
         return <ConnectedLocationDetailsPanel locationId={this.props.locationId} />;
       case ActionPanelType.EDIT_LOCATION:
-        return (
-          <ConnectedEditLocationPanel
-            location={this.props.locationId ? this.props.locations[this.props.locationId] : undefined}
-          />
-        );
+        return <ConnectedEditLocationPanel locationId={this.props.locationId} />;
       case ActionPanelType.EDIT_REVIEW:
         if (this.props.locationId == null) {
           throw new Error("Cannot edit review without specifying a location");
@@ -62,7 +55,6 @@ const mapStateToProps = (state: RootState): ConnectedProps => ({
   isVisible: state.actionPanel.isVisible,
   type: state.actionPanel.type,
   locationId: getCurrentLocationId(state),
-  locations: state.location.locations,
 });
 
 const mapDispatchToProps = (dispatch: Dispatch): DispatchProps => ({

@@ -63,7 +63,7 @@ class LocationReviewView extends React.PureComponent<LocationReviewProps, never>
   private maybeRenderEntry(heading: string, notes?: React.ReactNode) {
     return notes && (
       <div className="location-entry">
-        <span className="location-entry-heading">{heading}</span>
+        <span className="location-review-heading">{heading}</span>
         <span className="notes">{notes}</span>
       </div>
     );
