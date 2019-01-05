@@ -25,7 +25,11 @@ class LocationItem extends React.PureComponent<OwnProps & DispatchProps, {}> {
     return (
       <div className="location-item" onClick={this.openDetailsPanel}>
         <H5 className="location-name">{location.name}</H5>
-        <RatingAndPrice location={location} />
+        <RatingAndPrice
+          rating={location.computedRating}
+          foodPrice={location.computedFoodPrice}
+          drinkPrice={location.computedDrinkPrice}
+        />
         <LocationTags tags={location.tags} showNumberOfTags={2} />
       </div>
     );

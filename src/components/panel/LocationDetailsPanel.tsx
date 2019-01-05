@@ -2,15 +2,14 @@ import { H2, AnchorButton, Button, Tooltip } from "@blueprintjs/core";
 import { map } from "lodash-es";
 import * as React from "react";
 import { connect } from "react-redux";
-
-import { RatingAndPrice } from "../shared";
-import { Location, LocationReview } from "../../api/interfaces";
+import { Location } from "../../api/interfaces";
 import { LocationTags } from "../shared";
 import { ToggleEditPanel, ClosePanel } from "../../store/actionPanel/actions";
 import { TypedDispatch } from "../../store/TypedDispatch";
 import { getGoogleMapsUrl } from "../../store/locations/actions";
 import { RootState } from "../../store/RootState";
 import { isAdminSelector } from "../../store/user/selectors";
+import { ConnectedLocationReviewView } from "./LocationReviewView";
 
 import "./LocationDetailsPanel.less";
 
@@ -75,23 +74,12 @@ class LocationDetailsPanel extends React.PureComponent<LocationDetailsPanelProps
           </div>
         </div>
         <div className="location-entry location-address">{location.address}</div>
-
-        <div className="location-entry aligned">
-          <RatingAndPrice location={location} />
-        </div>
         <div className="location-entry aligned">
           <LocationTags tags={location.tags} />
         </div>
-        {map(location.reviews, (review, uid) => this.renderReview(review, uid))}
-      </div>
-    );
-  }
-
-  private maybeRenderNotes(heading: string, notes?: string) {
-    return notes && (
-      <div className="location-entry">
-        <span className="location-entry-heading">{heading}</span>
-        <span className="notes">{notes}</span>
+        {map(location.reviews, (review, uid) => (
+          <ConnectedLocationReviewView key={uid} review={review} uid={uid} />
+        ))}
       </div>
     );
   }
@@ -105,14 +93,6 @@ class LocationDetailsPanel extends React.PureComponent<LocationDetailsPanelProps
       this.setState({ googleMapsUrl });
     }
   }
-
-  private renderReview = (review: LocationReview, uid: string) => (
-    <div key={uid} className="location-review">
-      {this.maybeRenderNotes("Notes", review.notes)}
-      {this.maybeRenderNotes("What to Order", review.order)}
-      {this.maybeRenderNotes("What to Avoid", review.avoid)}
-    </div>
-  )
 }
 
 function mapStateToProps(state: RootState): ConnectedProps {

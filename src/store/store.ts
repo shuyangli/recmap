@@ -13,6 +13,7 @@ import { GoogleMapsApi } from "../api/GoogleMapsApi";
 import { setCurrentPositionToGeolocation } from "./locations/actions";
 import { userReducer } from "./user/reducer";
 import { initFirebase, setupFirebaseObservers } from "../initFirebase";
+import { initializeAuthorRecords } from "./user/actions";
 
 const composeEnhancers: typeof compose = (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
@@ -50,16 +51,18 @@ export async function createApplicationStore() {
     } else {
       return Promise.resolve(undefined);
     }
-  }
+  };
+
   const uidProvider = () => {
     const maybeCurrentUser = store.getState().user.currentUser;
     return maybeCurrentUser ? maybeCurrentUser.uid : undefined;
-  }
+  };
 
   const backendApi: BackendApi = new ExpressApi(serverConfig, authTokenProvider, uidProvider);
   applicationApi.backendApi = backendApi;
 
   setupFirebaseObservers(store);
   store.dispatch(setCurrentPositionToGeolocation());
+  store.dispatch(initializeAuthorRecords());
   return store;
 }

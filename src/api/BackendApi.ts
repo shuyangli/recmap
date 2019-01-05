@@ -8,5 +8,5 @@ export interface BackendApi {
   getAllLocations(): Promise<{ [locationId: string]: Location }>;
   getAllTags(): Promise<string[]>;
   isAdmin(): Promise<boolean>;
-  getUserRecord(userId: string): Promise<UserRecord>;
+  getAuthors(): Promise<{ [uid: string]: UserRecord }>;
 }

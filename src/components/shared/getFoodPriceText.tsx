@@ -1,4 +1,4 @@
-import { FoodPrice } from "../../api/interfaces";
+import { FoodPrice, DrinkPrice } from "../../api/interfaces";
 
 import "./LocationRating.less";
 
@@ -11,4 +11,14 @@ const foodPriceToText = {
 
 export function getFoodPriceText(foodPrice: FoodPrice | null) {
   return foodPrice != null ? foodPriceToText[foodPrice] : null;
+}
+
+const drinkPriceToText = {
+  [DrinkPrice.ZERO_TO_EIGHT]: "Under $8",
+  [DrinkPrice.EIGHT_TO_FIFTEEN]: "$8 – $15",
+  [DrinkPrice.OVER_FIFTEEN]: "Over $15",
+};
+
+export function getDrinkPriceText(drinkPrice: DrinkPrice | null) {
+  return drinkPrice != null ? drinkPriceToText[drinkPrice] : null;
 }
