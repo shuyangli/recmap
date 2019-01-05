@@ -11,6 +11,7 @@ import { ConnectedEditLocationPanel } from "./EditLocationPanel";
 import { ConnectedLocationDetailsPanel } from "./LocationDetailsPanel";
 
 import "./ActionPanel.less";
+import { ConnectedEditReviewPanel } from "./EditReviewPanel";
 
 interface ConnectedProps {
   isVisible: boolean;
@@ -39,17 +40,18 @@ class ActionPanel extends React.PureComponent<ConnectedProps & DispatchProps, vo
   private getActionPanel() {
     switch (this.props.type) {
       case ActionPanelType.DETAIL:
-        return (
-          <ConnectedLocationDetailsPanel
-            location={this.props.locations[this.props.locationId]}
-          />
-        );
-      case ActionPanelType.EDIT:
+        return <ConnectedLocationDetailsPanel locationId={this.props.locationId} />;
+      case ActionPanelType.EDIT_LOCATION:
         return (
           <ConnectedEditLocationPanel
             location={this.props.locationId ? this.props.locations[this.props.locationId] : undefined}
           />
         );
+      case ActionPanelType.EDIT_REVIEW:
+        if (this.props.locationId == null) {
+          throw new Error("Cannot edit review without specifying a location");
+        }
+        return <ConnectedEditReviewPanel locationId={this.props.locationId} />;
       default:
         throw new Error(`Invalid action panel type: ${this.props.type}`);
     }

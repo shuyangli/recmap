@@ -6,4 +6,7 @@ export const ToggleDetailPanel = TypedAction.define("ToggleDetailPanel")<{
 export const ToggleEditPanel = TypedAction.define("ToggleEditPanel")<{
   locationId?: string;
 }>();
+export const OpenEditReviewPanel = TypedAction.define("OpenEditReviewPanel")<{
+  locationId: string;
+}>();
 export const ClosePanel = TypedAction.defineWithoutPayload("ClosePanel")();

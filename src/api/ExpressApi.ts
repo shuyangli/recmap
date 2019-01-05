@@ -1,6 +1,6 @@
 import { ServerConfig } from "../config";
 import { BackendApi } from "./BackendApi";
-import { Location, CreateLocationRequest, UserRecord } from "./interfaces";
+import { Location, CreateLocationRequest, UserRecord, LocationReview } from "./interfaces";
 
 export class ExpressApi implements BackendApi {
   private host: string;
@@ -54,6 +54,18 @@ export class ExpressApi implements BackendApi {
       },
     });
     return;
+  }
+
+  async setReview(locationId: string, review: LocationReview) {
+    const authToken = await this.authTokenProvider();
+    return fetch(this.getPath(`/locations/${locationId}/review`), {
+      method: "post",
+      headers: {
+        "Content-Type": "application/json",
+        "authorization": `Bearer ${authToken}`,
+      },
+      body: JSON.stringify(review),
+    }).then((response) => response.json());
   }
 
   async getLocation(locationId: string) {

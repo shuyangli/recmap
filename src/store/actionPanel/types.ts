@@ -1,6 +1,7 @@
 export enum ActionPanelType {
   DETAIL,
-  EDIT,
+  EDIT_LOCATION,
+  EDIT_REVIEW,
 }
 
 export interface ActionPanelState {

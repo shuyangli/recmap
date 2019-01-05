@@ -12,10 +12,15 @@ export const actionPanelReducer = TypedReducer.builder<ActionPanelState>()
   }))
   .withHandler(actions.ToggleEditPanel.TYPE, (state, { locationId }) => setWith(state, {
     locationId,
-    isVisible: state.type === ActionPanelType.EDIT && locationId === state.locationId
+    isVisible: state.type === ActionPanelType.EDIT_LOCATION && locationId === state.locationId
       ? !state.isVisible
       : true,
-    type: ActionPanelType.EDIT,
+    type: ActionPanelType.EDIT_LOCATION,
+  }))
+  .withHandler(actions.OpenEditReviewPanel.TYPE, (state, { locationId }) => setWith(state, {
+    locationId,
+    isVisible: true,
+    type: ActionPanelType.EDIT_REVIEW,
   }))
   .withHandler(actions.ClosePanel.TYPE, (state) => setWith(state, { isVisible: false }))
   .build();

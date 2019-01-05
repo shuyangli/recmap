@@ -2,7 +2,7 @@ import { TypedAction } from "redoodle";
 import { Dispatch } from "redux";
 
 import { ApplicationApi } from "../../api/ApplicationApi";
-import { Location, CreateLocationRequest } from "../../api/interfaces";
+import { Location, CreateLocationRequest, LocationReview } from "../../api/interfaces";
 import { FilterState, PositionWithMetadata } from "./types";
 import { RootState } from "../RootState";
 import { getCurrentPosition } from "../../api/MapsApi";
@@ -12,7 +12,7 @@ export const UpdateAllLocations = TypedAction.define("UpdateAllLocations")<{
   locations: { [id: string]: Location };
 }>();
 
-export const AddLocation = TypedAction.define("AddLocation")<{
+export const SetLocation = TypedAction.define("SetLocation")<{
   location: Location;
 }>();
 
@@ -41,7 +41,7 @@ export function createLocation(request: CreateLocationRequest) {
   return (dispatch: Dispatch, getState: () => RootState, api: ApplicationApi) =>
     api.backendApi.createLocation(request)
     .then((loc) => {
-      dispatch(AddLocation.create({ location: loc }));
+      dispatch(SetLocation.create({ location: loc }));
       return loc;
     });
 }
@@ -50,7 +50,7 @@ export function updateLocation(locationId: string, request: Partial<CreateLocati
   return (dispatch: Dispatch, getState: () => RootState, api: ApplicationApi) =>
     api.backendApi.updateLocation(locationId, request)
     .then((loc) => {
-      dispatch(AddLocation.create({ location: loc }));
+      dispatch(SetLocation.create({ location: loc }));
       return loc;
     });
 }
@@ -59,6 +59,12 @@ export function deleteLocation(locationId: string) {
   return (dispatch: Dispatch, getState: () => RootState, api: ApplicationApi) =>
     api.backendApi.deleteLocation(locationId)
     .then(() => dispatch(RemoveLocation.create({ locationId })));
+}
+
+export function setReview(locationId: string, review: LocationReview) {
+  return (dispatch: Dispatch, getState: () => RootState, api: ApplicationApi) =>
+    api.backendApi.setReview(locationId, review)
+    .then((loc) => dispatch(SetLocation.create({ location: loc })));
 }
 
 export function centerMapAroundLocation(locationId: string) {

@@ -14,15 +14,16 @@ import { ConnectedLocationReviewView } from "./LocationReviewView";
 import "./LocationDetailsPanel.less";
 
 interface OwnProps {
-  location: Location;
+  locationId: string;
 }
 
 interface ConnectedProps {
+  location: Location;
   isAdmin: boolean;
 }
 
 interface DispatchProps {
-  onEdit: (locationId: string) => void;
+  onEdit: () => void;
   closePanel: () => void;
   getGoogleMapsUrl: (placeId: string) => Promise<string>;
 }
@@ -68,7 +69,7 @@ class LocationDetailsPanel extends React.PureComponent<LocationDetailsPanelProps
               </Tooltip>
             )}
             {this.props.isAdmin && (
-              <Button small={true} minimal={true} icon="edit" onClick={this.onEdit} />
+              <Button small={true} minimal={true} icon="edit" onClick={this.props.onEdit} />
             )}
             <Button small={true} minimal={true} icon="cross" onClick={this.props.closePanel} />
           </div>
@@ -78,13 +79,11 @@ class LocationDetailsPanel extends React.PureComponent<LocationDetailsPanelProps
           <LocationTags tags={location.tags} />
         </div>
         {map(location.reviews, (review, uid) => (
-          <ConnectedLocationReviewView key={uid} review={review} uid={uid} />
+          <ConnectedLocationReviewView key={uid} locationId={this.props.location.id} review={review} uid={uid} />
         ))}
       </div>
     );
   }
-
-  private onEdit = () => this.props.onEdit(this.props.location.id);
 
   private async updateUrl(location: Location) {
     this.setState({ googleMapsUrl: undefined });
@@ -95,15 +94,16 @@ class LocationDetailsPanel extends React.PureComponent<LocationDetailsPanelProps
   }
 }
 
-function mapStateToProps(state: RootState): ConnectedProps {
+function mapStateToProps(state: RootState, ownProps: OwnProps): ConnectedProps {
   return {
     isAdmin: isAdminSelector(state),
+    location: state.location.locations[ownProps.locationId],
   };
 }
 
-function mapDispatchToProps(dispatch: TypedDispatch): DispatchProps {
+function mapDispatchToProps(dispatch: TypedDispatch, ownProps: OwnProps): DispatchProps {
   return {
-    onEdit: (locationId: string) => dispatch(ToggleEditPanel.create({ locationId })),
+    onEdit: () => dispatch(ToggleEditPanel.create({ locationId: ownProps.locationId })),
     closePanel: () => dispatch(ClosePanel.create()),
     getGoogleMapsUrl: (placeId: string) => dispatch(getGoogleMapsUrl(placeId)),
   };
