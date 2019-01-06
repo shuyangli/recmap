@@ -1,9 +1,9 @@
-import { H5 } from "@blueprintjs/core";
+import { H5, Icon } from "@blueprintjs/core";
 import * as React from "react";
 import { connect } from "react-redux";
 
 import { Location } from "../../api/interfaces";
-import { LocationTags, RatingAndPrice } from "../shared";
+import { LocationTags, LocationRating, getFoodPriceText, getDrinkPriceText } from "../shared";
 import { ToggleDetailPanel } from "../../store/actionPanel/actions";
 import { centerMapAroundLocation } from "../../store/locations/actions";
 import { TypedDispatch } from "../../store/TypedDispatch";
@@ -25,11 +25,24 @@ class LocationItem extends React.PureComponent<OwnProps & DispatchProps, {}> {
     return (
       <div className="location-item" onClick={this.openDetailsPanel}>
         <H5 className="location-name">{location.name}</H5>
-        <RatingAndPrice
-          rating={location.computedRating}
-          foodPrice={location.computedFoodPrice}
-          drinkPrice={location.computedDrinkPrice}
-        />
+        <div className="location-rating-and-price">
+          <LocationRating rating={location.computedRating} />
+          {location.computedFoodPrice && (
+            <>
+              <div className="location-middot">·</div>
+              <div className="location-price-range">{getFoodPriceText(location.computedFoodPrice)}</div>
+            </>
+          )}
+          {location.computedDrinkPrice && (
+            <>
+              <div className="location-middot">·</div>
+              <div className="location-price-range">
+                <Icon className="location-price-icon" iconSize={10} icon="glass" />
+                {getDrinkPriceText(location.computedDrinkPrice)}
+              </div>
+            </>
+          )}
+        </div>
         <LocationTags tags={location.tags} showNumberOfTags={2} />
       </div>
     );
