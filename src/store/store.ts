@@ -10,7 +10,7 @@ import { BackendApi } from "../api/BackendApi";
 import { ExpressApi } from "../api/ExpressApi";
 import { firebaseConfig, serverConfig, googleMapsApiKey } from "../config";
 import { GoogleMapsApi } from "../api/GoogleMapsApi";
-import { setCurrentPositionToGeolocation } from "./locations/actions";
+import { setCurrentPositionToGeolocation, initializePresetPositions } from "./locations/actions";
 import { userReducer } from "./user/reducer";
 import { initFirebase, setupFirebaseObservers } from "../initFirebase";
 import { initializeAuthorRecords } from "./user/actions";
@@ -63,6 +63,7 @@ export async function createApplicationStore() {
 
   setupFirebaseObservers(store);
   store.dispatch(setCurrentPositionToGeolocation());
+  store.dispatch(initializePresetPositions());
   store.dispatch(initializeAuthorRecords());
   return store;
 }

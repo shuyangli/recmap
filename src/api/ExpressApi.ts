@@ -1,6 +1,6 @@
 import { ServerConfig } from "../config";
 import { BackendApi } from "./BackendApi";
-import { Location, CreateLocationRequest, UserRecord, LocationReview } from "./interfaces";
+import { Location, CreateLocationRequest, UserRecord, LocationReview, PositionWithMetadata } from "./interfaces";
 
 export class ExpressApi implements BackendApi {
   private host: string;
@@ -123,6 +123,16 @@ export class ExpressApi implements BackendApi {
   async getAuthors(): Promise<{ [uid: string]: UserRecord }> {
     const authToken = await this.authTokenProvider();
     const authorsResponse = await fetch(this.getPath(`/authors`), {
+      headers: {
+        authorization: `Bearer ${authToken}`,
+      },
+    }).then((response) => response.json());
+    return authorsResponse;
+  }
+
+  async getMapPresets(): Promise<PositionWithMetadata[]> {
+    const authToken = await this.authTokenProvider();
+    const authorsResponse = await fetch(this.getPath(`/map-presets`), {
       headers: {
         authorization: `Bearer ${authToken}`,
       },

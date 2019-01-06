@@ -8,6 +8,7 @@ import { getDistanceBetween } from "../../api/MapsApi";
 
 const getAllLocations = (state: RootState) => state.location.locations;
 export const currentPositionSelector = (state: RootState) => state.location.currentPosition;
+export const presetPositionsSelector = (state: RootState) => state.location.presetPositions;
 const getFilter = (state: RootState) => state.location.filter;
 
 const locationListSelector = createSelector(

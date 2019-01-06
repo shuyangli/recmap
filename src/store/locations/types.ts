@@ -1,4 +1,4 @@
-import { Location, FoodPrice, Rating } from "../../api/interfaces";
+import { Location, FoodPrice, Rating, PositionWithMetadata } from "../../api/interfaces";
 
 export interface FilterState {
   searchTerm: string;
@@ -26,22 +26,6 @@ export const EMPTY_FILTER_STATE: FilterState = {
   tags: [],
 };
 
-export interface PositionWithMetadata {
-  name: string;
-  position: {
-    latitude: number,
-    longitude: number,
-  };
-}
-
-const SAN_FRANCISCO_POSITION: PositionWithMetadata = {
-  name: "San Francisco Bay Area",
-  position: {
-    latitude: 37.7767416,
-    longitude: -122.4274025,
-  },
-};
-
 export const NEW_YORK_CITY_POSITION: PositionWithMetadata = {
   name: "New York City",
   position: {
@@ -50,28 +34,16 @@ export const NEW_YORK_CITY_POSITION: PositionWithMetadata = {
   },
 };
 
-const LONDON_POSITION: PositionWithMetadata = {
-  name: "London",
-  position: {
-    latitude: 51.5104711,
-    longitude: -0.1320534,
-  },
-};
-
-export const PresetPositions = [
-  NEW_YORK_CITY_POSITION,
-  SAN_FRANCISCO_POSITION,
-  LONDON_POSITION,
-];
-
 export interface LocationState {
   currentPosition: PositionWithMetadata;
+  presetPositions: PositionWithMetadata[];
   locations: { [id: string]: Location };
   filter: FilterState;
 }
 
 export const EMPTY_LOCATION_STATE: LocationState = {
   currentPosition: NEW_YORK_CITY_POSITION, // for synchronous access in filtering
+  presetPositions: [NEW_YORK_CITY_POSITION],
   locations: {},
   filter: EMPTY_FILTER_STATE,
 };

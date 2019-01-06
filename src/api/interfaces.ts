@@ -66,3 +66,11 @@ export interface UserRecord {
   photoURL: string;
   disabled: boolean;
 }
+
+export interface PositionWithMetadata {
+  name: string;
+  position: {
+    latitude: number,
+    longitude: number,
+  };
+}

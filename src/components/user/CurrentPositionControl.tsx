@@ -2,15 +2,16 @@ import * as React from "react";
 import { connect } from "react-redux";
 import { Icon, Popover, Menu, MenuItem } from "@blueprintjs/core";
 import { RootState } from "../../store/RootState";
-import { currentPositionSelector } from "../../store/locations/selectors";
-import { PositionWithMetadata, PresetPositions } from "../../store/locations/types";
+import { currentPositionSelector, presetPositionsSelector } from "../../store/locations/selectors";
 import { TypedDispatch } from "../../store/TypedDispatch";
 import { setCurrentPosition, setCurrentPositionToGeolocation } from "../../store/locations/actions";
+import { PositionWithMetadata } from "../../api/interfaces";
 
 import "./CurrentPositionControl.less";
 
 interface ConnectedProps {
   currentPosition: PositionWithMetadata;
+  presetPositions: PositionWithMetadata[];
 }
 
 interface DispatchProps {
@@ -43,7 +44,7 @@ class CurrentPositionControl extends React.PureComponent<CurrentPositionControlP
   }
 
   private renderPopoverContent(): JSX.Element {
-    const presetLocations = PresetPositions.map((pos) =>
+    const presetLocations = this.props.presetPositions.map((pos) =>
       <MenuItem key={pos.name} text={pos.name} onClick={this.getSetCurrentPosition(pos)} />,
     );
     return (
@@ -69,6 +70,7 @@ class CurrentPositionControl extends React.PureComponent<CurrentPositionControlP
 function mapStateToProps(state: RootState): ConnectedProps {
   return {
     currentPosition: currentPositionSelector(state),
+    presetPositions: presetPositionsSelector(state),
   };
 }
 

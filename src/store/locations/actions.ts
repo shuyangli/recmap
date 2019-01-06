@@ -2,8 +2,8 @@ import { TypedAction } from "redoodle";
 import { Dispatch } from "redux";
 
 import { ApplicationApi } from "../../api/ApplicationApi";
-import { Location, CreateLocationRequest, LocationReview } from "../../api/interfaces";
-import { FilterState, PositionWithMetadata } from "./types";
+import { Location, CreateLocationRequest, LocationReview, PositionWithMetadata } from "../../api/interfaces";
+import { FilterState } from "./types";
 import { RootState } from "../RootState";
 import { getCurrentPosition } from "../../api/MapsApi";
 import { TypedDispatch } from "../TypedDispatch";
@@ -26,6 +26,10 @@ export const UpdateFilter = TypedAction.define("UpdateFilter")<{
 
 export const SetCurrentPosition = TypedAction.define("SetCurrentPosition")<{
   position: PositionWithMetadata;
+}>();
+
+export const SetPresetPositions = TypedAction.define("SetPresetPositions")<{
+  positions: PositionWithMetadata[];
 }>();
 
 export function loadLocations() {
@@ -114,4 +118,12 @@ export function setCurrentPositionToGeolocation() {
         longitude: position.coords.longitude,
       },
     })));
+}
+
+export function initializePresetPositions() {
+  return (dispatch: Dispatch, getState: () => RootState, api: ApplicationApi) => {
+    api.backendApi.getMapPresets().then((positions) => {
+      dispatch(SetPresetPositions.create({ positions }));
+    });
+  };
 }

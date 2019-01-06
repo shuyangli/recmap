@@ -1,4 +1,4 @@
-import { Location, CreateLocationRequest, UserRecord, LocationReview } from "./interfaces";
+import { Location, CreateLocationRequest, UserRecord, LocationReview, PositionWithMetadata } from "./interfaces";
 
 export interface BackendApi {
   createLocation(request: CreateLocationRequest): Promise<Location>;
@@ -9,6 +9,9 @@ export interface BackendApi {
   getLocation(locationId: string): Promise<Location>;
   getAllLocations(): Promise<{ [locationId: string]: Location }>;
   getAllTags(): Promise<string[]>;
+
   isAdmin(): Promise<boolean>;
   getAuthors(): Promise<{ [uid: string]: UserRecord }>;
+
+  getMapPresets(): Promise<PositionWithMetadata[]>;
 }
