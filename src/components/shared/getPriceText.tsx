@@ -1,6 +1,17 @@
 import { FoodPrice, DrinkPrice } from "../../api/interfaces";
 
-import "./LocationRating.less";
+export const FOOD_PRICE_OPTIONS = [
+  FoodPrice.ZERO_TO_FIFTEEN,
+  FoodPrice.FIFTEEN_TO_THIRTY,
+  FoodPrice.THIRTY_TO_SIXTY,
+  FoodPrice.OVER_SIXTY,
+];
+
+export const DRINK_PRICE_OPTIONS = [
+  DrinkPrice.ZERO_TO_EIGHT,
+  DrinkPrice.EIGHT_TO_FIFTEEN,
+  DrinkPrice.OVER_FIFTEEN,
+];
 
 const foodPriceToText = {
   [FoodPrice.ZERO_TO_FIFTEEN]: "Under $15",

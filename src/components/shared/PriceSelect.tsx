@@ -2,52 +2,45 @@ import { Classes, MenuItem, Button, AnchorButton } from "@blueprintjs/core";
 import { Select, ItemRenderer } from "@blueprintjs/select";
 import * as React from "react";
 import * as classNames from "classnames";
-import { FoodPrice } from "../../api/interfaces";
-import { getFoodPriceText } from "./getFoodPriceText";
 
-import "./FoodPriceSelect.less";
+import "./PriceSelect.less";
 
-const RawFoodPriceSelect = Select.ofType<FoodPrice>();
+const RawPriceSelect = Select.ofType<number>();
 
-const allowedFoodPrices = [
-  FoodPrice.ZERO_TO_FIFTEEN,
-  FoodPrice.FIFTEEN_TO_THIRTY,
-  FoodPrice.THIRTY_TO_SIXTY,
-  FoodPrice.OVER_SIXTY,
-];
-
-export interface FoodPriceSelectProps {
-  priceRange?: FoodPrice;
+export interface PriceSelectProps {
+  priceRange?: number;
+  options: number[];
+  getHumanReadablePrice: (price: number) => string;
   clearable?: boolean;
-  onSelect: (priceRange: FoodPrice | undefined) => void;
+  onSelect: (priceRange: number | undefined) => void;
 }
 
-export class FoodPriceSelect extends React.PureComponent<FoodPriceSelectProps, never> {
+export class PriceSelect extends React.PureComponent<PriceSelectProps, never> {
   render() {
     return (
-      <RawFoodPriceSelect
+      <RawPriceSelect
         className={classNames("price-range-select", Classes.FILL)}
-        items={allowedFoodPrices}
+        items={this.props.options}
         filterable={false}
         itemRenderer={this.renderItem}
         noResults={"No results"}
         onItemSelect={this.props.onSelect}
       >
         <AnchorButton className="price-range-select-outer-button">
-          {getFoodPriceText(this.props.priceRange) || "Select price range"}
+          {this.props.getHumanReadablePrice(this.props.priceRange) || "Select price range"}
           {this.maybeRenderClearButton()}
         </AnchorButton>
-      </RawFoodPriceSelect>
+      </RawPriceSelect>
     );
   }
 
-  private renderItem: ItemRenderer<FoodPrice> = (priceRange, { modifiers, handleClick }) => {
+  private renderItem: ItemRenderer<number> = (price, { modifiers, handleClick }) => {
     return (
         <MenuItem
-            key={`${priceRange}`}
+            key={`${price}`}
             active={modifiers.active}
             onClick={handleClick}
-            text={getFoodPriceText(priceRange)}
+            text={this.props.getHumanReadablePrice(price)}
             shouldDismissPopover={false}
         />
     );

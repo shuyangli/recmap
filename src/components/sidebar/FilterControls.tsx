@@ -7,7 +7,7 @@ import { Dispatch } from "redux";
 import { UpdateFilter } from "../../store/locations/actions";
 import { FilterState } from "../../store/locations/types";
 import { RootState } from "../../store/RootState";
-import { FoodPriceSelect } from "../shared/FoodPriceSelect";
+import { PriceSelect, FOOD_PRICE_OPTIONS, getFoodPriceText } from "../shared";
 import { FoodPrice, Rating } from "../../api/interfaces";
 import { RatingSelect } from "../shared/RatingSelect";
 
@@ -38,7 +38,9 @@ class FilterControls extends React.PureComponent<ConnectedProps & DispatchProps,
           <Icon className="filter-control-icon" icon="filter" />
           <div>
             <div className="filter-control-sub-group">
-              <FoodPriceSelect
+              <PriceSelect
+                options={FOOD_PRICE_OPTIONS}
+                getHumanReadablePrice={getFoodPriceText}
                 priceRange={this.props.filter.priceRange.foodPrice}
                 onSelect={this.handleFoodPriceChange}
                 clearable={true}

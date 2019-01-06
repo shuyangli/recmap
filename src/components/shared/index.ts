@@ -1,5 +1,5 @@
-export * from "./getFoodPriceText";
+export * from "./getPriceText";
 export * from "./LocationRating";
 export * from "./LocationTags";
-export * from "./FoodPriceSelect";
+export * from "./PriceSelect";
 export * from "./RatingSelect";

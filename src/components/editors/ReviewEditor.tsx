@@ -2,7 +2,14 @@ import { Classes } from "@blueprintjs/core";
 import * as React from "react";
 import classNames from "classnames";
 import { Rating, FoodPrice, DrinkPrice, LocationReview } from "../../api/interfaces";
-import { RatingSelect, FoodPriceSelect } from "../shared";
+import {
+  RatingSelect,
+  PriceSelect,
+  getFoodPriceText,
+  FOOD_PRICE_OPTIONS,
+  DRINK_PRICE_OPTIONS,
+  getDrinkPriceText,
+} from "../shared";
 
 import "./SharedEntryStyles.less";
 import "./ReviewEditor.less";
@@ -42,16 +49,29 @@ export class ReviewEditor extends React.PureComponent<ReviewEditorProps, never> 
   render() {
     return (
       <div className="review-editor">
-        <div className="location-editor-entry inline-entry">
+        <div className="location-editor-entry">
           <div className="location-editor-heading">Rating</div>
           <RatingSelect rating={this.props.editorState.rating} onSelect={this.onRatingChange} />
         </div>
 
-        <div className="location-editor-entry inline-entry">
-          <div className="location-editor-heading">Price Range</div>
-          <FoodPriceSelect
+        <div className="location-editor-entry">
+          <div className="location-editor-heading">Meal Price</div>
+          <PriceSelect
             priceRange={this.props.editorState.foodPrice}
+            options={FOOD_PRICE_OPTIONS}
+            getHumanReadablePrice={getFoodPriceText}
             onSelect={this.onFoodPriceChange}
+            clearable={true}
+          />
+        </div>
+
+        <div className="location-editor-entry">
+          <div className="location-editor-heading">Drink Price</div>
+          <PriceSelect
+            priceRange={this.props.editorState.drinkPrice}
+            options={DRINK_PRICE_OPTIONS}
+            getHumanReadablePrice={getDrinkPriceText}
+            onSelect={this.onDrinkPriceChange}
             clearable={true}
           />
         </div>
@@ -99,6 +119,10 @@ export class ReviewEditor extends React.PureComponent<ReviewEditorProps, never> 
 
   private onFoodPriceChange = (foodPrice: FoodPrice | undefined) => {
     this.updateReview({ foodPrice });
+  }
+
+  private onDrinkPriceChange = (drinkPrice: DrinkPrice | undefined) => {
+    this.updateReview({ drinkPrice });
   }
 
   private onNotesChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
