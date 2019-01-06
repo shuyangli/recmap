@@ -50,9 +50,18 @@ export const NEW_YORK_CITY_POSITION: PositionWithMetadata = {
   },
 };
 
+const LONDON_POSITION: PositionWithMetadata = {
+  name: "London",
+  position: {
+    latitude: 51.5104711,
+    longitude: -0.1320534,
+  },
+};
+
 export const PresetPositions = [
   NEW_YORK_CITY_POSITION,
   SAN_FRANCISCO_POSITION,
+  LONDON_POSITION,
 ];
 
 export interface LocationState {
