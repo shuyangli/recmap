@@ -9,15 +9,14 @@ export class App extends React.PureComponent<{}, {}> {
   render() {
     return (
       <div className="app-viewport">
-        <ConnectedMap />
-        <div className="columns-viewport">
-          <ConnectedLocationSidebar />
-          <ConnectedActionPanel />
-        </div>
+        <ConnectedLocationSidebar />
+        <ConnectedActionPanel />
         <div className="user-viewport">
           <ConnectedCurrentPositionControl />
           <ConnectedUserDisplay />
         </div>
+
+        <ConnectedMap />
       </div>
       );
   }
