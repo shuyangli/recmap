@@ -31,6 +31,11 @@ export class GoogleMapsApi implements MapsApi {
       },
       zoom: mapsDefaults.zoom,
       disableDefaultUI: true,
+      zoomControl: true,
+      zoomControlOptions: {
+        position: google.maps.ControlPosition.RIGHT_BOTTOM,
+        style: google.maps.ZoomControlStyle.SMALL,
+      },
     });
     this.mapElement = mapElement;
     this.placesService = new google.maps.places.PlacesService(this.mapElement);
