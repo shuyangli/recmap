@@ -1,4 +1,4 @@
-import { assign, keys, reduce } from "lodash-es";
+import { keys, reduce } from "lodash-es";
 
 export class ObjectTranslator {
   constructor(private target: any) {}
@@ -14,7 +14,7 @@ export class ObjectTranslator {
     } else {
       override[field] = [];
     }
-    this.target = assign({}, this.target, override);
+    this.target = { ...this.target, ...override };
     return this;
   }
 
@@ -29,7 +29,14 @@ export class ObjectTranslator {
     } else {
       override[field] = {};
     }
-    this.target = assign({}, this.target, override);
+    this.target = { ...this.target, ...override }
+    return this;
+  }
+
+  ensureObjectPresence(field: string) {
+    if (!this.target[field]) {
+      this.target[field] = {};
+    }
     return this;
   }
 }

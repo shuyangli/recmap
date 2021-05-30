@@ -6,9 +6,8 @@ import { actionPanelReducer } from "./actionPanel/reducer";
 import { locationsReducer } from "./locations/reducer";
 import { initialState } from "./RootState";
 import { ApplicationApi } from "../api/ApplicationApi";
-import { BackendApi } from "../api/BackendApi";
-import { ExpressApi } from "../api/ExpressApi";
-import { firebaseConfig, serverConfig, googleMapsApiKey } from "../config";
+import { FirebaseApi } from "../api/FirebaseApi";
+import { firebaseConfig, googleMapsApiKey } from "../config";
 import { GoogleMapsApi } from "../api/GoogleMapsApi";
 import { setCurrentPositionToGeolocation, initializePresetPositions } from "./locations/actions";
 import { userReducer } from "./user/reducer";
@@ -44,22 +43,12 @@ export async function createApplicationStore() {
     ),
   );
 
-  const authTokenProvider = () => {
-    const maybeCurrentUser = store.getState().user.currentUser;
-    if (maybeCurrentUser) {
-      return Promise.resolve(maybeCurrentUser.getIdToken());
-    } else {
-      return Promise.resolve(undefined);
-    }
-  };
-
   const uidProvider = () => {
     const maybeCurrentUser = store.getState().user.currentUser;
     return maybeCurrentUser ? maybeCurrentUser.uid : undefined;
   };
 
-  const backendApi: BackendApi = new ExpressApi(serverConfig, authTokenProvider, uidProvider);
-  applicationApi.backendApi = backendApi;
+  applicationApi.backendApi = new FirebaseApi(uidProvider);
 
   setupFirebaseObservers(store);
   store.dispatch(setCurrentPositionToGeolocation());

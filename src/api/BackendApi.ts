@@ -6,6 +6,7 @@ export interface BackendApi {
   deleteLocation(locationId: string): Promise<void>;
   setReview(locationId: string, review: LocationReview): Promise<Location>;
   deleteReview(locationId: string): Promise<Location>;
+
   getLocation(locationId: string): Promise<Location>;
   getAllLocations(): Promise<{ [locationId: string]: Location }>;
   getAllTags(): Promise<string[]>;

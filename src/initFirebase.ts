@@ -1,5 +1,6 @@
 import firebase from "firebase/app";
 import "firebase/auth";
+import "firebase/database";
 
 import { FirebaseConfig } from "./config";
 import { Store } from "redux";
@@ -19,6 +20,8 @@ export function setupFirebaseObservers(store: Store<RootState>) {
       UpdateCurrentUser.create({ currentUser: maybeCurrentUser }),
     ]));
 
-    (store.dispatch as TypedDispatch)(updateCurrentUserAdminStatus());
+    if (maybeCurrentUser != null) {
+      (store.dispatch as TypedDispatch)(updateCurrentUserAdminStatus());
+    }
   });
 }
