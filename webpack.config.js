@@ -2,10 +2,12 @@
 
 const path = require("path");
 const webpack = require("webpack");
-const UglifyJsPlugin = require("uglifyjs-webpack-plugin");
+const TerserPlugin = require("terser-webpack-plugin");
 const { forEach } = require("lodash");
 
-const environment = {};
+const environment = {
+  "process.env": "{}",
+};
 forEach(process.env, (value, key) => {
   environment["process.env." + key]= JSON.stringify(value);
 });
@@ -33,6 +35,7 @@ module.exports = {
     new webpack.DefinePlugin(environment),
   ],
   optimization: {
-    minimizer: [new UglifyJsPlugin()],
+    minimize: true,
+    minimizer: [new TerserPlugin()],
   },
 };
