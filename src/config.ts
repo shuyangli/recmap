@@ -1,11 +1,3 @@
-export interface ServerConfig {
-  host: string;
-}
-
-export const serverConfig: ServerConfig = {
-  host: process.env.SERVER_HOST,
-};
-
 export interface FirebaseConfig {
   apiKey: string;
   authDomain: string;
