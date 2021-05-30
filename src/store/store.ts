@@ -47,7 +47,7 @@ export async function createApplicationStore() {
   const authTokenProvider = () => {
     const maybeCurrentUser = store.getState().user.currentUser;
     if (maybeCurrentUser) {
-      return Promise.resolve(maybeCurrentUser.getToken());
+      return Promise.resolve(maybeCurrentUser.getIdToken());
     } else {
       return Promise.resolve(undefined);
     }

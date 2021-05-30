@@ -1,6 +1,6 @@
 import * as React from "react";
 import { connect } from "react-redux";
-import * as firebase from "firebase";
+import firebase from "firebase/app";
 import { LocationReview, UserRecord } from "../../api/interfaces";
 import { RootState } from "../../store/RootState";
 import { authorsSelector, isAdminSelector } from "../../store/user/selectors";

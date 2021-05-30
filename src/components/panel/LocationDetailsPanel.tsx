@@ -1,6 +1,6 @@
 import { AnchorButton, Button, Tooltip } from "@blueprintjs/core";
 import { map } from "lodash-es";
-import * as firebase from "firebase";
+import firebase from "firebase/app";
 import * as React from "react";
 import { connect } from "react-redux";
 import { Location } from "../../api/interfaces";

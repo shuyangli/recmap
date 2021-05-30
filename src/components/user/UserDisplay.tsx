@@ -1,5 +1,6 @@
 import * as React from "react";
 import { connect } from "react-redux";
+import firebase from "firebase/app";
 import { Icon, Popover, Menu, MenuItem, MenuDivider } from "@blueprintjs/core";
 import { signIn, signOut } from "../../store/user/actions";
 import { RootState } from "../../store/RootState";

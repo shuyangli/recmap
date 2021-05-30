@@ -1,7 +1,7 @@
 import { Classes, MenuItem, Button, AnchorButton } from "@blueprintjs/core";
 import { Select, ItemRenderer } from "@blueprintjs/select";
 import * as React from "react";
-import * as classNames from "classnames";
+import classNames from "classnames"
 import { LocationRating } from "./";
 import { Rating } from "../../api/interfaces";
 

@@ -1,4 +1,4 @@
-import * as firebase from "firebase";
+import firebase from "firebase/app";
 import { TypedAction } from "redoodle";
 import { AppToaster } from "../../util/AppToaster";
 import { TypedDispatch } from "../TypedDispatch";

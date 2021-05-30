@@ -1,4 +1,6 @@
-import * as firebase from "firebase";
+import firebase from "firebase/app";
+import "firebase/auth";
+
 import { FirebaseConfig } from "./config";
 import { Store } from "redux";
 import { RootState } from "./store/RootState";

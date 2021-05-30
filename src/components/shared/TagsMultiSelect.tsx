@@ -2,7 +2,7 @@ import { Classes, MenuItem, Button } from "@blueprintjs/core";
 import { MultiSelect, ItemRenderer, ItemPredicate } from "@blueprintjs/select";
 import * as React from "react";
 import { connect } from "react-redux";
-import * as classNames from "classnames";
+import classNames from "classnames"
 import { TypedDispatch } from "../../store/TypedDispatch";
 import { getAllTags } from "../../store/locations/actions";
 

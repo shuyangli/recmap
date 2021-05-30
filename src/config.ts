@@ -13,6 +13,7 @@ export interface FirebaseConfig {
   projectId: string;
   storageBucket: string;
   messagingSenderId: string;
+  appId: string;
 }
 
 export const firebaseConfig: FirebaseConfig = {
@@ -22,6 +23,7 @@ export const firebaseConfig: FirebaseConfig = {
   projectId: process.env.FIREBASE_PROJECT_ID,
   storageBucket: process.env.FIREBASE_STORAGE_BUCKET,
   messagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.FIREBASE_APP_ID,
 };
 
 export const googleMapsApiKey: string = process.env.GOOGLE_MAPS_KEY;

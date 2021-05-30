@@ -1,5 +1,5 @@
 import { Button, Intent } from "@blueprintjs/core";
-import * as firebase from "firebase";
+import firebase from "firebase/app";
 import * as React from "react";
 import { connect } from "react-redux";
 import { LocationReview, Location } from "../../api/interfaces";

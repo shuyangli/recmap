@@ -1,5 +1,5 @@
 import { Classes, Icon, Checkbox } from "@blueprintjs/core";
-import * as classNames from "classnames";
+import classNames from "classnames";
 import * as React from "react";
 import { connect } from "react-redux";
 import { Dispatch } from "redux";

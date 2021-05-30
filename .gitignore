@@ -2,5 +2,6 @@ node_modules/
 build/
 dist/
 typings/
+packages/
 config.*.sh
 *.log
