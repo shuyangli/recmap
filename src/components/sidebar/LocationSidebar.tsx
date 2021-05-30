@@ -33,7 +33,7 @@ class LocationSidebar extends React.PureComponent<ConnectedProps & DispatchProps
     isLoadingLocations: false,
   };
 
-  componentWillMount() {
+  componentDidMount() {
     this.setState({ isLoadingLocations: true });
     this.props.loadLocations()
     .then(() => this.setState({ isLoadingLocations: false }));
