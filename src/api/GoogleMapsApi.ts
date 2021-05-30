@@ -1,4 +1,4 @@
-import * as GoogleMapsLoader from "google-maps";
+import { Loader } from "google-maps";
 import { MapsApi } from "./MapsApi";
 import { NEW_YORK_CITY_POSITION } from "../store/locations/types";
 
@@ -11,16 +11,18 @@ const mapsDefaults = {
 export class GoogleMapsApi implements MapsApi {
   private mapElement: google.maps.Map | undefined;
   private placesService: google.maps.places.PlacesService | undefined;
+  private mapsLoader: any /* Loader */;
 
   constructor(googleMapsApiKey: string) {
-    (GoogleMapsLoader as any).KEY = googleMapsApiKey;
-    (GoogleMapsLoader as any).LIBRARIES = ["places", "geometry"];
+    this.mapsLoader = new Loader(googleMapsApiKey, {
+      libraries: ["places", "geometry"],
+    });
     this.mapElement = undefined;
     this.placesService = undefined;
   }
 
   initialize(): Promise<any> {
-    return new Promise((resolve) => GoogleMapsLoader.load(resolve));
+    return this.mapsLoader.load();
   }
 
   initializeMapElement(wrapper: HTMLDivElement) {

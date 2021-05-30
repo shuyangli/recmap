@@ -28,7 +28,7 @@
     "express": "^4.16.4",
     "firebase": "^8.6.0",
     "fuse.js": "^6.4.0",
-    "google-maps": "^3.3.0",
+    "google-maps": "^4.0.0",
     "immutable": "^4.0.0-rc.12",
     "lodash-es": "^4.17.11",
     "react": "^16.6.3",
@@ -40,8 +40,6 @@
     "reselect": "^4.0.0"
   },
   "devDependencies": {
-    "@types/classnames": "^2.2.6",
-    "@types/googlemaps": "^3.30.16",
     "@types/lodash-es": "^4.17.1",
     "@types/react": "^16.7.7",
     "@types/react-dom": "^16.0.10",
