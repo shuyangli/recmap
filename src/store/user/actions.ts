@@ -4,7 +4,6 @@ import { AppToaster } from "../../util/AppToaster";
 import { TypedDispatch } from "../TypedDispatch";
 import { RootState } from "../RootState";
 import { ApplicationApi } from "../../api/ApplicationApi";
-import { UserRecord } from "../../api/interfaces";
 
 export const UpdateCurrentUser = TypedAction.define("UpdateCurrentUser")<{
   currentUser: firebase.User;
@@ -12,10 +11,6 @@ export const UpdateCurrentUser = TypedAction.define("UpdateCurrentUser")<{
 
 export const SetIsAdmin = TypedAction.define("SetIsAdmin")<{
   isAdmin: boolean;
-}>();
-
-export const SetAuthors = TypedAction.define("SetAuthors")<{
-  authors: { [uid: string]: UserRecord };
 }>();
 
 export function signIn() {
@@ -41,14 +36,6 @@ export function updateCurrentUserAdminStatus()  {
   return (dispatch: TypedDispatch, getState: () => RootState, api: ApplicationApi) => {
     api.backendApi.isAdmin().then((isAdmin) => {
       dispatch(SetIsAdmin.create({ isAdmin }));
-    });
-  };
-}
-
-export function initializeAuthorRecords() {
-  return (dispatch: TypedDispatch, getState: () => RootState, api: ApplicationApi) => {
-    api.backendApi.getAuthors().then((authors) => {
-      dispatch(SetAuthors.create({ authors }));
     });
   };
 }

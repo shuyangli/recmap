@@ -60,13 +60,6 @@ export interface UserRoles {
   [role: string]: boolean;
 }
 
-export interface UserRecord {
-  uid: string;
-  displayName: string;
-  photoURL: string;
-  disabled: boolean;
-}
-
 export interface PositionWithMetadata {
   name: string;
   position: {

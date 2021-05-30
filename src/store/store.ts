@@ -12,7 +12,6 @@ import { GoogleMapsApi } from "../api/GoogleMapsApi";
 import { setCurrentPositionToGeolocation, initializePresetPositions } from "./locations/actions";
 import { userReducer } from "./user/reducer";
 import { initFirebase, setupFirebaseObservers } from "../initFirebase";
-import { initializeAuthorRecords } from "./user/actions";
 
 const composeEnhancers: typeof compose = (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
@@ -53,6 +52,5 @@ export async function createApplicationStore() {
   setupFirebaseObservers(store);
   store.dispatch(setCurrentPositionToGeolocation());
   store.dispatch(initializePresetPositions());
-  store.dispatch(initializeAuthorRecords());
   return store;
 }

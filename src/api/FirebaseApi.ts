@@ -9,7 +9,6 @@ import {
   LocationReview,
   PersistedLocation,
   PositionWithMetadata,
-  UserRecord,
   UserRoles,
 } from "./interfaces";
 import { BackendApi } from "./BackendApi";
@@ -219,11 +218,6 @@ export class FirebaseApi implements BackendApi {
     return Promise.resolve(firebase.database().ref(`/users/${uid}`).once("value"))
       .then((snapshot) => snapshot.val() as UserRoles)
       .then((roles) => roles[ADMIN_AUTH_ROLE] === true);
-  }
-
-  getAuthors(): Promise<{ [uid: string]: UserRecord }> {
-    // TODO: Not supported, remove.
-    return Promise.resolve({});
   }
 
   getMapPresets(): Promise<PositionWithMetadata[]> {
