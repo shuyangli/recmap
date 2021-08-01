@@ -50,6 +50,8 @@ class TagsMultiSelect extends React.PureComponent<TagsMultiSelectProps, State> {
         itemRenderer={this.renderItem}
         itemPredicate={tagPredicate}
         tagRenderer={this.renderTag}
+        createNewItemFromQuery={this.createTag}
+        onRemove={this.handleTagRemove}
         noResults={(
           <MenuItem
             text={"Press Enter to create tag"}
@@ -59,9 +61,7 @@ class TagsMultiSelect extends React.PureComponent<TagsMultiSelectProps, State> {
         onItemSelect={this.handleTagSelect}
         tagInputProps={{
           tagProps: { minimal: true },
-          onRemove: this.handleTagRemove,
           rightElement: clearButton,
-          onAdd: this.addMultipleTags,
         }}
       />
     );
@@ -95,16 +95,8 @@ class TagsMultiSelect extends React.PureComponent<TagsMultiSelectProps, State> {
     }
   }
 
-  private addMultipleTags = (tags: string[]) => {
-    const newTags = [...this.props.tags];
-    tags.forEach((t) => {
-      if (newTags.indexOf(t) === -1) {
-        newTags.push(t);
-      }
-    });
-    if (newTags.length !== this.props.tags.length) {
-      this.props.onSelect(newTags);
-    }
+  private createTag = (tag: string) => {
+    return tag;
   }
 
   private removeTag = (tagIndex: number) => {
