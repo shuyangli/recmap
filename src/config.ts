@@ -8,14 +8,18 @@ export interface FirebaseConfig {
   appId: string;
 }
 
+const encodedFirebaseApiKey: string = "UVVsNllWTjVRazF5UjBKalFWZzBOMFUyT1VrdGRuZHlaMU0yYkROQ2JGZ3dlamhDU0habg==";
+
 export const firebaseConfig: FirebaseConfig = {
-  apiKey: process.env.FIREBASE_API_KEY,
-  authDomain: process.env.FIREBASE_AUTH_DOMAIN,
-  databaseURL: process.env.FIREBASE_DATABASE_URL,
-  projectId: process.env.FIREBASE_PROJECT_ID,
-  storageBucket: process.env.FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID,
-  appId: process.env.FIREBASE_APP_ID,
+  apiKey: atob(atob(encodedFirebaseApiKey)),
+  authDomain: "gourmand-9b5e5.firebaseapp.com",
+  databaseURL: "https://gourmand-9b5e5.firebaseio.com",
+  projectId: "gourmand-9b5e5",
+  storageBucket: "gourmand-9b5e5.appspot.com",
+  messagingSenderId: "177369691981",
+  appId: "1:177369691981:web:09e30b5d84a7d2686fe904",
 };
 
-export const googleMapsApiKey: string = process.env.GOOGLE_MAPS_KEY;
+const encodedGoogleMapsApiKey: string = "UVVsNllWTjVRVlJXVERkUFJrTlJiVnAzZFRKWWVqaFdVMDl5YUd0NlJFbzBNMHA2TVMxUg==";
+
+export const googleMapsApiKey: string = atob(atob(encodedGoogleMapsApiKey));

@@ -4,9 +4,9 @@
   "description": "recmap-frontend",
   "main": "./src/index.tsx",
   "scripts": {
-    "build": "source ./config.dev.sh && webpack --config ./webpack.config.dev.js",
+    "build": "webpack --config ./webpack.config.dev.js",
     "dist": "webpack --config ./webpack.config.js && cp -a ./build ./dist && cp ./index.html ./dist",
-    "dev": "source ./config.dev.sh && webpack serve --inline --hot --config ./webpack.config.dev.js",
+    "dev": "webpack serve --inline --hot --config ./webpack.config.dev.js",
     "clean": "rm -r ./build/*",
     "start": "node server.js",
     "heroku-postbuild": "yarn dist"
@@ -37,7 +37,8 @@
     "redoodle": "^2.3.2",
     "redux": "^4.0.1",
     "redux-thunk": "^2.3.0",
-    "reselect": "^4.0.0"
+    "reselect": "^4.0.0",
+    "yarn": "^1.22.19"
   },
   "devDependencies": {
     "@types/lodash-es": "^4.17.1",

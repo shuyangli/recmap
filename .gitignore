@@ -5,3 +5,5 @@ typings/
 packages/
 config.*.sh
 *.log
+.DS_Store
+.yarn
