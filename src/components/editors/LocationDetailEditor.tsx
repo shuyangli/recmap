@@ -1,7 +1,7 @@
 import * as React from "react";
 import { CreateLocationRequest, Location } from "../../api/interfaces";
 import { ConnectedTagsMultiSelect } from "../shared/TagsMultiSelect";
-import classNames from "classnames";
+import * as classNames from "classnames"
 import { Classes } from "@blueprintjs/core";
 import { connect } from "react-redux";
 import { TypedDispatch } from "../../store/TypedDispatch";

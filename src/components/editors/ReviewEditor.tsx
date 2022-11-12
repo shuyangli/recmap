@@ -1,6 +1,6 @@
 import { Classes } from "@blueprintjs/core";
 import * as React from "react";
-import classNames from "classnames";
+import * as classNames from "classnames"
 import { Rating, FoodPrice, DrinkPrice, LocationReview } from "../../api/interfaces";
 import {
   RatingSelect,

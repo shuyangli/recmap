@@ -1,7 +1,7 @@
 import { Classes, MenuItem, Button, AnchorButton } from "@blueprintjs/core";
 import { Select, ItemRenderer } from "@blueprintjs/select";
 import * as React from "react";
-import classNames from "classnames"
+import * as classNames from "classnames"
 
 import "./PriceSelect.less";
 
