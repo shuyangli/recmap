@@ -7,3 +7,4 @@ config.*.sh
 *.log
 .DS_Store
 .yarn
+.firebase/
