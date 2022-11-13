@@ -8,7 +8,7 @@ export interface FirebaseConfig {
   appId: string;
 }
 
-const encodedFirebaseApiKey: string = "UVVsNllWTjVRazF5UjBKalFWZzBOMFUyT1VrdGRuZHlaMU0yYkROQ2JGZ3dlamhDU0habg==";
+const encodedFirebaseApiKey: string = "UVVsNllWTjVSRzFqT0dGalZrTnBORTFmZUZWMGRUUXpVSFZyYVZVME9VNVRaSEpJWlVGWg==";
 
 export const firebaseConfig: FirebaseConfig = {
   apiKey: atob(atob(encodedFirebaseApiKey)),
