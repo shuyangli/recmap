@@ -12,6 +12,13 @@
   flex-direction: column;
   box-shadow: @pt-elevation-shadow-3;
   z-index: 1;
+
+  @media (max-width: 768px) {
+    width: 100%;
+    min-width: unset;
+    max-width: unset;
+    margin-left: 0;
+  }
 }
 
 .action-panel-header {

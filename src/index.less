@@ -13,6 +13,11 @@ body {
   flex-direction: row;
   align-items: flex-start;
   padding: 20px;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    padding: 10px;
+  }
 }
 
 .user-viewport {
@@ -21,4 +26,9 @@ body {
   align-items: center;
   z-index: 1;
   margin-left: auto;
+
+  @media (max-width: 768px) {
+    margin-left: 0;
+    margin-top: 10px;
+  }
 }
