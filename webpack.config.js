@@ -3,6 +3,7 @@
 const path = require("path");
 const webpack = require("webpack");
 const TerserPlugin = require("terser-webpack-plugin");
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const { forEach } = require("lodash");
 
 const environment = {
@@ -26,13 +27,16 @@ module.exports = {
   module: {
     rules: [
       { test: /\.tsx?$/, exclude: /node_modules/, use: "ts-loader" },
-      { test: /\.less$/, exclude: /node_modules/, use: ["style-loader", "css-loader", "less-loader"] },
-      { test: /\.css$/, exclude: /node_modules/, use: ["style-loader", "css-loader"] },
+      { test: /\.less$/, exclude: /node_modules/, use: [MiniCssExtractPlugin.loader, "css-loader", "less-loader"] },
+      { test: /\.css$/, exclude: /node_modules/, use: [MiniCssExtractPlugin.loader, "css-loader"] },
       { test: /\.(eot|ttf|woff|woff2)$/, use: "file-loader" }
     ]
   },
   plugins: [
     new webpack.DefinePlugin(environment),
+    new MiniCssExtractPlugin({
+      filename: "style.css",
+    }),
   ],
   optimization: {
     minimize: true,
