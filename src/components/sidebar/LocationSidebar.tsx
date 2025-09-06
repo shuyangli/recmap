@@ -17,6 +17,7 @@ import "./LocationSidebar.less";
 interface ConnectedProps {
   filteredLocations: Location[];
   isAdmin: boolean;
+  isPanelVisible: boolean;
 }
 
 interface DispatchProps {
@@ -40,6 +41,13 @@ class LocationSidebar extends React.PureComponent<ConnectedProps & DispatchProps
   }
 
   render() {
+    if (this.props.isPanelVisible) {
+      // On mobile, hide the list when a panel is open
+      if (window.innerWidth < 768) {
+        return null;
+      }
+    }
+
     return (
       <div className="location-sidebar">
         <ConnectedFilterControls />
@@ -66,6 +74,7 @@ function mapStateToProps(state: RootState): ConnectedProps {
   return {
     filteredLocations: getFilteredLocations(state),
     isAdmin: isAdminSelector(state),
+    isPanelVisible: state.actionPanel.isVisible,
   };
 }
 
